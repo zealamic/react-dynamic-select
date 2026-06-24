@@ -1,0 +1,60 @@
+{
+  "name": "@zealamic/react-dynamic-select",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rslib",
+    "build:storybook": "storybook build",
+    "check": "biome check --write",
+    "dev": "rslib --watch",
+    "format": "biome format --write",
+    "storybook": "storybook dev",
+    "test": "rstest",
+    "test:watch": "rstest --watch"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.15",
+    "@rsbuild/core": "~2.0.15",
+    "@rsbuild/plugin-babel": "^1.2.1",
+    "@rsbuild/plugin-react": "^2.0.1",
+    "@rslib/core": "^0.23.0",
+    "@rstest/adapter-rslib": "^0.10.5",
+    "@rstest/core": "^0.10.5",
+    "@storybook/addon-docs": "^10.4.5",
+    "@storybook/addon-onboarding": "^10.4.5",
+    "@storybook/react": "^10.4.5",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "happy-dom": "^20.10.3",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "storybook": "^10.4.5",
+    "storybook-addon-rslib": "^3.3.4",
+    "storybook-react-rsbuild": "^3.3.4",
+    "typescript": "^6.0.3"
+  },
+  "peerDependencies": {
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
+  "private": true
+}
