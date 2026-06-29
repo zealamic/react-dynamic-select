@@ -1,7 +1,7 @@
-import { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
-import type { StorybookConfig } from 'storybook-react-rsbuild';
+import type { StorybookConfig } from "storybook-react-rsbuild";
 
 /**
  * This function is used to resolve the absolute path of a package.
@@ -12,28 +12,28 @@ const getAbsolutePath = (value: string): string => {
     fileURLToPath(
       new URL(import.meta.resolve(`${value}/package.json`, import.meta.url)),
     ),
-    '..',
+    "..",
   );
 };
 
 const config: StorybookConfig = {
   stories: [
-    '../stories/**/*.mdx',
-    '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    "../stories/**/*.mdx",
+    "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
   addons: [
-    '@storybook/addon-docs',
-    '@storybook/addon-onboarding',
+    "@storybook/addon-docs",
+    "@storybook/addon-onboarding",
     {
-      name: getAbsolutePath('storybook-addon-rslib'),
+      name: getAbsolutePath("storybook-addon-rslib"),
     },
   ],
   framework: {
-    name: getAbsolutePath('storybook-react-rsbuild'),
+    name: getAbsolutePath("storybook-react-rsbuild"),
     options: {},
   },
   typescript: {
-    reactDocgen: 'react-docgen-typescript',
+    reactDocgen: "react-docgen-typescript",
     check: true,
   },
 };

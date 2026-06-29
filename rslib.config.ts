@@ -1,22 +1,22 @@
-import { pluginBabel } from '@rsbuild/plugin-babel';
-import { pluginReact } from '@rsbuild/plugin-react';
-import { defineConfig } from '@rslib/core';
+import { pluginBabel } from "@rsbuild/plugin-babel";
+import { pluginReact } from "@rsbuild/plugin-react";
+import { defineConfig } from "@rslib/core";
 
 export default defineConfig({
   source: {
     entry: {
-      index: ['./src/**'],
+      index: ["./src/**/*.{ts,tsx}", "!./src/env.d.ts"],
     },
   },
   lib: [
     {
       bundle: false,
       dts: true,
-      format: 'esm',
+      format: "esm",
     },
   ],
   output: {
-    target: 'web',
+    target: "web",
   },
   plugins: [
     pluginReact(),
@@ -25,7 +25,7 @@ export default defineConfig({
       exclude: [/[\\/]node_modules[\\/]/],
       babelLoaderOptions(opts) {
         opts.plugins ??= [];
-        opts.plugins.unshift('babel-plugin-react-compiler');
+        opts.plugins.unshift("babel-plugin-react-compiler");
       },
     }),
   ],

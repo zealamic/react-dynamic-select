@@ -5,9 +5,13 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
+    "module": "ESNext",
     "moduleResolution": "bundler",
     "useDefineForClassFields": true,
-    "rootDir": "src"
+    "rootDir": "src",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src"]
 }
