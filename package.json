@@ -10,6 +10,10 @@
     "./antd": {
       "types": "./dist/antd.d.ts",
       "import": "./dist/antd.js"
+    },
+    "./mui": {
+      "types": "./dist/mui.d.ts",
+      "import": "./dist/mui.js"
     }
   },
   "types": "./dist/index.d.ts",
@@ -28,6 +32,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^9.1.2",
     "@rsbuild/core": "~2.0.15",
     "@rsbuild/plugin-babel": "^1.2.1",
     "@rsbuild/plugin-react": "^2.0.1",
@@ -53,11 +60,15 @@
     "typescript": "^6.0.3"
   },
   "peerDependencies": {
+    "@mui/material": ">=5.0.0",
     "antd": ">=5.0.0",
     "react": ">=19.0.0",
     "react-dom": ">=19.0.0"
   },
   "peerDependenciesMeta": {
+    "@mui/material": {
+      "optional": true
+    },
     "antd": {
       "optional": true
     }
