@@ -7,6 +7,10 @@ import type { SearchableApiParams } from "@/general-types";
 import type { MuiSelectMenuPaperProps } from "../types";
 import { MuiListMenuFooter } from "./list-menu-footer";
 import { MuiMenuSearchInput } from "./menu-search-input";
+import {
+  DYNAMIC_SELECT_POPUP_ATTR,
+  MuiAutocompletePopupSection,
+} from "./autocomplete-popup-section";
 
 export const MuiSelectMenuPaper = forwardRef(function MuiSelectMenuPaper<
   DataType = any,
@@ -41,6 +45,7 @@ export const MuiSelectMenuPaper = forwardRef(function MuiSelectMenuPaper<
     <Paper
       ref={ref}
       {...paperProps}
+      {...{ [DYNAMIC_SELECT_POPUP_ATTR]: "" }}
       sx={[
         {
           display: "flex",
@@ -51,7 +56,10 @@ export const MuiSelectMenuPaper = forwardRef(function MuiSelectMenuPaper<
         ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
       ]}
     >
-      <Box sx={{ flexShrink: 0, px: 1.5, pt: 1, pb: 1 }}>
+      <MuiAutocompletePopupSection
+        focusContainedInput
+        sx={{ flexShrink: 0, px: 1.5, pt: 1, pb: 1 }}
+      >
         <MuiMenuSearchInput
           autoFocus
           variant="outlined"
@@ -60,7 +68,7 @@ export const MuiSelectMenuPaper = forwardRef(function MuiSelectMenuPaper<
           onChange={handleMenuSearchChange}
           disabled={searchDisabled}
         />
-      </Box>
+      </MuiAutocompletePopupSection>
       <Divider sx={{ flexShrink: 0 }} />
 
       {loading ? (

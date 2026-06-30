@@ -3,7 +3,6 @@ import type {
   AutocompleteProps,
 } from "@mui/material/Autocomplete";
 import type { PaperProps } from "@mui/material/Paper";
-import type { SelectProps } from "@mui/material/Select";
 import type { TextFieldProps } from "@mui/material/TextField";
 import type { ChangeEvent, SyntheticEvent, UIEvent } from "react";
 import type {
@@ -86,16 +85,12 @@ export type MuiDynamicSelectProps<
     listHeight?: number;
     placeholder?: string;
     label?: string;
-    selectProps?: Omit<
-      SelectProps,
-      | "value"
-      | "defaultValue"
-      | "onChange"
-      | "open"
-      | "onOpen"
-      | "onClose"
-      | "multiple"
-      | "children"
+    renderValue?: (
+      value: Array<string | number>,
+    ) => ReturnType<
+      NonNullable<
+        AutocompleteProps<ResolvedOption, boolean, false, false>["renderValue"]
+      >
     >;
   };
 

@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
+// biome-ignore lint/correctness/noUnusedImports: used for storybook
+import React from "react";
 import { LOAD_MORE_TYPE, SEARCH_PLACEMENT } from "../src/lib/constants";
+import type { MuiDynamicSelectConfig, MuiDynamicSelectProps } from "../src/mui";
 import { MuiDynamicSelect } from "../src/mui";
-import type {
-  MuiDynamicSelectConfig,
-  MuiDynamicSelectProps,
-} from "../src/mui";
+import { renderMultipleValueChips } from "../src/components/mui/handlers";
 import { getUserList, MOCK_USER_LIST } from "./mocks/user";
 
 type UserListParams = Parameters<typeof getUserList>[0];
@@ -54,6 +54,15 @@ const userListConfig = {
   UserListResult,
   UserListParams
 >;
+
+const mockUserOptions = MOCK_USER_LIST.map((user) => ({
+  label: user.fullName,
+  value: user.id,
+}));
+
+function renderUserChips(selected: unknown) {
+  return renderMultipleValueChips(selected, mockUserOptions, "Select users");
+}
 
 function MuiUserSelect(
   props: MuiDynamicSelectProps<
@@ -130,5 +139,20 @@ export const InlineSearch: Story = {
         debounce: 300,
       },
     },
+  },
+};
+
+export const InlineSearchMultiple: Story = {
+  args: {
+    placeholder: "Select a user",
+    sx: { width: 320 },
+    dynamicConfig: {
+      ...userListConfig,
+      search: {
+        placement: SEARCH_PLACEMENT.INLINE,
+        debounce: 300,
+      },
+    },
+    multiple: true,
   },
 };

@@ -5,8 +5,9 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import type { SearchableApiParams } from "@/general-types";
 import { LOAD_MORE_TYPE } from "@/lib/constants";
-import type { MuiDynamicSelectConfig } from "../types";
 import type { ResolvedLoadMoreConfig } from "@/lib/utils/load-more";
+import type { MuiDynamicSelectConfig } from "../types";
+import { MuiAutocompletePopupSection } from "./autocomplete-popup-section";
 
 type MuiListMenuFooterProps<
   DataType = any,
@@ -50,7 +51,7 @@ export function MuiListMenuFooter<
   return (
     <>
       <Divider sx={{ flexShrink: 0 }} />
-      <Box
+      <MuiAutocompletePopupSection
         sx={{
           display: "flex",
           flexShrink: 0,
@@ -85,7 +86,7 @@ export function MuiListMenuFooter<
             {loadMoreConfig?.label || "Load More"}
           </Button>
         )}
-      </Box>
+      </MuiAutocompletePopupSection>
     </>
   );
 }

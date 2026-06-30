@@ -5,7 +5,7 @@ import type { SearchableApiParams } from "@/general-types";
 import { useFetchData } from "@/hooks/use-fetch-data";
 import { useLoadMore } from "@/hooks/use-load-more";
 import { useSearch } from "@/hooks/use-search";
-import { FETCH_TRIGGER } from "@/lib/constants";
+import { FETCH_TRIGGER, SEARCH_PLACEMENT } from "@/lib/constants";
 import {
   mergeDynamicConfig,
   mergeOptionsWithCurrent,
@@ -17,6 +17,7 @@ import type {
   MuiDynamicSelectProps,
   UseMuiDynamicSelectReturn,
 } from "../types";
+import { isDynamicSelectPopupElement } from "../partials/autocomplete-popup-section";
 
 export function useMuiDynamicSelect<
   DataType = any,
@@ -25,7 +26,7 @@ export function useMuiDynamicSelect<
 >(
   props: MuiDynamicSelectProps<DataType, ApiResponse, ApiParams>,
 ): UseMuiDynamicSelectReturn<DataType, ApiResponse, ApiParams> {
-  const { dynamicConfig: dynamicConfigProps, onOpen, onClose } = props;
+  const { dynamicConfig: dynamicConfigProps, onOpen, onClose, multiple } = props;
   const dynamicConfig = useMemo(
     () =>
       mergeDynamicConfig<
@@ -76,8 +77,26 @@ export function useMuiDynamicSelect<
     [isControlledOpen, onOpen],
   );
 
+  const isMenuSearch =
+    dynamicConfig.search?.placement !== SEARCH_PLACEMENT.INLINE;
+
   const handleClose = useCallback(
     (event: React.SyntheticEvent, reason?: AutocompleteCloseReason) => {
+      if (multiple && reason === "selectOption") {
+        return;
+      }
+
+      if (isMenuSearch && reason === "blur") {
+        const relatedTarget = (event as React.FocusEvent).relatedTarget;
+
+        if (
+          isDynamicSelectPopupElement(relatedTarget) ||
+          isDynamicSelectPopupElement(document.activeElement)
+        ) {
+          return;
+        }
+      }
+
       if (reason) {
         onClose?.(event, reason);
       } else {
@@ -97,7 +116,7 @@ export function useMuiDynamicSelect<
         resetSearch();
       }
     },
-    [fetchData, isControlledOpen, onClose, resetSearch, searchValue],
+    [fetchData, isControlledOpen, isMenuSearch, multiple, onClose, resetSearch, searchValue],
   );
 
   const {

@@ -1,6 +1,8 @@
-import { createElement, type ReactNode } from "react";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+import { createElement, type ReactNode, type SyntheticEvent } from "react";
 import type { ResolvedOption } from "@/general-types";
-import type { MuiDynamicSelectValue } from "./types";
+import type { MuiDynamicSelectValue } from "../types";
 
 function isSameOptionValue(a: unknown, b: unknown) {
   return a === b || String(a) === String(b);
@@ -97,25 +99,89 @@ export function resolveSelectValue(
   return value ?? "";
 }
 
+export function normalizeSelectedIds(selected: unknown): Array<string | number> {
+  if (!Array.isArray(selected)) {
+    return [];
+  }
+
+  return selected
+    .map((item) => {
+      if (
+        typeof item === "object" &&
+        item !== null &&
+        "value" in item &&
+        (typeof item.value === "string" || typeof item.value === "number")
+      ) {
+        return item.value;
+      }
+
+      if (typeof item === "string" || typeof item === "number") {
+        return item;
+      }
+
+      return null;
+    })
+    .filter((item): item is string | number => item != null);
+}
+
+export function renderMultipleValueChips(
+  selected: unknown,
+  options: ResolvedOption[],
+  placeholder?: string,
+  onRemoveItem?: (item: string | number) => (event: SyntheticEvent) => void,
+): ReactNode {
+  const values = normalizeSelectedIds(selected);
+
+  if (values.length === 0) {
+    return placeholder ? createElement("em", null, placeholder) : "";
+  }
+
+  return createElement(
+    Box,
+    {
+      sx: {
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 0.5,
+        py: 0.25,
+      },
+    },
+    values.map((item) => {
+      const option = options.find((entry) =>
+        isSameOptionValue(entry.value, item),
+      );
+      const label = option ? getOptionLabel(option) : String(item);
+      const handleRemove = onRemoveItem?.(item);
+
+      return createElement(Chip, {
+        key: String(item),
+        size: "small",
+        label,
+        onDelete: handleRemove,
+        onMouseDown: handleRemove
+          ? (event: SyntheticEvent) => {
+              event.stopPropagation();
+            }
+          : undefined,
+      });
+    }),
+  );
+}
+
 export function formatSelectDisplayValue(
   selected: unknown,
   options: ResolvedOption[],
   placeholder?: string,
   multiple = false,
+  onRemoveItem?: (item: string | number) => (event: SyntheticEvent) => void,
 ): ReactNode {
   if (multiple) {
-    const values = Array.isArray(selected) ? selected : [];
-
-    if (values.length === 0) {
-      return placeholder ? createElement("em", null, placeholder) : "";
-    }
-
-    return values
-      .map((item) => {
-        const option = options.find((entry) => isSameOptionValue(entry.value, item));
-        return option ? getOptionLabel(option) : String(item);
-      })
-      .join(", ");
+    return renderMultipleValueChips(
+      selected,
+      options,
+      placeholder,
+      onRemoveItem,
+    );
   }
 
   if (selected === "" || selected == null) {

@@ -1,5 +1,11 @@
 import { afterEach, expect, test } from "@rstest/core";
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { FETCH_TRIGGER, LOAD_MORE_TYPE } from "../src/lib/constants";
 import type { MuiDynamicSelectConfig } from "../src/mui";
 import { MuiDynamicSelect } from "../src/mui";
@@ -57,7 +63,7 @@ test("MuiDynamicSelect fetches options when dropdown opens", async () => {
   fetchCalls.length = 0;
 
   render(
-    // @ts-ignore
+    // @ts-expect-error
     <MuiDynamicSelect
       placeholder="Select user"
       dynamicConfig={dynamicConfig}
@@ -81,7 +87,7 @@ test("MuiDynamicSelect fetches options when dropdown opens", async () => {
 
 test("MuiDynamicSelect shows currentData label before opening dropdown", () => {
   render(
-    // @ts-ignore
+    // @ts-expect-error
     <MuiDynamicSelect
       placeholder="Select user"
       value={15}
@@ -92,12 +98,12 @@ test("MuiDynamicSelect shows currentData label before opening dropdown", () => {
     />,
   );
 
-  expect(screen.getByText("User 15 preset")).toBeInTheDocument();
+  expect(screen.getByDisplayValue("User 15 preset")).toBeInTheDocument();
 });
 
 test("MuiDynamicSelect merges currentData for multiple mode", () => {
   render(
-    // @ts-ignore
+    // @ts-expect-error
     <MuiDynamicSelect
       multiple
       value={[4, 15]}
@@ -111,5 +117,126 @@ test("MuiDynamicSelect merges currentData for multiple mode", () => {
     />,
   );
 
-  expect(screen.getByText("User 4 preset, User 15 preset")).toBeInTheDocument();
+  expect(screen.getByText("User 4 preset")).toBeInTheDocument();
+  expect(screen.getByText("User 15 preset")).toBeInTheDocument();
+});
+
+test("MuiDynamicSelect keeps menu open when selecting multiple items", async () => {
+  fetchCalls.length = 0;
+
+  render(
+    // @ts-expect-error
+    <MuiDynamicSelect
+      multiple
+      placeholder="Select users"
+      dynamicConfig={dynamicConfig}
+    />,
+  );
+
+  fireEvent.mouseDown(screen.getByRole("combobox"));
+
+  await screen.findByText("User 1");
+  fireEvent.click(screen.getByText("User 1"));
+
+  expect(screen.getByText("User 2")).toBeInTheDocument();
+});
+
+test("MuiDynamicSelect keeps menu open when focusing menu search input", async () => {
+  fetchCalls.length = 0;
+
+  render(
+    // @ts-expect-error
+    <MuiDynamicSelect
+      placeholder="Select users"
+      dynamicConfig={{
+        ...dynamicConfig,
+        search: {
+          inputSearchMenuProps: {
+            placeholder: "Search user",
+          },
+        },
+      }}
+    />,
+  );
+
+  fireEvent.mouseDown(screen.getByRole("combobox"));
+
+  const searchInput = await screen.findByPlaceholderText("Search user");
+  fireEvent.mouseDown(searchInput);
+
+  expect(searchInput).toHaveFocus();
+  expect(screen.getByText("User 1")).toBeInTheDocument();
+});
+
+test("MuiDynamicSelect reopens after closing menu", async () => {
+  fetchCalls.length = 0;
+
+  render(
+    // @ts-expect-error
+    <MuiDynamicSelect
+      placeholder="Select users"
+      dynamicConfig={{
+        ...dynamicConfig,
+        search: {
+          inputSearchMenuProps: {
+            placeholder: "Search user",
+          },
+        },
+      }}
+    />,
+  );
+
+  const combobox = screen.getByRole("combobox");
+
+  fireEvent.mouseDown(combobox);
+  await screen.findByPlaceholderText("Search user");
+
+  fireEvent.keyDown(combobox, { key: "Escape" });
+
+  await waitFor(() => {
+    expect(screen.queryByPlaceholderText("Search user")).not.toBeInTheDocument();
+  });
+
+  fireEvent.mouseDown(combobox);
+  expect(await screen.findByPlaceholderText("Search user")).toBeInTheDocument();
+});
+
+test("MuiDynamicSelect focuses search after loading completes", async () => {
+  fetchCalls.length = 0;
+
+  const slowFetch = async (params: MockParams) => {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    return mockFetch(params);
+  };
+
+  render(
+    // @ts-expect-error
+    <MuiDynamicSelect
+      placeholder="Select users"
+      dynamicConfig={{
+        ...dynamicConfig,
+        api: {
+          ...dynamicConfig.api,
+          fetch: slowFetch,
+        },
+        search: {
+          inputSearchMenuProps: {
+            placeholder: "Search user",
+          },
+        },
+      }}
+    />,
+  );
+
+  fireEvent.mouseDown(screen.getByRole("combobox"));
+
+  const searchInput = await screen.findByPlaceholderText("Search user");
+
+  await waitFor(() => {
+    expect(screen.getByText("User 1")).toBeInTheDocument();
+  });
+
+  await waitFor(() => {
+    expect(searchInput).toHaveFocus();
+  });
 });
