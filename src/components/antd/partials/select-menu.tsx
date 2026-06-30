@@ -2,7 +2,7 @@ import { Button, Divider, Flex, Spin, Typography } from "antd";
 import type { SearchableApiParams } from "@/general-types";
 import { LOAD_MORE_TYPE, SEARCH_PLACEMENT } from "@/lib/constants";
 import type { AntdSelectMenuProps } from "../types";
-import { AntdIsolatedInput } from "./isolated-input";
+import { AntdMenuSearchInput } from "./menu-search-input";
 
 export function AntdSelectMenu<
   DataType = any,
@@ -32,7 +32,7 @@ export function AntdSelectMenu<
     <Flex orientation="vertical">
       {search?.placement === SEARCH_PLACEMENT.MENU && (
         <>
-          <AntdIsolatedInput
+          <AntdMenuSearchInput
             autoFocus
             allowClear
             {...search?.inputSearchMenuProps}
@@ -62,7 +62,7 @@ export function AntdSelectMenu<
                 <Flex
                   align="center"
                   justify="space-between"
-                  style={{ padding: "0 0.5rem 0.25rem" }}
+                  style={{ padding: "0 0.5rem 0.25rem", minHeight: "1.6rem" }}
                   gap="small"
                 >
                   {(totalConfig?.path || totalConfig?.label) && (
@@ -80,9 +80,13 @@ export function AntdSelectMenu<
                   )}
                   {showClickLoadMore && (
                     <Button
-                      type="dashed"
+                      type="default"
+                      color="primary"
                       size="small"
                       onClick={handleLoadMoreClick}
+                      onMouseDown={(event) => {
+                        event.stopPropagation();
+                      }}
                       disabled={loadMoreDisabled}
                     >
                       {loadMoreConfig?.label || "Load More"}

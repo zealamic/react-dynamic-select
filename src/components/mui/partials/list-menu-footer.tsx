@@ -61,6 +61,7 @@ export function MuiListMenuFooter<
           py: 1,
           gap: 1,
           bgcolor: "background.paper",
+          minHeight: "1.5rem",
         }}
       >
         {(totalConfig?.path || totalConfig?.label) && (
@@ -80,8 +81,10 @@ export function MuiListMenuFooter<
           <Button
             size="small"
             variant="outlined"
+            color="primary"
             onClick={handleLoadMoreClick}
             disabled={loadMoreDisabled}
+            sx={{ fontSize: "0.6rem", padding: "0.1rem 0.5rem" }}
           >
             {loadMoreConfig?.label || "Load More"}
           </Button>

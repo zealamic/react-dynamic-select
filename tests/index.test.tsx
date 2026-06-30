@@ -1,5 +1,11 @@
-import { expect, test } from "@rstest/core";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, expect, test } from "@rstest/core";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import type { AntdDynamicSelectConfig } from "../src/antd";
 import { AntdDynamicSelect } from "../src/antd";
 import { FETCH_TRIGGER, LOAD_MORE_TYPE } from "../src/lib/constants";
@@ -48,6 +54,19 @@ const dynamicConfig = {
     type: LOAD_MORE_TYPE.CLICK,
   },
 } satisfies AntdDynamicSelectConfig<MockItem, MockResult, MockParams>;
+
+const menuSearchConfig = {
+  ...dynamicConfig,
+  search: {
+    inputSearchMenuProps: {
+      placeholder: "Search user",
+    },
+  },
+} satisfies AntdDynamicSelectConfig<MockItem, MockResult, MockParams>;
+
+afterEach(() => {
+  cleanup();
+});
 
 test("AntdDynamicSelect fetches options when dropdown opens", async () => {
   fetchCalls.length = 0;
@@ -106,4 +125,71 @@ test("AntdDynamicSelect merges currentData for multiple mode", () => {
 
   expect(screen.getByText("User 4 preset")).toBeInTheDocument();
   expect(screen.getAllByText("User 15 preset").length).toBeGreaterThan(0);
+});
+
+test("AntdDynamicSelect focuses search after loading completes", async () => {
+  fetchCalls.length = 0;
+
+  const slowFetch = async (params: MockParams) => {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    return mockFetch(params);
+  };
+
+  render(
+    <AntdDynamicSelect
+      placeholder="Select user"
+      dynamicConfig={{
+        ...menuSearchConfig,
+        api: {
+          ...menuSearchConfig.api,
+          fetch: slowFetch,
+        },
+      }}
+    />,
+  );
+
+  fireEvent.mouseDown(screen.getByRole("combobox"));
+
+  const searchInput = await screen.findByPlaceholderText("Search user");
+
+  await waitFor(() => {
+    expect(screen.getByText("User 1")).toBeInTheDocument();
+  });
+
+  await waitFor(() => {
+    expect(searchInput).toHaveFocus();
+  });
+});
+
+test("AntdDynamicSelect focuses search after load more completes", async () => {
+  fetchCalls.length = 0;
+
+  render(
+    <AntdDynamicSelect
+      placeholder="Select user"
+      dynamicConfig={menuSearchConfig}
+    />,
+  );
+
+  fireEvent.mouseDown(screen.getByRole("combobox"));
+
+  const searchInput = await screen.findByPlaceholderText("Search user");
+
+  await waitFor(() => {
+    expect(screen.getByText("User 1")).toBeInTheDocument();
+  });
+
+  await waitFor(() => {
+    expect(searchInput).toHaveFocus();
+  });
+
+  fireEvent.click(screen.getByRole("button", { name: "Load More" }));
+
+  await waitFor(() => {
+    expect(fetchCalls.length).toBeGreaterThanOrEqual(2);
+  });
+
+  await waitFor(() => {
+    expect(searchInput).toHaveFocus();
+  });
 });

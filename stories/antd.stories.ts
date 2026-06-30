@@ -126,3 +126,49 @@ export const LoadedDataMultiple: Story = {
     },
   },
 };
+
+export const InlineSearch: Story = {
+  args: {
+    placeholder: "Select a user",
+    style: { width: 320 },
+    allowClear: true,
+    showSearch: true,
+    dynamicConfig: {
+      ...userListConfig,
+      search: {
+        placement: SEARCH_PLACEMENT.INLINE,
+      },
+    },
+  },
+};
+
+export const InlineSearchMultiple: Story = {
+  args: {
+    placeholder: "Select users",
+    style: { width: 320 },
+    allowClear: true,
+    showSearch: true, 
+    mode: "multiple",
+    dynamicConfig: {
+      ...userListConfig,
+      search: {
+        placement: SEARCH_PLACEMENT.INLINE,
+      },
+    },
+  },
+};
+
+export const LoadMoreClick: Story = {
+  args: {
+    placeholder: "Select a user",
+    style: { width: 320 },
+    allowClear: true,
+    showSearch: true,
+    dynamicConfig: {
+      ...userListConfig,
+      loadMore: {
+        type: LOAD_MORE_TYPE.CLICK,
+      },
+    },
+  },
+};
