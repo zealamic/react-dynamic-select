@@ -2,6 +2,8 @@
 
 Async select components for React — fetch options from an API, search, paginate, and load more. Works with **Ant Design**, **MUI**, **Base UI**, or your own UI via headless hooks.
 
+![React Dynamic Select](https://github.com/zealamic/react-dynamic-select/blob/main/assets/cover-photo.jpg)
+
 ## Features
 
 - **Async data** — fetch options on open or mount, with configurable API params
