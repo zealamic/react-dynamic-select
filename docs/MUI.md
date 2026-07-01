@@ -216,3 +216,17 @@ Use when rendering a custom UI on top of MUI Autocomplete.
 - Client-side filtering is disabled (`filterOptions` always returns all server-fetched options).
 - Loading is shown via `CircularProgress` in the input and an overlay in the popup.
 - Closing the popup resets search, same as the Ant Design variant.
+
+---
+
+## Preview
+
+![Default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/default.jpg)
+
+![Inline search](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/inline-search.jpg)
+
+![load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/load-more-click.jpg)
+
+![load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/load-more-scroll.jpg)
+
+![multiple](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/multiple.jpg)

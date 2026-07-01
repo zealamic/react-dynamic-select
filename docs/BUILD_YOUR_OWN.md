@@ -4,10 +4,10 @@ The main entry `@zealamic/react-dynamic-select` is a **headless** toolkit. It ex
 
 Pre-built UI integrations live in separate entry points:
 
-| Entry point | Component |
-|---|---|
-| `@zealamic/react-dynamic-select/antd` | `AntdDynamicSelect` |
-| `@zealamic/react-dynamic-select/mui` | `MuiDynamicSelect` |
+| Entry point                              | Component             |
+| ---------------------------------------- | --------------------- |
+| `@zealamic/react-dynamic-select/antd`    | `AntdDynamicSelect`   |
+| `@zealamic/react-dynamic-select/mui`     | `MuiDynamicSelect`    |
 | `@zealamic/react-dynamic-select/base-ui` | `BaseUiDynamicSelect` |
 
 Each of those is essentially a thin wrapper around the primitives documented here.
@@ -63,30 +63,30 @@ import type {
 
 ### Types
 
-| Export | Description |
-|---|---|
-| `DynamicSelectConfig` | Full config shape: `api`, `list`, `total`, `option`, `search`, `loadMore`, `currentData` |
-| `DynamicSelectHookProps` | `{ dynamicConfig?: DynamicSelectConfig }` — useful as a base for custom hook props |
-| `ResolvedOption` | `{ label?: string \| null; value: string \| number \| null \| undefined }` |
-| `SearchableApiParams` | `Record<string, any> & { search?: string }` — minimum API params constraint |
-| `OptionTemplate` | `{ label?: string; value?: string }` — maps API item fields to options |
-| `PaginationParams` | `{ page, pageSize }` or `{ page, limit }` |
-| `FetchTrigger` | `"mount"` \| `"open"` |
-| `LoadMoreType` | `"click"` \| `"scroll"` |
-| `SearchPlacement` | `"inline"` \| `"menu"` |
-| `ResolvedLoadMoreConfig` | Normalized load-more settings returned by `resolveLoadMoreConfig` |
+| Export                   | Description                                                                              |
+| ------------------------ | ---------------------------------------------------------------------------------------- |
+| `DynamicSelectConfig`    | Full config shape: `api`, `list`, `total`, `option`, `search`, `loadMore`, `currentData` |
+| `DynamicSelectHookProps` | `{ dynamicConfig?: DynamicSelectConfig }` — useful as a base for custom hook props       |
+| `ResolvedOption`         | `{ label?: string \| null; value: string \| number \| null \| undefined }`               |
+| `SearchableApiParams`    | `Record<string, any> & { search?: string }` — minimum API params constraint              |
+| `OptionTemplate`         | `{ label?: string; value?: string }` — maps API item fields to options                   |
+| `PaginationParams`       | `{ page, pageSize }` or `{ page, limit }`                                                |
+| `FetchTrigger`           | `"mount"` \| `"open"`                                                                    |
+| `LoadMoreType`           | `"click"` \| `"scroll"`                                                                  |
+| `SearchPlacement`        | `"inline"` \| `"menu"`                                                                   |
+| `ResolvedLoadMoreConfig` | Normalized load-more settings returned by `resolveLoadMoreConfig`                        |
 
 ### Constants
 
-| Export | Value | Description |
-|---|---|---|
-| `FETCH_TRIGGER.MOUNT` | `"mount"` | Fetch on component mount |
-| `FETCH_TRIGGER.OPEN` | `"open"` | Fetch on first dropdown open (default) |
-| `SEARCH_PLACEMENT.MENU` | `"menu"` | Search input inside the dropdown |
-| `SEARCH_PLACEMENT.INLINE` | `"inline"` | Search on the main input |
-| `LOAD_MORE_TYPE.CLICK` | `"click"` | Load more via button |
-| `LOAD_MORE_TYPE.SCROLL` | `"scroll"` | Load more on scroll-to-bottom |
-| `INVALID_VALUE` | `""` | Sentinel used internally for missing template values |
+| Export                    | Value      | Description                                          |
+| ------------------------- | ---------- | ---------------------------------------------------- |
+| `FETCH_TRIGGER.MOUNT`     | `"mount"`  | Fetch on component mount                             |
+| `FETCH_TRIGGER.OPEN`      | `"open"`   | Fetch on first dropdown open (default)               |
+| `SEARCH_PLACEMENT.MENU`   | `"menu"`   | Search input inside the dropdown                     |
+| `SEARCH_PLACEMENT.INLINE` | `"inline"` | Search on the main input                             |
+| `LOAD_MORE_TYPE.CLICK`    | `"click"`  | Load more via button                                 |
+| `LOAD_MORE_TYPE.SCROLL`   | `"scroll"` | Load more on scroll-to-bottom                        |
+| `INVALID_VALUE`           | `""`       | Sentinel used internally for missing template values |
 
 ### `defaultDynamicSelectConfig`
 
@@ -113,14 +113,14 @@ Manages async data fetching, pagination, and option resolution.
 
 **Returns:**
 
-| Field | Type | Description |
-|---|---|---|
-| `options` | `ResolvedOption[]` | Options from the latest fetch (accumulated on load more) |
-| `total` | `number` | Total record count from the API response |
-| `loading` | `boolean` | Initial fetch in progress |
-| `isLoadingMore` | `boolean` | Load-more fetch in progress |
-| `fetchData` | `(overrideParams?) => Promise<void>` | Reset to page 1 and fetch. Pass `{ search: "..." }` to search |
-| `fetchLoadMore` | `() => Promise<void>` | Fetch the next page and append options |
+| Field           | Type                                 | Description                                                   |
+| --------------- | ------------------------------------ | ------------------------------------------------------------- |
+| `options`       | `ResolvedOption[]`                   | Options from the latest fetch (accumulated on load more)      |
+| `total`         | `number`                             | Total record count from the API response                      |
+| `loading`       | `boolean`                            | Initial fetch in progress                                     |
+| `isLoadingMore` | `boolean`                            | Load-more fetch in progress                                   |
+| `fetchData`     | `(overrideParams?) => Promise<void>` | Reset to page 1 and fetch. Pass `{ search: "..." }` to search |
+| `fetchLoadMore` | `() => Promise<void>`                | Fetch the next page and append options                        |
 
 **Behavior:**
 
@@ -136,12 +136,12 @@ Debounced search state for inline or menu search inputs.
 
 **Returns:**
 
-| Field | Description |
-|---|---|
-| `searchValue` | Current search string |
-| `handleInlineSearch` | `(value: string) => void` — for inline search inputs |
+| Field                    | Description                                                               |
+| ------------------------ | ------------------------------------------------------------------------- |
+| `searchValue`            | Current search string                                                     |
+| `handleInlineSearch`     | `(value: string) => void` — for inline search inputs                      |
 | `handleMenuSearchChange` | `(event: ChangeEvent<HTMLInputElement>) => void` — for menu search inputs |
-| `resetSearch` | Clears search value and pending debounce |
+| `resetSearch`            | Clears search value and pending debounce                                  |
 
 Wire `onSearch` to `fetchData({ search })`.
 
@@ -151,12 +151,12 @@ Scroll and click handlers for pagination.
 
 **Returns:**
 
-| Field | Description |
-|---|---|
-| `handleLoadMoreClick` | Click handler for `LOAD_MORE_TYPE.CLICK` |
-| `handlePopupScroll` | Scroll handler for `LOAD_MORE_TYPE.SCROLL` (also forwards `onPopupScroll`) |
-| `loadMoreConfig` | Resolved load-more config, or `null` if disabled |
-| `canLoadMore` | `true` when `loadedCount < total` |
+| Field                 | Description                                                                |
+| --------------------- | -------------------------------------------------------------------------- |
+| `handleLoadMoreClick` | Click handler for `LOAD_MORE_TYPE.CLICK`                                   |
+| `handlePopupScroll`   | Scroll handler for `LOAD_MORE_TYPE.SCROLL` (also forwards `onPopupScroll`) |
+| `loadMoreConfig`      | Resolved load-more config, or `null` if disabled                           |
+| `canLoadMore`         | `true` when `loadedCount < total`                                          |
 
 ---
 
@@ -164,32 +164,32 @@ Scroll and click handlers for pagination.
 
 ### Config merging
 
-| Function | Description |
-|---|---|
+| Function                                        | Description                              |
+| ----------------------------------------------- | ---------------------------------------- |
 | `mergeDynamicConfig({ defaultConfig, config })` | Deep-merges partial config into defaults |
 
 ### Pagination
 
-| Function | Description |
-|---|---|
-| `getInitialPagination(params)` | Returns `{ page: 1, pageSize }` or `{ page: 1, limit }` from config params |
-| `getNextPagePagination(current)` | Increments `page` by 1 |
-| `hasMoreToLoad(loadedCount, total)` | `total > 0 && loadedCount < total` |
+| Function                            | Description                                                                |
+| ----------------------------------- | -------------------------------------------------------------------------- |
+| `getInitialPagination(params)`      | Returns `{ page: 1, pageSize }` or `{ page: 1, limit }` from config params |
+| `getNextPagePagination(current)`    | Increments `page` by 1                                                     |
+| `hasMoreToLoad(loadedCount, total)` | `total > 0 && loadedCount < total`                                         |
 
 ### Response → options
 
-| Function | Description |
-|---|---|
-| `resolveDataFromTemplate({ template, data })` | Reads a value from nested response data. Supports dot paths (`"data.items"`) and `"{field}"` placeholders |
-| `resolveOptionFromTemplate({ template, data })` | Maps one API item to `ResolvedOption` |
-| `resolveLoadMoreConfig(loadMore)` | Normalizes `loadMore: true \| object` to `ResolvedLoadMoreConfig \| null` |
+| Function                                        | Description                                                                                               |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `resolveDataFromTemplate({ template, data })`   | Reads a value from nested response data. Supports dot paths (`"data.items"`) and `"{field}"` placeholders |
+| `resolveOptionFromTemplate({ template, data })` | Maps one API item to `ResolvedOption`                                                                     |
+| `resolveLoadMoreConfig(loadMore)`               | Normalizes `loadMore: true \| object` to `ResolvedLoadMoreConfig \| null`                                 |
 
 ### Selected value handling
 
-| Function | Description |
-|---|---|
-| `resolveCurrentOptions(dynamicConfig)` | Converts `currentData` to `ResolvedOption[]` using `option.template` |
-| `normalizeSelectValues(value, { mode, labelInValue })` | Extracts primitive ids from single/multiple/`labelInValue` select values |
+| Function                                                                      | Description                                                                    |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `resolveCurrentOptions(dynamicConfig)`                                        | Converts `currentData` to `ResolvedOption[]` using `option.template`           |
+| `normalizeSelectValues(value, { mode, labelInValue })`                        | Extracts primitive ids from single/multiple/`labelInValue` select values       |
 | `mergeOptionsWithCurrent({ fetchedOptions, currentOptions, selectedValues })` | Ensures pre-loaded selected options appear in the list even if not yet fetched |
 
 ---
@@ -405,7 +405,7 @@ function CustomUserSelect() {
     <div>
       <button type="button" onClick={() => handleOpenChange(!open)}>
         {value != null
-          ? options.find((o) => o.value === value)?.label ?? value
+          ? (options.find((o) => o.value === value)?.label ?? value)
           : "Select a user"}
       </button>
 
@@ -419,7 +419,10 @@ function CustomUserSelect() {
             />
           )}
 
-          <div onScroll={handlePopupScroll} style={{ maxHeight: 200, overflow: "auto" }}>
+          <div
+            onScroll={handlePopupScroll}
+            style={{ maxHeight: 200, overflow: "auto" }}
+          >
             {loading ? (
               <p>Loading...</p>
             ) : (
@@ -446,7 +449,9 @@ function CustomUserSelect() {
                 onClick={handleLoadMoreClick}
                 disabled={loading || isLoadingMore}
               >
-                {isLoadingMore ? "Loading..." : loadMoreConfig.label ?? "Load More"}
+                {isLoadingMore
+                  ? "Loading..."
+                  : (loadMoreConfig.label ?? "Load More")}
               </button>
             )}
           </footer>
@@ -472,7 +477,7 @@ When building a custom dynamic select, make sure you handle:
 
 ## See also
 
-- [ANTD.md](./ANTD.md) — full `dynamicConfig` reference
-- [MUI.md](./MUI.md) — MUI integration
-- [BASE-UI.md](./BASE-UI.md) — Base UI headless integration with slot components
+- [ANTD.md](https://github.com/zealamic/react-dynamic-select/blob/main/docs/ANTD.md) — full `dynamicConfig` reference
+- [MUI.md](https://github.com/zealamic/react-dynamic-select/blob/main/docs/MUI.md) — MUI integration
+- [BASE-UI.md](https://github.com/zealamic/react-dynamic-select/blob/main/docs/BASE-UI.md) — Base UI headless integration with slot components
 - `src/components/antd/hooks/use-dynamic-select.ts` — reference implementation

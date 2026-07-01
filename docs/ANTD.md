@@ -216,3 +216,17 @@ const selectProps = useAntdDynamicSelect(props);
 - Closing the dropdown resets the search value and re-fetches the first page (if a search was active).
 - `listHeight` defaults to `200` when not provided.
 - Fetch runs only on the first open (unless `trigger: FETCH_TRIGGER.MOUNT`).
+
+---
+
+## Preview
+
+![Default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/default.jpg)
+
+![Inline search](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/inline-search.jpg)
+
+![load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-click.jpg)
+
+![load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-scroll.jpg)
+
+![multiple](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/multiple.jpg)

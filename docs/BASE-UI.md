@@ -268,3 +268,17 @@ BaseUiDynamicSelect<UserModel, ApiResponse, ApiParams, Multiple>
 - See `stories/components/base-ui/story-components.tsx` and `base-ui.module.css` to copy the pattern.
 - Use `onValueChange(value, eventDetails)` instead of `onChange` from other variants.
 - The `label` prop renders a label above the input when `components.Label` is provided.
+
+---
+
+## Preview
+
+![Default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/default.jpg)
+
+![Inline search](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/inline-search.jpg)
+
+![load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/load-more-click.jpg)
+
+![load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/load-more-scroll.jpg)
+
+![multiple](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/multiple.jpg)
