@@ -5,12 +5,12 @@ import Paper from "@mui/material/Paper";
 import { forwardRef } from "react";
 import type { SearchableApiParams } from "@/general-types";
 import type { MuiSelectMenuPaperProps } from "../types";
-import { MuiListMenuFooter } from "./list-menu-footer";
-import { MuiMenuSearchInput } from "./menu-search-input";
 import {
   DYNAMIC_SELECT_POPUP_ATTR,
   MuiAutocompletePopupSection,
 } from "./autocomplete-popup-section";
+import { MuiListMenuFooter } from "./list-menu-footer";
+import { MuiMenuSearchInput } from "./menu-search-input";
 
 export const MuiSelectMenuPaper = forwardRef(function MuiSelectMenuPaper<
   DataType = any,

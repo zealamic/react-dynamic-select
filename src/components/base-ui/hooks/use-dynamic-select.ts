@@ -1,43 +1,38 @@
-import type { AutocompleteCloseReason } from "@mui/material/Autocomplete";
+import type { ComboboxRootChangeEventDetails } from "@base-ui/react/combobox";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { defaultDynamicSelectConfig } from "@/default";
 import type { SearchableApiParams } from "@/general-types";
 import { useFetchData } from "@/hooks/use-fetch-data";
 import { useLoadMore } from "@/hooks/use-load-more";
 import { useSearch } from "@/hooks/use-search";
-import { FETCH_TRIGGER, SEARCH_PLACEMENT } from "@/lib/constants";
+import { FETCH_TRIGGER } from "@/lib/constants";
 import {
   mergeDynamicConfig,
   mergeOptionsWithCurrent,
   normalizeSelectValues,
   resolveCurrentOptions,
 } from "@/lib/utils";
-import { isDynamicSelectPopupElement } from "../partials/autocomplete-popup-section";
 import type {
-  MuiDynamicSelectConfig,
-  MuiDynamicSelectProps,
-  UseMuiDynamicSelectReturn,
+  BaseUiDynamicSelectConfig,
+  BaseUiDynamicSelectProps,
+  UseBaseUiDynamicSelectReturn,
 } from "../types";
 
-export function useMuiDynamicSelect<
+export function useBaseUiDynamicSelect<
   DataType = any,
   ApiResponse = any,
   ApiParams extends SearchableApiParams = SearchableApiParams,
+  Multiple extends boolean = false,
 >(
-  props: MuiDynamicSelectProps<DataType, ApiResponse, ApiParams>,
-): UseMuiDynamicSelectReturn<DataType, ApiResponse, ApiParams> {
-  const {
-    dynamicConfig: dynamicConfigProps,
-    onOpen,
-    onClose,
-    multiple,
-  } = props;
+  props: BaseUiDynamicSelectProps<DataType, ApiResponse, ApiParams, Multiple>,
+): UseBaseUiDynamicSelectReturn<DataType, ApiResponse, ApiParams, Multiple> {
+  const { dynamicConfig: dynamicConfigProps, onOpenChange, multiple } = props;
   const dynamicConfig = useMemo(
     () =>
       mergeDynamicConfig<
-        MuiDynamicSelectConfig<DataType, ApiResponse, ApiParams>
+        BaseUiDynamicSelectConfig<DataType, ApiResponse, ApiParams>
       >({
-        defaultConfig: defaultDynamicSelectConfig as MuiDynamicSelectConfig<
+        defaultConfig: defaultDynamicSelectConfig as BaseUiDynamicSelectConfig<
           DataType,
           ApiResponse,
           ApiParams
@@ -52,7 +47,7 @@ export function useMuiDynamicSelect<
 
   const isControlledOpen = props.open !== undefined;
   const [localOpen, setLocalOpen] = useState(props.open ?? false);
-  const isOpen = isControlledOpen ? props.open : localOpen;
+  const open = isControlledOpen ? (props.open ?? false) : localOpen;
   const hasFetchedOnOpenRef = useRef(false);
   const prevConfigPropsRef = useRef(dynamicConfigProps);
 
@@ -71,62 +66,39 @@ export function useMuiDynamicSelect<
     onSearch: handleSearch,
   });
 
-  const handleOpen = useCallback(
-    (event: React.SyntheticEvent) => {
-      onOpen?.(event);
+  const handleOpenChange = useCallback(
+    (nextOpen: boolean, eventDetails?: ComboboxRootChangeEventDetails) => {
+      if (eventDetails) {
+        onOpenChange?.(nextOpen, eventDetails);
+      }
 
       if (!isControlledOpen) {
-        setLocalOpen(true);
-      }
-    },
-    [isControlledOpen, onOpen],
-  );
-
-  const isMenuSearch =
-    dynamicConfig.search?.placement !== SEARCH_PLACEMENT.INLINE;
-
-  const handleClose = useCallback(
-    (event: React.SyntheticEvent, reason?: AutocompleteCloseReason) => {
-      if (multiple && reason === "selectOption") {
-        return;
+        setLocalOpen(nextOpen);
       }
 
-      if (isMenuSearch && reason === "blur") {
-        const relatedTarget = (event as React.FocusEvent).relatedTarget;
+      if (
+        nextOpen &&
+        dynamicConfig.api.trigger === FETCH_TRIGGER.OPEN &&
+        !hasFetchedOnOpenRef.current
+      ) {
+        hasFetchedOnOpenRef.current = true;
+        void fetchData();
+      }
 
-        if (
-          isDynamicSelectPopupElement(relatedTarget) ||
-          isDynamicSelectPopupElement(document.activeElement)
-        ) {
-          return;
+      if (!nextOpen) {
+        if (searchValue) {
+          resetSearch();
+          void fetchData({ search: "" } as Partial<ApiParams>);
+        } else {
+          resetSearch();
         }
-      }
-
-      if (reason) {
-        onClose?.(event, reason);
-      } else {
-        (onClose as ((event: React.SyntheticEvent) => void) | undefined)?.(
-          event,
-        );
-      }
-
-      if (!isControlledOpen) {
-        setLocalOpen(false);
-      }
-
-      if (searchValue) {
-        resetSearch();
-        void fetchData({ search: "" } as Partial<ApiParams>);
-      } else {
-        resetSearch();
       }
     },
     [
+      dynamicConfig.api.trigger,
       fetchData,
       isControlledOpen,
-      isMenuSearch,
-      multiple,
-      onClose,
+      onOpenChange,
       resetSearch,
       searchValue,
     ],
@@ -149,9 +121,9 @@ export function useMuiDynamicSelect<
   const selectedValues = useMemo(
     () =>
       normalizeSelectValues(props.value ?? props.defaultValue, {
-        mode: props.multiple ? "multiple" : undefined,
+        mode: multiple ? "multiple" : undefined,
       }),
-    [props.defaultValue, props.multiple, props.value],
+    [props.defaultValue, multiple, props.value],
   );
 
   const currentOptions = useMemo(
@@ -180,11 +152,11 @@ export function useMuiDynamicSelect<
       return;
     }
 
-    if (isOpen && !hasFetchedOnOpenRef.current) {
+    if (open && !hasFetchedOnOpenRef.current) {
       hasFetchedOnOpenRef.current = true;
       void fetchData();
     }
-  }, [fetchData, isOpen, dynamicConfig.api.trigger, dynamicConfigProps]);
+  }, [fetchData, open, dynamicConfig.api.trigger, dynamicConfigProps]);
 
   return {
     ...props,
@@ -195,9 +167,9 @@ export function useMuiDynamicSelect<
     isLoadingMore,
     canLoadMore,
     loadMoreConfig,
-    isOpen: isOpen ?? false,
-    handleOpen,
-    handleClose,
+    isOpenControlled: isControlledOpen,
+    open,
+    handleOpenChange,
     handlePopupScroll,
     handleLoadMoreClick,
     searchValue,

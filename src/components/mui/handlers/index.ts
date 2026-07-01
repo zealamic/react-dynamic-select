@@ -99,7 +99,9 @@ export function resolveSelectValue(
   return value ?? "";
 }
 
-export function normalizeSelectedIds(selected: unknown): Array<string | number> {
+export function normalizeSelectedIds(
+  selected: unknown,
+): Array<string | number> {
   if (!Array.isArray(selected)) {
     return [];
   }

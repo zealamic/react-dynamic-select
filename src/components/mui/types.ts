@@ -70,7 +70,12 @@ export type MuiDynamicSelectProps<
   ApiParams extends SearchableApiParams = SearchableApiParams,
 > = Omit<
   AutocompleteProps<ResolvedOption, boolean, false, false>,
-  "options" | "value" | "defaultValue" | "onChange" | "filterOptions"
+  | "options"
+  | "value"
+  | "defaultValue"
+  | "onChange"
+  | "filterOptions"
+  | "renderInput"
 > &
   Pick<TextFieldProps, "helperText" | "error" | "required" | "name"> & {
     dynamicConfig?: MuiDynamicSelectConfig<DataType, ApiResponse, ApiParams>;
@@ -85,6 +90,9 @@ export type MuiDynamicSelectProps<
     listHeight?: number;
     placeholder?: string;
     label?: string;
+    renderInput?: NonNullable<
+      AutocompleteProps<ResolvedOption, boolean, false, false>["renderInput"]
+    >;
     renderValue?: (
       value: Array<string | number>,
     ) => ReturnType<

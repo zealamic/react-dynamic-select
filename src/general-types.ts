@@ -43,7 +43,10 @@ export type DynamicSelectConfig<
 > = {
   api: {
     fetch?: (params: ApiParams) => Promise<ApiResponse>;
-    params?: ApiParams;
+    params?: (Omit<ApiParams, "search" | "page" | "pageSize" | "limit"> & {
+      search?: string;
+    }) &
+      PaginationParams;
     onSuccess?: (data: ApiResponse) => void;
     onError?: (error: Error) => void;
     trigger?: FetchTrigger;

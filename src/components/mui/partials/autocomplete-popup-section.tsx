@@ -7,7 +7,8 @@ export function isDynamicSelectPopupElement(
   node: EventTarget | null | undefined,
 ) {
   return (
-    node instanceof Element && node.closest(`[${DYNAMIC_SELECT_POPUP_ATTR}]`) != null
+    node instanceof Element &&
+    node.closest(`[${DYNAMIC_SELECT_POPUP_ATTR}]`) != null
   );
 }
 

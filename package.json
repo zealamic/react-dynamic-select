@@ -14,6 +14,10 @@
     "./mui": {
       "types": "./dist/mui.d.ts",
       "import": "./dist/mui.js"
+    },
+    "./base-ui": {
+      "types": "./dist/base-ui.d.ts",
+      "import": "./dist/base-ui.js"
     }
   },
   "types": "./dist/index.d.ts",
@@ -31,6 +35,7 @@
     "test:watch": "rstest --watch"
   },
   "devDependencies": {
+    "@base-ui/react": "^1.6.0",
     "@biomejs/biome": "2.4.15",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
@@ -54,18 +59,23 @@
     "happy-dom": "^20.10.3",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-hook-form": "^7.80.0",
     "storybook": "^10.4.5",
     "storybook-addon-rslib": "^3.3.4",
     "storybook-react-rsbuild": "^3.3.4",
     "typescript": "^6.0.3"
   },
   "peerDependencies": {
+    "@base-ui/react": ">=1.0.0",
     "@mui/material": ">=5.0.0",
     "antd": ">=5.0.0",
     "react": ">=19.0.0",
     "react-dom": ">=19.0.0"
   },
   "peerDependenciesMeta": {
+    "@base-ui/react": {
+      "optional": true
+    },
     "@mui/material": {
       "optional": true
     },

@@ -6,22 +6,22 @@ import Autocomplete, {
 import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
 import {
-  cloneElement,
   Children,
-  type ReactNode,
+  cloneElement,
   Fragment,
   isValidElement,
+  type ReactNode,
   useCallback,
   useMemo,
 } from "react";
 import type { ResolvedOption } from "@/general-types";
+import { SEARCH_PLACEMENT } from "@/lib/constants";
 import {
   getOptionLabel,
   isOptionEqualToValue,
   resolveAutocompleteValue,
   toChangeValue,
 } from "../handlers";
-import { SEARCH_PLACEMENT } from "@/lib/constants";
 import type {
   MuiDynamicSelectProps,
   UseMuiDynamicSelectReturn,
@@ -123,10 +123,7 @@ export function MuiCustomAutocomplete<
     >
   >(
     (event, newInputValue, reason) => {
-      if (
-        isInlineSearch &&
-        (reason === "input" || reason === "clear")
-      ) {
+      if (isInlineSearch && (reason === "input" || reason === "clear")) {
         handleInlineSearch(reason === "clear" ? "" : newInputValue);
       }
 

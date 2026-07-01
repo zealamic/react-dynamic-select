@@ -5,6 +5,7 @@ import type {
 } from "../src/antd";
 import { AntdDynamicSelect } from "../src/antd";
 import { LOAD_MORE_TYPE, SEARCH_PLACEMENT } from "../src/lib/constants";
+import { AntdHookFormStory } from "./components/antd/story-hook-form";
 import { getUserList, MOCK_USER_LIST } from "./mocks/user";
 
 type UserListParams = Parameters<typeof getUserList>[0];
@@ -15,7 +16,10 @@ const presetUsers = [MOCK_USER_LIST[14], MOCK_USER_LIST[15]]; // id: 15, 16
 
 const userListConfig = {
   api: {
-    fetch: getUserList,
+    fetch: (params: any) => {
+      console.log("fetch", params);
+      return getUserList(params);
+    },
     params: {
       page: 1,
       pageSize: 10,
@@ -147,7 +151,7 @@ export const InlineSearchMultiple: Story = {
     placeholder: "Select users",
     style: { width: 320 },
     allowClear: true,
-    showSearch: true, 
+    showSearch: true,
     mode: "multiple",
     dynamicConfig: {
       ...userListConfig,
@@ -170,5 +174,12 @@ export const LoadMoreClick: Story = {
         type: LOAD_MORE_TYPE.CLICK,
       },
     },
+  },
+};
+
+export const HookForm: Story = {
+  render: () => <AntdHookFormStory />,
+  parameters: {
+    controls: { disable: true },
   },
 };

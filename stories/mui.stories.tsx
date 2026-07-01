@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { LOAD_MORE_TYPE, SEARCH_PLACEMENT } from "../src/lib/constants";
 import type { MuiDynamicSelectConfig, MuiDynamicSelectProps } from "../src/mui";
 import { MuiDynamicSelect } from "../src/mui";
+import { MuiHookFormStory } from "./components/mui/story-hook-form";
 import { getUserList, MOCK_USER_LIST } from "./mocks/user";
 
 type UserListParams = Parameters<typeof getUserList>[0];
@@ -155,5 +156,12 @@ export const LoadMoreClick: Story = {
         type: LOAD_MORE_TYPE.CLICK,
       },
     },
+  },
+};
+
+export const HookForm: Story = {
+  render: () => <MuiHookFormStory />,
+  parameters: {
+    controls: { disable: true },
   },
 };

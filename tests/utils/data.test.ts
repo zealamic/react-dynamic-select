@@ -3,7 +3,7 @@ import {
   mergeOptionsWithCurrent,
   normalizeSelectValues,
   resolveCurrentOptions,
-} from "../src/lib/utils";
+} from "../../src/lib/utils/data";
 
 test("normalizeSelectValues handles single mode", () => {
   expect(normalizeSelectValues(4)).toEqual([4]);
@@ -63,13 +63,13 @@ test("resolveCurrentOptions supports single object and array", () => {
     },
   };
 
-  // @ts-expect-error
+  // @ts-expect-error minimal config for unit test
   expect(resolveCurrentOptions(config)).toEqual([
     { label: "Jill Doe", value: 4 },
   ]);
 
   expect(
-    // @ts-expect-error
+    // @ts-expect-error minimal config for unit test
     resolveCurrentOptions({
       ...config,
       currentData: [
