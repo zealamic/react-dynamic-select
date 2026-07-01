@@ -1,0 +1,55 @@
+name: Publish Package to npm
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Reason for running the workflow"
+        required: false
+        default: "Manual publish"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm run test
+
+      - name: Build library
+        run: pnpm run build
+
+      - name: Publish to npm
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [[ "$VERSION" =~ (alpha|beta|rc) ]]; then
+            echo "Publishing prerelease ${VERSION} with tag beta..."
+            npm publish --provenance --access public --tag beta
+          else
+            echo "Publishing stable version ${VERSION}..."
+            npm publish --provenance --access public
+          fi

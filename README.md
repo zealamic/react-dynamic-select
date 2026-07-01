@@ -19,16 +19,6 @@ Same `dynamicConfig` across UI libraries:
 | :---: | :---: | :---: |
 | ![Ant Design default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/default.jpg) | ![MUI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/default.jpg) | ![Base UI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/default.jpg) |
 
-Feature highlights (Ant Design variant):
-
-| Inline search | Multiple |
-| :---: | :---: |
-| ![Inline search](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/inline-search.jpg) | ![Multiple](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/multiple.jpg) |
-
-| Load more (scroll) | Load more (click) |
-| :---: | :---: |
-| ![Load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-scroll.jpg) | ![Load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-click.jpg) |
-
 More screenshots and usage details in the [documentation](#documentation).
 
 ## Installation
@@ -83,6 +73,42 @@ import { AntdDynamicSelect } from "@zealamic/react-dynamic-select/antd";
 ```
 
 All variants share the same `dynamicConfig` shape. Pass only the fields that differ from the defaults.
+
+## Dynamic config properties
+
+`dynamicConfig` is the shared prop that wires async behavior into every variant. It is deep-merged with `defaultDynamicSelectConfig` — you only need to pass fields that differ from the defaults.
+
+Full reference: [ANTD.md](./docs/ANTD.md#dynamicconfig).
+
+| Property | Description | Type | Default |
+| --- | --- | --- | --- |
+| **api** | API fetch configuration | `object` | — |
+| **api.fetch** | Function that loads options from the server | `(params) => Promise<ApiResponse>` | — |
+| **api.params** | Default query sent on every request (`page`, `pageSize` or `limit`, `search`) | `ApiParams & PaginationParams` | `{ page: 1, pageSize: 10, search: "" }` |
+| **api.trigger** | When to run the first fetch | `"open"` \| `"mount"` | `"open"` |
+| **api.onSuccess** | Called after a successful fetch | `(data: ApiResponse) => void` | — |
+| **api.onError** | Called when a fetch fails | `(error: Error) => void` | — |
+| **list** | Maps the options array from the API response | `object` | — |
+| **list.path** | Dot path to the list in the response, e.g. `"data"` or `"result.items"` | `string` | `"list"` |
+| **total** | Maps the total record count from the response | `object` | — |
+| **total.path** | Dot path to the total count, e.g. `"total"` | `string` | `"total"` |
+| **total.label** | Label shown in the dropdown footer | `string` | `"Total"` |
+| **option** | Maps each API item to a select option | `object` | — |
+| **option.template.label** | Label field or template, supports `"{firstName} {lastName}"` | `string` | `"label"` |
+| **option.template.value** | Value field | `string` | `"value"` |
+| **currentData** | Pre-loaded item(s) for edit mode when the selected value is not in the fetched list yet | `DataType` \| `DataType[]` | — |
+| **search** | Search input configuration | `object` | — |
+| **search.placement** | Where the search input is rendered | `"menu"` \| `"inline"` | `"menu"` |
+| **search.debounce** | Debounce delay before triggering a search fetch (ms) | `number` | `500` |
+| **search.inputSearchMenuProps** | Props for the menu search input (Ant Design `Input`, MUI `TextField`, or Base UI `ComboboxInput`) | `InputSearchProps` | `{ placeholder: "Search..." }` |
+| **loadMore** | Enable pagination / load more. `true` enables click mode with defaults | `boolean` \| `object` | `{ type: "click", threshold: 100, distance: 100, debounce: 100 }` |
+| **loadMore.type** | How to load the next page | `"click"` \| `"scroll"` | `"click"` |
+| **loadMore.label** | Load-more button text | `string` | `"Load More"` |
+| **loadMore.loadingLabel** | Text shown while loading more | `string` | `"Loading..."` |
+| **loadMore.threshold** | Scroll threshold (px) to trigger load more | `number` | `100` |
+| **loadMore.distance** | Distance from bottom (px) to trigger scroll load more | `number` | `100` |
+| **loadMore.debounce** | Debounce delay for scroll load more (ms) | `number` | `100` |
+| **loadMore.afterFetch** | Hook called after each successful fetch | `(data: ApiResponse) => Promise<void>` | — |
 
 ## Documentation
 

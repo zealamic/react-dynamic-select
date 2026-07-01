@@ -87,6 +87,5 @@
     "onlyBuiltDependencies": [
       "esbuild"
     ]
-  },
-  "private": true
+  }
 }
