@@ -57,7 +57,7 @@ function UserSelect() {
 }
 ```
 
-![Default](../assets/antd/default.jpg)
+![Default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/default.jpg)
 
 `AntdDynamicSelect` extends all Ant Design `Select` props and adds `dynamicConfig`.
 
@@ -113,7 +113,7 @@ Config is merged with `defaultDynamicSelectConfig`. Only pass fields that differ
 />
 ```
 
-![Inline search](../assets/antd/inline-search.jpg)
+![Inline search](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/inline-search.jpg)
 
 ### `loadMore`
 
@@ -134,9 +134,9 @@ dynamicConfig={{ ...config, loadMore: { type: LOAD_MORE_TYPE.SCROLL } }}
 dynamicConfig={{ ...config, loadMore: { type: LOAD_MORE_TYPE.CLICK } }}
 ```
 
-![Load more scroll](../assets/antd/load-more-scroll.jpg)
+![Load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-scroll.jpg)
 
-![Load more click](../assets/antd/load-more-click.jpg)
+![Load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-click.jpg)
 
 ### `currentData`
 
@@ -165,7 +165,7 @@ Use when the form already has a value (edit mode) but the option is not in the f
 />
 ```
 
-![Multiple](../assets/antd/multiple.jpg)
+![Multiple](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/multiple.jpg)
 
 ## React Hook Form
 
@@ -216,17 +216,3 @@ const selectProps = useAntdDynamicSelect(props);
 - Closing the dropdown resets the search value and re-fetches the first page (if a search was active).
 - `listHeight` defaults to `200` when not provided.
 - Fetch runs only on the first open (unless `trigger: FETCH_TRIGGER.MOUNT`).
-
----
-
-## Preview
-
-![Default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/default.jpg)
-
-![Inline search](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/inline-search.jpg)
-
-![load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-click.jpg)
-
-![load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-scroll.jpg)
-
-![multiple](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/multiple.jpg)

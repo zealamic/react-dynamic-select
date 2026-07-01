@@ -55,7 +55,7 @@ function UserSelect() {
 }
 ```
 
-![Default](../assets/mui/default.jpg)
+![Default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/default.jpg)
 
 `MuiDynamicSelect` wraps MUI `Autocomplete` with an async data layer. Most Autocomplete props are supported, except `options`, `value`, `defaultValue`, `onChange`, `filterOptions`, and `renderInput` (managed internally).
 
@@ -105,7 +105,7 @@ The only difference: `search.inputSearchMenuProps` accepts MUI `TextField` props
 />
 ```
 
-![Inline search](../assets/mui/inline-search.jpg)
+![Inline search](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/inline-search.jpg)
 
 ### Load more
 
@@ -117,9 +117,9 @@ loadMore: { type: LOAD_MORE_TYPE.SCROLL }
 loadMore: { type: LOAD_MORE_TYPE.CLICK }
 ```
 
-![Load more scroll](../assets/mui/load-more-scroll.jpg)
+![Load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/load-more-scroll.jpg)
 
-![Load more click](../assets/mui/load-more-click.jpg)
+![Load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/load-more-click.jpg)
 
 ## Multiple selection
 
@@ -132,7 +132,7 @@ loadMore: { type: LOAD_MORE_TYPE.CLICK }
 />
 ```
 
-![Multiple](../assets/mui/multiple.jpg)
+![Multiple](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/multiple.jpg)
 
 ## Pre-loaded value (`currentData`)
 
@@ -216,17 +216,3 @@ Use when rendering a custom UI on top of MUI Autocomplete.
 - Client-side filtering is disabled (`filterOptions` always returns all server-fetched options).
 - Loading is shown via `CircularProgress` in the input and an overlay in the popup.
 - Closing the popup resets search, same as the Ant Design variant.
-
----
-
-## Preview
-
-![Default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/default.jpg)
-
-![Inline search](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/inline-search.jpg)
-
-![load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/load-more-click.jpg)
-
-![load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/load-more-scroll.jpg)
-
-![multiple](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/multiple.jpg)

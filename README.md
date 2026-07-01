@@ -17,17 +17,17 @@ Same `dynamicConfig` across UI libraries:
 
 | Ant Design | MUI | Base UI |
 | :---: | :---: | :---: |
-| ![Ant Design default](./assets/antd/default.jpg) | ![MUI default](./assets/mui/default.jpg) | ![Base UI default](./assets/base-ui/default.jpg) |
+| ![Ant Design default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/default.jpg) | ![MUI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/default.jpg) | ![Base UI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/default.jpg) |
 
 Feature highlights (Ant Design variant):
 
 | Inline search | Multiple |
 | :---: | :---: |
-| ![Inline search](./assets/antd/inline-search.jpg) | ![Multiple](./assets/antd/multiple.jpg) |
+| ![Inline search](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/inline-search.jpg) | ![Multiple](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/multiple.jpg) |
 
 | Load more (scroll) | Load more (click) |
 | :---: | :---: |
-| ![Load more scroll](./assets/antd/load-more-scroll.jpg) | ![Load more click](./assets/antd/load-more-click.jpg) |
+| ![Load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-scroll.jpg) | ![Load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-click.jpg) |
 
 More screenshots and usage details in the [documentation](#documentation).
 
@@ -111,4 +111,4 @@ MIT
 
 ---
 
-> _If this library helps your team ship safer access control with less friction, thank you for giving it a place in your stack._
+> _If this library saves you time building async selects, thanks for using it._
