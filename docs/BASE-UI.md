@@ -225,34 +225,24 @@ Customize the default SVG icons:
 />
 ```
 
-## `dynamicConfig`
+## dynamicConfig
 
-Shared API. `search.inputSearchMenuProps` accepts `ComboboxInputProps`.
+Shared across all variants. See [Dynamic config properties](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) for the full property reference.
 
-See [ANTD.md](./ANTD.md#dynamicconfig) for details on `api`, `list`, `total`, `option`, `loadMore`, and `currentData`.
+`search.inputSearchMenuProps` accepts Base UI `ComboboxInputProps`.
 
-### Search
+## Search
 
 ```tsx
-// Menu search (default)
-search: {
-  placement: SEARCH_PLACEMENT.MENU,
-  inputSearchMenuProps: { placeholder: "Search user" },
-}
-
-// Inline search — type directly in the main input
-search: {
-  placement: SEARCH_PLACEMENT.INLINE,
-  debounce: 300,
-}
+search: { placement: SEARCH_PLACEMENT.INLINE, debounce: 300 }
 ```
 
 ![Inline search](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/inline-search.jpg)
 
-### Load more
+## Load more
 
 ```tsx
-loadMore: { type: LOAD_MORE_TYPE.SCROLL }  // default
+loadMore: { type: LOAD_MORE_TYPE.SCROLL }
 loadMore: { type: LOAD_MORE_TYPE.CLICK }
 ```
 
@@ -274,6 +264,8 @@ loadMore: { type: LOAD_MORE_TYPE.CLICK }
 ![Multiple](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/multiple.jpg)
 
 ## Pre-loaded value
+
+Use `currentData` for edit mode — see [currentData](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
 
 ```tsx
 const presetUser = { id: 15, fullName: "Emma Johnson", ... };

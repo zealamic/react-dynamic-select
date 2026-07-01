@@ -81,17 +81,13 @@ const [userId, setUserId] = useState<number | null>(null);
 />
 ```
 
-## `dynamicConfig`
+## dynamicConfig
 
-Same structure as the Ant Design variant. See [ANTD.md](./ANTD.md#dynamicconfig) for details on `api`, `list`, `total`, `option`, `loadMore`, and `currentData`.
+Shared across all variants. See [Dynamic config properties](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) for the full property reference.
 
-The only difference: `search.inputSearchMenuProps` accepts MUI `TextField` props.
+`search.inputSearchMenuProps` accepts MUI `TextField` props.
 
-### Search
-
-**Menu search** (default): search input inside the popup Paper.
-
-**Inline search:**
+## Search
 
 ```tsx
 <MuiDynamicSelect
@@ -107,19 +103,16 @@ The only difference: `search.inputSearchMenuProps` accepts MUI `TextField` props
 
 ![Inline search](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/inline-search.jpg)
 
-### Load more
+## Load more
 
 ```tsx
-// Scroll (default)
 loadMore: { type: LOAD_MORE_TYPE.SCROLL }
-
-// Click
 loadMore: { type: LOAD_MORE_TYPE.CLICK }
 ```
 
-![Load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/load-more-scroll.jpg)
-
-![Load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/load-more-click.jpg)
+| Scroll | Click |
+| :---: | :---: |
+| ![Load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/load-more-scroll.jpg) | ![Load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/load-more-click.jpg) |
 
 ## Multiple selection
 
@@ -134,7 +127,9 @@ loadMore: { type: LOAD_MORE_TYPE.CLICK }
 
 ![Multiple](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/multiple.jpg)
 
-## Pre-loaded value (`currentData`)
+## Pre-loaded value
+
+Use `currentData` for edit mode — see [currentData](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
 
 ```tsx
 <MuiDynamicSelect

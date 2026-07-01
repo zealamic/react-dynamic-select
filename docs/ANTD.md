@@ -67,40 +67,17 @@ function UserSelect() {
 - **Multiple:** `mode="multiple"` → array of ids
 - Supports Ant Design `labelInValue`
 
-## `dynamicConfig`
+## dynamicConfig
 
-Config is merged with `defaultDynamicSelectConfig`. Only pass fields that differ from the defaults.
+Shared across all variants. See [Dynamic config properties](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) for the full property reference.
 
-### `api`
+`search.inputSearchMenuProps` accepts Ant Design `Input` props.
 
-| Field | Description |
-|---|---|
-| `fetch` | `(params) => Promise<ApiResponse>` — called when opening the dropdown, searching, or loading more |
-| `params` | Default query: `page`, `pageSize` (or `limit`), `search` |
-| `trigger` | `FETCH_TRIGGER.OPEN` (default) or `FETCH_TRIGGER.MOUNT` |
-| `onSuccess` / `onError` | Callbacks after each request |
-
-### `list` / `total` / `option`
-
-| Field | Description |
-|---|---|
-| `list.path` | Path to the array in the response, e.g. `"data"` or `"result.items"` |
-| `total.path` | Path to the total record count, e.g. `"total"` |
-| `total.label` | Footer label, defaults to `"Total"` |
-| `option.template.label` | Label field or template, supports `"{firstName} {lastName}"` |
-| `option.template.value` | Value field |
-
-### `search`
-
-| Field | Description |
-|---|---|
-| `placement` | `SEARCH_PLACEMENT.MENU` (default) or `SEARCH_PLACEMENT.INLINE` |
-| `debounce` | Milliseconds, defaults to `500` |
-| `inputSearchMenuProps` | Ant Design `Input` props for the menu search field |
+## Search
 
 **Menu search** (default): search input inside the dropdown.
 
-**Inline search:** set `placement: SEARCH_PLACEMENT.INLINE` and enable `showSearch` on the Select:
+**Inline search:** set `search.placement` to `SEARCH_PLACEMENT.INLINE` and enable `showSearch`:
 
 ```tsx
 <AntdDynamicSelect
@@ -115,32 +92,20 @@ Config is merged with `defaultDynamicSelectConfig`. Only pass fields that differ
 
 ![Inline search](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/inline-search.jpg)
 
-### `loadMore`
-
-`true` or an object:
-
-| Field | Description |
-|---|---|
-| `type` | `LOAD_MORE_TYPE.SCROLL` (default) or `LOAD_MORE_TYPE.CLICK` |
-| `label` / `loadingLabel` | Button text / loading state text |
-| `threshold` / `distance` / `debounce` | Scroll detection tuning |
-| `afterFetch` | Hook called after each fetch |
+## Load more
 
 ```tsx
-// Load more on scroll
 dynamicConfig={{ ...config, loadMore: { type: LOAD_MORE_TYPE.SCROLL } }}
-
-// Load more on button click
 dynamicConfig={{ ...config, loadMore: { type: LOAD_MORE_TYPE.CLICK } }}
 ```
 
-![Load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-scroll.jpg)
+| Scroll | Click |
+| :---: | :---: |
+| ![Load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-scroll.jpg) | ![Load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-click.jpg) |
 
-![Load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/load-more-click.jpg)
+## Edit mode
 
-### `currentData`
-
-Use when the form already has a value (edit mode) but the option is not in the fetched list:
+Use `currentData` when the form already has a value but the option is not in the fetched list:
 
 ```tsx
 <AntdDynamicSelect

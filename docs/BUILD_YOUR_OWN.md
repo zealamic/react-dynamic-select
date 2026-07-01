@@ -90,18 +90,7 @@ import type {
 
 ### `defaultDynamicSelectConfig`
 
-Baseline config merged with your `dynamicConfig`. Defaults:
-
-```ts
-{
-  api: { params: { page: 1, pageSize: 10, search: "" }, trigger: "open" },
-  total: { path: "total", label: "Total" },
-  list: { path: "list" },
-  option: { template: { label: "label", value: "value" } },
-  search: { placement: "menu", debounce: 500, inputSearchMenuProps: { placeholder: "Search..." } },
-  loadMore: { type: "click", threshold: 100, distance: 100, debounce: 100 },
-}
-```
+Baseline config merged with your `dynamicConfig`. See [Dynamic config properties](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) for defaults and property details.
 
 ---
 
@@ -477,7 +466,7 @@ When building a custom dynamic select, make sure you handle:
 
 ## See also
 
-- [ANTD.md](https://github.com/zealamic/react-dynamic-select/blob/main/docs/ANTD.md) — full `dynamicConfig` reference
+- [README.md](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) — `dynamicConfig` property reference
 - [MUI.md](https://github.com/zealamic/react-dynamic-select/blob/main/docs/MUI.md) — MUI integration
 - [BASE-UI.md](https://github.com/zealamic/react-dynamic-select/blob/main/docs/BASE-UI.md) — Base UI headless integration with slot components
 - `src/components/antd/hooks/use-dynamic-select.ts` — reference implementation

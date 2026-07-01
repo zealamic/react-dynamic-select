@@ -78,8 +78,6 @@ All variants share the same `dynamicConfig` shape. Pass only the fields that dif
 
 `dynamicConfig` is the shared prop that wires async behavior into every variant. It is deep-merged with `defaultDynamicSelectConfig` — you only need to pass fields that differ from the defaults.
 
-Full reference: [ANTD.md](./docs/ANTD.md#dynamicconfig).
-
 | Property | Description | Type | Default |
 | --- | --- | --- | --- |
 | **api** | API fetch configuration | `object` | — |
