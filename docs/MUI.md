@@ -114,6 +114,35 @@ loadMore: { type: LOAD_MORE_TYPE.CLICK }
 | :---: | :---: |
 | ![Load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/load-more-scroll.jpg) | ![Load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/load-more-click.jpg) |
 
+## Add button
+
+Render a create / add action in the dropdown footer. Set `placement` to `"start"` or `"end"`.
+
+```tsx
+<MuiDynamicSelect
+  dynamicConfig={{
+    ...userListConfig,
+    add: {
+      label: "Add user",
+      placement: "start",
+      onClick: () => {
+        // open create form, navigate, etc.
+      },
+    },
+  }}
+/>
+```
+
+| Property | Description |
+|---|---|
+| `label` | Button text |
+| `icon` | Custom icon (`ReactNode`). Defaults to a built-in plus icon |
+| `placement` | `"start"` — left side of footer; `"end"` — right side |
+| `onClick` | Click handler |
+| `disabled` | Disable the button |
+
+The footer is shown when `total`, `loadMore`, or `add` is configured. See [add](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
+
 ## Multiple selection
 
 ```tsx

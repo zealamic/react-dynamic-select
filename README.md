@@ -109,6 +109,12 @@ All variants share the same `dynamicConfig` shape. Pass only the fields that dif
 | **loadMore.distance** | Distance from bottom (px) to trigger scroll load more | `number` | `100` |
 | **loadMore.debounce** | Debounce delay for scroll load more (ms) | `number` | `100` |
 | **loadMore.afterFetch** | Hook called after each successful fetch | `(data: ApiResponse) => Promise<void>` | — |
+| **add** | Add button in the dropdown footer (e.g. create a new record) | `object` | — |
+| **add.label** | Button label text | `string` | — |
+| **add.icon** | Custom icon before the label | `ReactNode` | built-in plus icon |
+| **add.placement** | Footer position of the add button | `"start"` \| `"end"` | — |
+| **add.onClick** | Called when the add button is clicked | `() => void` | — |
+| **add.disabled** | Disables the add button | `boolean` | `false` |
 
 ## Documentation
 

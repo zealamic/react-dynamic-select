@@ -1,20 +1,20 @@
-import { Combobox } from "@base-ui/react/combobox";
+"use client";
 import { useMemo } from "react";
-import { DefaultCaretDownIcon } from "../icons/default-caret-down-icon";
-import { DefaultCheckIcon } from "../icons/default-check-icon";
-import { DefaultXIcon } from "../icons/default-x-icon";
+import type { SearchableApiParams } from "@/general-types";
+import { DefaultCaretDownIcon } from "@/icons/default-caret-down-icon";
+import { DefaultCheckIcon } from "@/icons/default-check-icon";
+import { DefaultXIcon } from "@/icons/default-x-icon";
 import type {
   BaseUiDynamicSelectComponents,
   BaseUiDynamicSelectIcons,
 } from "../types";
-import { DefaultButton } from "./defaults/default-button";
-import { DefaultEmpty } from "./defaults/default-empty";
-import { DefaultItemText } from "./defaults/default-item-text";
-import { DefaultListFooter } from "./defaults/default-list-footer";
-import { DefaultLoadingOverlay } from "./defaults/default-loading-overlay";
-import { DefaultMenuSearchInput } from "./defaults/default-menu-search-input";
-import { DefaultSeparator } from "./defaults/default-separator";
-import { DefaultStatus } from "./defaults/default-status";
+import { createDefaultBaseUiComponents } from "./defaults/create-default-base-ui-components";
+
+type ResolvedBaseUiComponents<
+  DataType = any,
+  ApiResponse = any,
+  ApiParams extends SearchableApiParams = SearchableApiParams,
+> = Required<BaseUiDynamicSelectComponents<DataType, ApiResponse, ApiParams>>;
 
 export function resolveBaseUiIcons(icons?: BaseUiDynamicSelectIcons) {
   return {
@@ -26,47 +26,58 @@ export function resolveBaseUiIcons(icons?: BaseUiDynamicSelectIcons) {
   };
 }
 
+type UseResolvedBaseUiComponentsOptions = {
+  multiple?: boolean;
+};
+
 export function useResolvedBaseUiComponents<
   DataType = any,
   ApiResponse = any,
-  ApiParams extends Record<string, unknown> = Record<string, unknown>,
+  ApiParams extends SearchableApiParams = SearchableApiParams,
 >(
   components?: BaseUiDynamicSelectComponents<DataType, ApiResponse, ApiParams>,
-) {
+  { multiple = false }: UseResolvedBaseUiComponentsOptions = {},
+): ResolvedBaseUiComponents<DataType, ApiResponse, ApiParams> {
+  const defaults = useMemo(
+    () => createDefaultBaseUiComponents({ multiple }),
+    [multiple],
+  );
+
   return useMemo(
-    () => ({
-      Root: components?.Root ?? Combobox.Root,
-      Label: components?.Label ?? Combobox.Label,
-      InputGroup: components?.InputGroup ?? Combobox.InputGroup,
-      Input: components?.Input ?? Combobox.Input,
-      Chips: components?.Chips ?? Combobox.Chips,
-      Value: components?.Value ?? Combobox.Value,
-      Chip: components?.Chip ?? Combobox.Chip,
-      ChipRemove: components?.ChipRemove ?? Combobox.ChipRemove,
-      Clear: components?.Clear ?? Combobox.Clear,
-      Trigger: components?.Trigger ?? Combobox.Trigger,
-      Icon: components?.Icon ?? Combobox.Icon,
-      Portal: components?.Portal ?? Combobox.Portal,
-      Backdrop: components?.Backdrop ?? Combobox.Backdrop,
-      Positioner: components?.Positioner ?? Combobox.Positioner,
-      Popup: components?.Popup ?? Combobox.Popup,
-      Arrow: components?.Arrow ?? Combobox.Arrow,
-      List: components?.List ?? Combobox.List,
-      Group: components?.Group ?? Combobox.Group,
-      GroupLabel: components?.GroupLabel ?? Combobox.GroupLabel,
-      Collection: components?.Collection ?? Combobox.Collection,
-      Row: components?.Row ?? Combobox.Row,
-      Status: DefaultStatus,
-      Empty: components?.Empty ?? DefaultEmpty,
-      Item: components?.Item,
-      ItemIndicator: components?.ItemIndicator ?? Combobox.ItemIndicator,
-      ItemText: components?.ItemText ?? DefaultItemText,
-      MenuSearchInput: components?.MenuSearchInput ?? DefaultMenuSearchInput,
-      ListFooter: components?.ListFooter ?? DefaultListFooter,
-      LoadingOverlay: components?.LoadingOverlay ?? DefaultLoadingOverlay,
-      Separator: components?.Separator ?? DefaultSeparator,
-      Button: components?.Button ?? DefaultButton,
-    }),
-    [components],
+    () =>
+      ({
+        Root: components?.Root ?? defaults.Root,
+        Label: components?.Label ?? defaults.Label,
+        InputGroup: components?.InputGroup ?? defaults.InputGroup,
+        Input: components?.Input ?? defaults.Input,
+        Chips: components?.Chips ?? defaults.Chips,
+        Value: components?.Value ?? defaults.Value,
+        Chip: components?.Chip ?? defaults.Chip,
+        ChipRemove: components?.ChipRemove ?? defaults.ChipRemove,
+        Clear: components?.Clear ?? defaults.Clear,
+        Trigger: components?.Trigger ?? defaults.Trigger,
+        Icon: components?.Icon ?? defaults.Icon,
+        Portal: components?.Portal ?? defaults.Portal,
+        Backdrop: components?.Backdrop ?? defaults.Backdrop,
+        Positioner: components?.Positioner ?? defaults.Positioner,
+        Popup: components?.Popup ?? defaults.Popup,
+        Arrow: components?.Arrow ?? defaults.Arrow,
+        List: components?.List ?? defaults.List,
+        Group: components?.Group ?? defaults.Group,
+        GroupLabel: components?.GroupLabel ?? defaults.GroupLabel,
+        Collection: components?.Collection ?? defaults.Collection,
+        Row: components?.Row ?? defaults.Row,
+        Status: components?.Status ?? defaults.Status,
+        Empty: components?.Empty ?? defaults.Empty,
+        Item: components?.Item ?? defaults.Item,
+        ItemIndicator: components?.ItemIndicator ?? defaults.ItemIndicator,
+        ItemText: components?.ItemText ?? defaults.ItemText,
+        MenuSearchInput: components?.MenuSearchInput ?? defaults.MenuSearchInput,
+        ListFooter: components?.ListFooter ?? defaults.ListFooter,
+        LoadingOverlay: components?.LoadingOverlay ?? defaults.LoadingOverlay,
+        Separator: components?.Separator ?? defaults.Separator,
+        Button: components?.Button ?? defaults.Button,
+      }) as ResolvedBaseUiComponents<DataType, ApiResponse, ApiParams>,
+    [components, defaults],
   );
 }

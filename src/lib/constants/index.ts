@@ -3,6 +3,11 @@ export const SEARCH_PLACEMENT = {
   MENU: "menu",
 } as const;
 
+export const ADD_PLACEMENT = {
+  START: "start",
+  END: "end",
+} as const;
+
 export const INVALID_VALUE = "" as const;
 export const PLACEHOLDER_PATTERN = /\{([^}]+)\}/g;
 

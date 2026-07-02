@@ -1,9 +1,12 @@
+import type { ReactNode } from "react";
 import type {
+  ADD_PLACEMENT,
   FETCH_TRIGGER,
   LOAD_MORE_TYPE,
   SEARCH_PLACEMENT,
 } from "@/lib/constants";
 
+export type AddPlacement = (typeof ADD_PLACEMENT)[keyof typeof ADD_PLACEMENT];
 export type SearchPlacement =
   (typeof SEARCH_PLACEMENT)[keyof typeof SEARCH_PLACEMENT];
 export type LoadMoreType = (typeof LOAD_MORE_TYPE)[keyof typeof LOAD_MORE_TYPE];
@@ -33,6 +36,14 @@ export type SearchConfig<InputSearchProps> = {
   placement?: SearchPlacement;
   inputSearchMenuProps?: InputSearchProps;
   debounce?: number;
+};
+
+export type AddConfig = {
+  label?: string | null;
+  icon?: ReactNode;
+  placement?: AddPlacement;
+  onClick?: () => void;
+  disabled?: boolean;
 };
 
 export type DynamicSelectConfig<
@@ -74,6 +85,7 @@ export type DynamicSelectConfig<
         debounce?: number;
         afterFetch?: (data: ApiResponse) => Promise<void>;
       };
+  add?: AddConfig;
 };
 
 export type SearchableApiParams = Record<string, any> & { search?: string };

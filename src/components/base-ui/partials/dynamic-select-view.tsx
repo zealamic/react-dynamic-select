@@ -3,7 +3,6 @@ import type {
   ComboboxRootChangeEventDetails,
   ComboboxRootProps,
 } from "@base-ui/react/combobox";
-import { Combobox } from "@base-ui/react/combobox";
 import { Fragment, useCallback, useId, useMemo } from "react";
 import type { ResolvedOption } from "@/general-types";
 import { SEARCH_PLACEMENT } from "@/lib/constants";
@@ -58,7 +57,9 @@ export function BaseUiDynamicSelectView<
 }: BaseUiDynamicSelectViewProps<DataType, ApiResponse, ApiParams>) {
   const multiple = Boolean(multipleProp);
   const inputId = useId();
-  const resolvedComponents = useResolvedBaseUiComponents(components);
+  const resolvedComponents = useResolvedBaseUiComponents(components, {
+    multiple,
+  });
   const resolvedIcons = useMemo(() => resolveBaseUiIcons(icons), [icons]);
 
   const isInlineSearch =
@@ -83,7 +84,7 @@ export function BaseUiDynamicSelectView<
     List,
     Status,
     Empty,
-    Item: CustomItem,
+    Item,
     ItemIndicator,
     ItemText,
     MenuSearchInput,
@@ -156,21 +157,13 @@ export function BaseUiDynamicSelectView<
         </>
       );
 
-      if (CustomItem) {
-        return (
-          <CustomItem key={itemKey} value={option} option={option}>
-            {itemContent}
-          </CustomItem>
-        );
-      }
-
       return (
-        <Combobox.Item key={itemKey} value={option}>
+        <Item key={itemKey} value={option} option={option}>
           {itemContent}
-        </Combobox.Item>
+        </Item>
       );
     },
-    [CheckIcon, CustomItem, ItemIndicator, ItemText],
+    [CheckIcon, Item, ItemIndicator, ItemText],
   );
 
   const rootPassthrough = rootProps as ComboboxRootProps<

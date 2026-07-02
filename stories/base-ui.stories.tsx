@@ -7,12 +7,11 @@ import type {
 import { BaseUiDynamicSelect } from "../src/base-ui";
 import type { ResolvedOption } from "../src/general-types";
 import {
+  ADD_PLACEMENT,
   FETCH_TRIGGER,
   LOAD_MORE_TYPE,
   SEARCH_PLACEMENT,
 } from "../src/lib/constants";
-import { createBaseUiStoryComponents } from "./components/base-ui";
-
 import { BaseUiHookFormStory } from "./components/base-ui/story-hook-form";
 import { getUserList, MOCK_USER_LIST } from "./mocks/user";
 
@@ -135,11 +134,6 @@ function BaseUiUserSelect({
   dynamicConfig,
   ...props
 }: BaseUiUserSelectProps) {
-  const components = useMemo(
-    () => createBaseUiStoryComponents({ multiple }),
-    [multiple],
-  );
-
   const resolvedDynamicConfig = useMemo(
     () => resolveStoryDynamicConfig(dynamicConfig),
     [dynamicConfig],
@@ -150,7 +144,6 @@ function BaseUiUserSelect({
       {...props}
       multiple={multiple}
       dynamicConfig={resolvedDynamicConfig}
-      components={components}
       listHeight={200}
     />
   );
@@ -236,6 +229,20 @@ export const LoadMoreClick: Story = {
     dynamicConfig: {
       loadMore: {
         type: LOAD_MORE_TYPE.CLICK,
+      },
+    },
+  },
+};
+
+export const AddButton: Story = {
+  args: {
+    placeholder: "Select a user",
+    dynamicConfig: {
+      add: {
+        placement: ADD_PLACEMENT.START,
+        onClick: () => {
+          alert("add");
+        },
       },
     },
   },
