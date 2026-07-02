@@ -65,7 +65,7 @@ import type {
 
 | Export                   | Description                                                                              |
 | ------------------------ | ---------------------------------------------------------------------------------------- |
-| `DynamicSelectConfig`    | Full config shape: `api`, `list`, `total`, `option`, `search`, `loadMore`, `currentData` |
+| `DynamicSelectConfig`    | Full config shape: `api`, `list`, `total`, `option`, `search`, `loadMore`, `add`, `currentData` |
 | `DynamicSelectHookProps` | `{ dynamicConfig?: DynamicSelectConfig }` — useful as a base for custom hook props       |
 | `ResolvedOption`         | `{ label?: string \| null; value: string \| number \| null \| undefined }`               |
 | `SearchableApiParams`    | `Record<string, any> & { search?: string }` — minimum API params constraint              |
@@ -74,6 +74,8 @@ import type {
 | `FetchTrigger`           | `"mount"` \| `"open"`                                                                    |
 | `LoadMoreType`           | `"click"` \| `"scroll"`                                                                  |
 | `SearchPlacement`        | `"inline"` \| `"menu"`                                                                   |
+| `AddPlacement`           | `"start"` \| `"end"` — add button position in the dropdown footer                        |
+| `AddConfig`              | `{ label?, icon?, placement?, onClick?, disabled? }` — footer add button                   |
 | `ResolvedLoadMoreConfig` | Normalized load-more settings returned by `resolveLoadMoreConfig`                        |
 
 ### Constants
@@ -87,6 +89,8 @@ import type {
 | `LOAD_MORE_TYPE.CLICK`    | `"click"`  | Load more via button                                 |
 | `LOAD_MORE_TYPE.SCROLL`   | `"scroll"` | Load more on scroll-to-bottom                        |
 | `INVALID_VALUE`           | `""`       | Sentinel used internally for missing template values |
+
+`add.placement` uses `"start"` (left of footer) or `"end"` (right of footer).
 
 ### `defaultDynamicSelectConfig`
 
@@ -432,6 +436,11 @@ function CustomUserSelect() {
 
           <footer>
             <span>Total: {totalNumber}</span>
+            {dynamicConfig.add?.placement === "start" && (
+              <button type="button" onClick={dynamicConfig.add.onClick}>
+                {dynamicConfig.add.label ?? "Add"}
+              </button>
+            )}
             {loadMoreConfig?.type === "click" && canLoadMore && (
               <button
                 type="button"
@@ -461,8 +470,9 @@ When building a custom dynamic select, make sure you handle:
 2. **Fetch trigger** — `FETCH_TRIGGER.MOUNT` vs `FETCH_TRIGGER.OPEN`
 3. **Search** — wire `useSearch` to `fetchData({ search })`; reset on close
 4. **Load more** — attach `handlePopupScroll` to the scrollable list; render a button for click mode
-5. **Edit mode** — pass `currentData` and use `mergeOptionsWithCurrent` so selected values display before fetch
-6. **Option template** — map your API shape via `list.path`, `total.path`, and `option.template`
+5. **Add button** — render `dynamicConfig.add` in the footer when `placement` is `"start"` or `"end"`
+6. **Edit mode** — pass `currentData` and use `mergeOptionsWithCurrent` so selected values display before fetch
+7. **Option template** — map your API shape via `list.path`, `total.path`, and `option.template`
 
 ## See also
 

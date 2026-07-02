@@ -1,7 +1,28 @@
 {
   "name": "@zealamic/react-dynamic-select",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "type": "module",
+  "description": "An extensible, headless-first dynamic select component for React with a pluggable UI adapter architecture.",
+  "keywords": [
+    "react",
+    "select",
+    "material-ui",
+    "headless",
+    "antd",
+    "mui",
+    "ant-design",
+    "base-ui",
+    "dynamic-select",
+    "shadcn-ui",
+    "react-dynamic-select"
+  ],
+  "author": "Huy Edward Nguyen (Zealamic founder)",
+  "license": "MIT",
+  "homepage": "https://github.com/zealamic/react-dynamic-select",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zealamic/react-dynamic-select.git"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

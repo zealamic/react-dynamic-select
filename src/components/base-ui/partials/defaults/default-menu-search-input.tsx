@@ -1,6 +1,9 @@
+"use client";
 import type { ComboboxInputProps } from "@base-ui/react/combobox";
 import type { InputHTMLAttributes } from "react";
 import type { BaseUiMenuSearchInputSlotProps } from "../../types";
+import styles from "./default.module.css";
+import { joinClassNames } from "./merge-class-name";
 
 type NativeMenuSearchInputProps = Omit<
   ComboboxInputProps,
@@ -17,8 +20,10 @@ export function DefaultMenuSearchInput({
   ...inputProps
 }: BaseUiMenuSearchInputSlotProps) {
   const nativeProps = inputProps as NativeMenuSearchInputProps;
-  const resolvedClassName =
-    typeof className === "string" ? className : undefined;
+  const resolvedClassName = joinClassNames(
+    styles["rds-base-ui__menu-search-input"],
+    typeof className === "string" ? className : undefined,
+  );
   const resolvedStyle = typeof style === "object" ? style : undefined;
 
   return (

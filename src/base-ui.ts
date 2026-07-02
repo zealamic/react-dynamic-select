@@ -5,6 +5,7 @@ export {
   itemToStringValue,
 } from "@/components/base-ui/handlers";
 export { useBaseUiDynamicSelect } from "@/components/base-ui/hooks/use-dynamic-select";
+export { createDefaultBaseUiComponents } from "@/components/base-ui/partials/defaults/create-default-base-ui-components";
 export { BaseUiDynamicSelect } from "@/components/base-ui/select";
 export type {
   BaseUiButtonSlotProps,

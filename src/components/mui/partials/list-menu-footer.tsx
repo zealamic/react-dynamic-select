@@ -4,7 +4,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import type { SearchableApiParams } from "@/general-types";
-import { LOAD_MORE_TYPE } from "@/lib/constants";
+import { DefaultPlusIcon } from "@/icons/default-plus-icon";
+import { ADD_PLACEMENT, LOAD_MORE_TYPE } from "@/lib/constants";
 import type { ResolvedLoadMoreConfig } from "@/lib/utils/load-more";
 import type { MuiDynamicSelectConfig } from "../types";
 import { MuiAutocompletePopupSection } from "./autocomplete-popup-section";
@@ -37,8 +38,12 @@ export function MuiListMenuFooter<
   loading,
 }: MuiListMenuFooterProps<DataType, ApiResponse, ApiParams>) {
   const totalConfig = dynamicConfig?.total;
+  const addConfig = dynamicConfig?.add;
   const showFooter =
-    loadMoreConfig != null || totalConfig?.path || totalConfig?.label;
+    loadMoreConfig != null ||
+    totalConfig?.path ||
+    totalConfig?.label ||
+    addConfig?.placement != null;
 
   if (!showFooter) {
     return null;
@@ -57,38 +62,67 @@ export function MuiListMenuFooter<
           flexShrink: 0,
           alignItems: "center",
           justifyContent: "space-between",
-          px: 1.5,
-          py: 1,
+          p: 1,
           gap: 1,
           bgcolor: "background.paper",
           minHeight: "1.5rem",
         }}
       >
-        {(totalConfig?.path || totalConfig?.label) && (
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            {totalConfig?.label || "Total"}: {totalNumber ?? "-"}
-          </Typography>
-        )}
-        {isLoadingMore && (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <CircularProgress size={12} />
-            <Typography variant="body2">
-              {loadMoreConfig?.loadingLabel || "Loading..."}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          {addConfig?.placement === ADD_PLACEMENT.START && (
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={addConfig?.onClick}
+              sx={{ minWidth: "auto" }}
+              disabled={addConfig?.disabled}
+            >
+              {addConfig?.icon || <DefaultPlusIcon />}
+              {addConfig?.label}
+            </Button>
+          )}
+          {(totalConfig?.path || totalConfig?.label) && (
+            <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+              {totalConfig?.label || "Total"}: {totalNumber ?? "-"}
             </Typography>
-          </Box>
-        )}
-        {showClickLoadMore && (
-          <Button
-            size="small"
-            variant="outlined"
-            color="primary"
-            onClick={handleLoadMoreClick}
-            disabled={loadMoreDisabled}
-            sx={{ fontSize: "0.6rem", padding: "0.1rem 0.5rem" }}
-          >
-            {loadMoreConfig?.label || "Load More"}
-          </Button>
-        )}
+          )}
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          {isLoadingMore && (
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <CircularProgress size={12} />
+              <Typography variant="body2">
+                {loadMoreConfig?.loadingLabel || "Loading..."}
+              </Typography>
+            </Box>
+          )}
+          {showClickLoadMore && (
+            <Button
+              size="small"
+              variant="outlined"
+              color="primary"
+              onClick={handleLoadMoreClick}
+              disabled={loadMoreDisabled}
+              sx={{ fontSize: "0.6rem", padding: "0.1rem 0.5rem" }}
+            >
+              {loadMoreConfig?.label || "Load More"}
+            </Button>
+          )}
+          {addConfig?.placement === ADD_PLACEMENT.END && (
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={addConfig?.onClick}
+              sx={{ minWidth: "auto" }}
+              disabled={addConfig?.disabled}
+            >
+              {addConfig?.icon || <DefaultPlusIcon />}
+              {addConfig?.label}
+            </Button>
+          )}
+        </Box>
       </MuiAutocompletePopupSection>
     </>
   );

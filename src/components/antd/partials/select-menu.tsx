@@ -1,6 +1,11 @@
 import { Button, Divider, Flex, Spin, Typography } from "antd";
 import type { SearchableApiParams } from "@/general-types";
-import { LOAD_MORE_TYPE, SEARCH_PLACEMENT } from "@/lib/constants";
+import { DefaultPlusIcon } from "@/icons/default-plus-icon";
+import {
+  ADD_PLACEMENT,
+  LOAD_MORE_TYPE,
+  SEARCH_PLACEMENT,
+} from "@/lib/constants";
 import type { AntdSelectMenuProps } from "../types";
 import { AntdMenuSearchInput } from "./menu-search-input";
 
@@ -9,7 +14,7 @@ export function AntdSelectMenu<
   ApiResponse = any,
   ApiParams extends SearchableApiParams = SearchableApiParams,
 >(props: AntdSelectMenuProps<DataType, ApiResponse, ApiParams>) {
-  const { total: totalConfig } = props.dynamicConfig ?? {};
+  const { total: totalConfig, add: addConfig } = props.dynamicConfig ?? {};
   const {
     isLoadingMore,
     totalNumber,
@@ -20,7 +25,10 @@ export function AntdSelectMenu<
 
   const search = props.dynamicConfig?.search;
   const showFooter =
-    loadMoreConfig != null || totalConfig?.path || totalConfig?.label;
+    loadMoreConfig != null ||
+    totalConfig?.path ||
+    totalConfig?.label ||
+    addConfig?.placement != null;
 
   const searchDisabled =
     search?.inputSearchMenuProps?.disabled || props.loading || isLoadingMore;
@@ -65,33 +73,59 @@ export function AntdSelectMenu<
                   style={{ padding: "0 0.5rem 0.25rem", minHeight: "1.6rem" }}
                   gap="small"
                 >
-                  {(totalConfig?.path || totalConfig?.label) && (
-                    <Typography.Text strong>
-                      {totalConfig?.label || "Total"}: {totalNumber || "-"}
-                    </Typography.Text>
-                  )}
-                  {isLoadingMore && (
-                    <Flex align="center" gap="small">
-                      <Spin spinning size="small" />
-                      <Typography.Text>
-                        {loadMoreConfig?.loadingLabel || "Loading..."}
+                  <Flex align="center" gap="small">
+                    {addConfig?.placement === ADD_PLACEMENT.START && (
+                      <Button
+                        type="primary"
+                        size="small"
+                        onClick={addConfig?.onClick}
+                        icon={addConfig?.icon || <DefaultPlusIcon />}
+                        disabled={addConfig?.disabled}
+                      >
+                        {addConfig?.label}
+                      </Button>
+                    )}
+                    {(totalConfig?.path || totalConfig?.label) && (
+                      <Typography.Text strong>
+                        {totalConfig?.label || "Total"}: {totalNumber || "-"}
                       </Typography.Text>
-                    </Flex>
-                  )}
-                  {showClickLoadMore && (
-                    <Button
-                      type="default"
-                      color="primary"
-                      size="small"
-                      onClick={handleLoadMoreClick}
-                      onMouseDown={(event) => {
-                        event.stopPropagation();
-                      }}
-                      disabled={loadMoreDisabled}
-                    >
-                      {loadMoreConfig?.label || "Load More"}
-                    </Button>
-                  )}
+                    )}
+                  </Flex>
+                  <Flex align="center" gap="small">
+                    {isLoadingMore && (
+                      <Flex align="center" gap="small">
+                        <Spin spinning size="small" />
+                        <Typography.Text>
+                          {loadMoreConfig?.loadingLabel || "Loading..."}
+                        </Typography.Text>
+                      </Flex>
+                    )}
+                    {showClickLoadMore && (
+                      <Button
+                        type="default"
+                        color="primary"
+                        size="small"
+                        onClick={handleLoadMoreClick}
+                        onMouseDown={(event) => {
+                          event.stopPropagation();
+                        }}
+                        disabled={loadMoreDisabled}
+                      >
+                        {loadMoreConfig?.label || "Load More"}
+                      </Button>
+                    )}
+                    {addConfig?.placement === ADD_PLACEMENT.END && (
+                      <Button
+                        type="primary"
+                        size="small"
+                        onClick={addConfig?.onClick}
+                        icon={addConfig?.icon || <DefaultPlusIcon />}
+                        disabled={addConfig?.disabled}
+                      >
+                        {addConfig?.label}
+                      </Button>
+                    )}
+                  </Flex>
                 </Flex>
               </>
             )}

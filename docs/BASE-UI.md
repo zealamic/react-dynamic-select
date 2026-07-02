@@ -2,7 +2,7 @@
 
 Guide for using `@zealamic/react-dynamic-select/base-ui` with [@base-ui/react Combobox](https://base-ui.com/react/components/combobox).
 
-The Base UI variant is **headless**: fetch/search/load-more logic is built in; you provide the UI via `components` and `icons`. The same slot system works with [shadcn/ui](#shadcnui) — see below.
+The Base UI variant is **headless-first**: fetch/search/load-more logic is built in. It ships **styled default components** out of the box — use `BaseUiDynamicSelect` with no `components` prop for a ready-to-use UI. Override individual slots via `components` when you need custom markup (e.g. [shadcn/ui](#shadcnui)).
 
 ## Installation
 
@@ -18,6 +18,7 @@ Peer dependencies: `react >= 19`, `@base-ui/react >= 1`.
 import {
   BaseUiDynamicSelect,
   useBaseUiDynamicSelect,
+  createDefaultBaseUiComponents,
   getOptionLabel,
   isOptionEqualToValue,
   itemToStringLabel,
@@ -30,14 +31,11 @@ import {
 
 ## Quick start
 
-`BaseUiDynamicSelect` **requires** a `components` prop to render UI. The library ships internal defaults without styles — see `stories/components/base-ui/story-components.tsx` and `base-ui.module.css` for a reference implementation.
+`BaseUiDynamicSelect` includes styled default components — no `components` prop required:
 
 ```tsx
 import { BaseUiDynamicSelect } from "@zealamic/react-dynamic-select/base-ui";
 import type { BaseUiDynamicSelectConfig } from "@zealamic/react-dynamic-select/base-ui";
-import { createBaseUiStoryComponents } from "./your-components";
-
-const components = createBaseUiStoryComponents();
 
 const userListConfig = {
   api: {
@@ -56,7 +54,6 @@ function UserSelect() {
   return (
     <BaseUiDynamicSelect
       placeholder="Select a user"
-      components={components}
       listHeight={200}
       dynamicConfig={userListConfig}
     />
@@ -65,6 +62,22 @@ function UserSelect() {
 ```
 
 ![Default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/default.jpg)
+
+### Customizing defaults
+
+Use `createDefaultBaseUiComponents` as a starting point — spread and override only the slots you need:
+
+```tsx
+import { createDefaultBaseUiComponents } from "@zealamic/react-dynamic-select/base-ui";
+
+const components = {
+  ...createDefaultBaseUiComponents(),
+  Button: MyCustomButton,
+};
+
+// Multiple mode — pass { multiple: true } for chip/input layout
+const multipleComponents = createDefaultBaseUiComponents({ multiple: true });
+```
 
 ## Value
 
@@ -81,7 +94,6 @@ const [user, setUser] = useState<ResolvedOption | null>(null);
 <BaseUiDynamicSelect
   value={user}
   onValueChange={(value) => setUser(value as ResolvedOption | null)}
-  components={components}
   dynamicConfig={userListConfig}
 />
 ```
@@ -97,7 +109,7 @@ itemToStringValue(option);
 
 ## `components` — slot system
 
-Each slot is a React component that replaces a Combobox part:
+`components` is **optional**. When omitted, styled defaults are used. Pass partial overrides to replace individual Combobox parts:
 
 | Slot | Description |
 |---|---|
@@ -107,7 +119,7 @@ Each slot is a React component that replaces a Combobox part:
 | `Item`, `ItemText`, `ItemIndicator` | Option row |
 | `MenuSearchInput` | Menu search (`SEARCH_PLACEMENT.MENU`) |
 | `Status`, `Empty`, `LoadingOverlay` | Loading / empty states |
-| `ListFooter` | Total count + load more button |
+| `ListFooter` | Total count, load more, and add button |
 | `Button`, `Separator` | Action button, divider |
 | `Chips`, `Chip`, `ChipRemove`, `Value` | Multiple mode |
 
@@ -122,13 +134,13 @@ Each slot is a React component that replaces a Combobox part:
 // MenuSearchInput — includes searchValue, onSearchChange
 ({ searchValue, onSearchChange, ...props }) => (...)
 
-// ListFooter — total, load more state
-({ totalNumber, canLoadMore, onLoadMoreClick, loadMoreConfig, ...props }) => (...)
+// ListFooter — total, load more, add button
+({ totalNumber, canLoadMore, onLoadMoreClick, loadMoreConfig, dynamicConfig, ...props }) => (...)
 ```
 
 ## shadcn/ui
 
-[shadcn/ui Combobox](https://ui.shadcn.com/docs/components/radix/combobox) is a styled wrapper around `@base-ui/react` Combobox. Map shadcn primitives to the `components` slots above to keep your Tailwind styling.
+[shadcn/ui Combobox](https://ui.shadcn.com/docs/components/radix/combobox) is a styled wrapper around `@base-ui/react` Combobox. Map shadcn primitives to the `components` slots above to keep your Tailwind styling. Start from `createDefaultBaseUiComponents()` and replace slots incrementally, or build the map from scratch.
 
 ### Setup
 
@@ -250,16 +262,39 @@ loadMore: { type: LOAD_MORE_TYPE.CLICK }
 | :---: | :---: |
 | ![Load more scroll](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/load-more-scroll.jpg) | ![Load more click](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/load-more-click.jpg) |
 
+## Add button
+
+```tsx
+dynamicConfig={{
+  ...userListConfig,
+  add: {
+    label: "Add user",
+    placement: "start",
+    onClick: () => {
+      // open create form, navigate, etc.
+    },
+  },
+}}
+```
+
+| Start | End |
+| :---: | :---: |
+| ![Add button start](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/add-button-start.jpg) | ![Add button end](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/add-button-end.jpg) |
+
+Set `placement` to `"start"` (left of footer) or `"end"` (right). See [add](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
+
 ## Multiple selection
 
 ```tsx
 <BaseUiDynamicSelect
   multiple
   placeholder="Select users"
-  components={createBaseUiStoryComponents({ multiple: true })}
+  components={createDefaultBaseUiComponents({ multiple: true })}
   dynamicConfig={userListConfig}
 />
 ```
+
+Or omit `components` — defaults adapt automatically when `multiple` is set.
 
 ![Multiple](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/multiple.jpg)
 
@@ -276,14 +311,12 @@ const presetUser = { id: 15, fullName: "Emma Johnson", ... };
     ...userListConfig,
     currentData: presetUser,
   }}
-  components={components}
 />
 ```
 
 ## React Hook Form
 
 ```tsx
-import { useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import type { ResolvedOption } from "@zealamic/react-dynamic-select";
 import { BaseUiDynamicSelect } from "@zealamic/react-dynamic-select/base-ui";
@@ -292,7 +325,6 @@ type FormValues = { user: ResolvedOption | null };
 
 function Form() {
   const { control } = useForm<FormValues>({ defaultValues: { user: null } });
-  const components = useMemo(() => createBaseUiStoryComponents(), []);
 
   return (
     <Controller
@@ -302,7 +334,6 @@ function Form() {
       render={({ field }) => (
         <BaseUiDynamicSelect
           placeholder="Select a user"
-          components={components}
           listHeight={200}
           dynamicConfig={userListConfig}
           value={field.value}
@@ -337,5 +368,6 @@ BaseUiDynamicSelect<UserModel, ApiResponse, ApiParams, Multiple>
 
 ## Notes
 
+- Default styles are shipped as CSS Modules in the build output (`default.module.js` + `default_module.css`).
 - Use `onValueChange(value, eventDetails)` instead of `onChange` from other variants.
 - The `label` prop renders a label above the input when `components.Label` is provided.

@@ -4,7 +4,11 @@ import type {
   AntdDynamicSelectProps,
 } from "../src/antd";
 import { AntdDynamicSelect } from "../src/antd";
-import { LOAD_MORE_TYPE, SEARCH_PLACEMENT } from "../src/lib/constants";
+import {
+  ADD_PLACEMENT,
+  LOAD_MORE_TYPE,
+  SEARCH_PLACEMENT,
+} from "../src/lib/constants";
 import { AntdHookFormStory } from "./components/antd/story-hook-form";
 import { getUserList, MOCK_USER_LIST } from "./mocks/user";
 
@@ -172,6 +176,42 @@ export const LoadMoreClick: Story = {
       ...userListConfig,
       loadMore: {
         type: LOAD_MORE_TYPE.CLICK,
+      },
+    },
+  },
+};
+
+export const AddButtonStart: Story = {
+  args: {
+    placeholder: "Select a user",
+    style: { width: 320 },
+    allowClear: true,
+    showSearch: true,
+    dynamicConfig: {
+      ...userListConfig,
+      add: {
+        placement: ADD_PLACEMENT.START,
+        onClick: () => {
+          alert("add");
+        },
+      },
+    },
+  },
+};
+
+export const AddButtonEnd: Story = {
+  args: {
+    placeholder: "Select a user",
+    style: { width: 320 },
+    allowClear: true,
+    showSearch: true,
+    dynamicConfig: {
+      ...userListConfig,
+      add: {
+        placement: ADD_PLACEMENT.END,
+        onClick: () => {
+          alert("add");
+        },
       },
     },
   },

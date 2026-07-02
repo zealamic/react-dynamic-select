@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import type { BaseUiDynamicSelectConfig } from "../../../src/base-ui";
 import { BaseUiDynamicSelect } from "../../../src/base-ui";
@@ -10,7 +10,6 @@ import {
 } from "../../../src/lib/constants";
 import { getUserList } from "../../mocks/user";
 import styles from "./base-ui.module.css";
-import { createBaseUiStoryComponents } from "./story-components";
 
 type UserListParams = Parameters<typeof getUserList>[0];
 type UserListResult = Awaited<ReturnType<typeof getUserList>>;
@@ -73,7 +72,6 @@ export function BaseUiHookFormStory({
   placeholder = "Select a user",
   dynamicConfig = defaultUserListConfig,
 }: BaseUiHookFormStoryProps) {
-  const components = useMemo(() => createBaseUiStoryComponents(), []);
   const [submittedValue, setSubmittedValue] = useState<HookFormValues | null>(
     null,
   );
@@ -103,7 +101,6 @@ export function BaseUiHookFormStory({
           <BaseUiDynamicSelect
             placeholder={placeholder}
             dynamicConfig={dynamicConfig}
-            components={components}
             listHeight={200}
             value={field.value}
             onValueChange={(value) => {

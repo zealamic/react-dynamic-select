@@ -1,5 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { LOAD_MORE_TYPE, SEARCH_PLACEMENT } from "../src/lib/constants";
+import {
+  ADD_PLACEMENT,
+  LOAD_MORE_TYPE,
+  SEARCH_PLACEMENT,
+} from "../src/lib/constants";
 import type { MuiDynamicSelectConfig, MuiDynamicSelectProps } from "../src/mui";
 import { MuiDynamicSelect } from "../src/mui";
 import { MuiHookFormStory } from "./components/mui/story-hook-form";
@@ -154,6 +158,38 @@ export const LoadMoreClick: Story = {
       ...userListConfig,
       loadMore: {
         type: LOAD_MORE_TYPE.CLICK,
+      },
+    },
+  },
+};
+
+export const AddButtonStart: Story = {
+  args: {
+    placeholder: "Select a user",
+    sx: { width: 320 },
+    dynamicConfig: {
+      ...userListConfig,
+      add: {
+        placement: ADD_PLACEMENT.START,
+        onClick: () => {
+          alert("add");
+        },
+      },
+    },
+  },
+};
+
+export const AddButtonEnd: Story = {
+  args: {
+    placeholder: "Select a user",
+    sx: { width: 320 },
+    dynamicConfig: {
+      ...userListConfig,
+      add: {
+        placement: ADD_PLACEMENT.END,
+        onClick: () => {
+          alert("add");
+        },
       },
     },
   },
