@@ -109,5 +109,8 @@
     "onlyBuiltDependencies": [
       "esbuild"
     ]
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
