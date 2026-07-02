@@ -124,6 +124,10 @@ Render a create / add action in the dropdown footer (left or right of total coun
 />
 ```
 
+| Start | End |
+| :---: | :---: |
+| ![Add button start](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/add-button-start.jpg) | ![Add button end](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/add-button-end.jpg) |
+
 | Property | Description |
 |---|---|
 | `label` | Button text |

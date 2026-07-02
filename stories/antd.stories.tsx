@@ -181,7 +181,7 @@ export const LoadMoreClick: Story = {
   },
 };
 
-export const AddButton: Story = {
+export const AddButtonStart: Story = {
   args: {
     placeholder: "Select a user",
     style: { width: 320 },
@@ -191,6 +191,24 @@ export const AddButton: Story = {
       ...userListConfig,
       add: {
         placement: ADD_PLACEMENT.START,
+        onClick: () => {
+          alert("add");
+        },
+      },
+    },
+  },
+};
+
+export const AddButtonEnd: Story = {
+  args: {
+    placeholder: "Select a user",
+    style: { width: 320 },
+    allowClear: true,
+    showSearch: true,
+    dynamicConfig: {
+      ...userListConfig,
+      add: {
+        placement: ADD_PLACEMENT.END,
         onClick: () => {
           alert("add");
         },

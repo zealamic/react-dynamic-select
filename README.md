@@ -125,16 +125,6 @@ All variants share the same `dynamicConfig` shape. Pass only the fields that dif
 | [Base UI](https://github.com/zealamic/react-dynamic-select/blob/main/docs/BASE-UI.md)               | `BaseUiDynamicSelect`, slot components, icons |
 | [Build your own](https://github.com/zealamic/react-dynamic-select/blob/main/docs/BUILD_YOUR_OWN.md) | Headless hooks, utilities, custom UI          |
 
-## Development
-
-```bash
-pnpm install
-pnpm run build      # build library
-pnpm run dev        # watch mode
-pnpm run test       # run tests
-pnpm run storybook  # interactive examples
-```
-
 ---
 
 ## License

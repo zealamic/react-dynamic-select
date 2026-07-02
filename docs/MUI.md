@@ -133,6 +133,10 @@ Render a create / add action in the dropdown footer. Set `placement` to `"start"
 />
 ```
 
+| Start | End |
+| :---: | :---: |
+| ![Add button start](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/add-button-start.jpg) | ![Add button end](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/add-button-end.jpg) |
+
 | Property | Description |
 |---|---|
 | `label` | Button text |

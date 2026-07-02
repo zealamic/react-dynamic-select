@@ -234,12 +234,26 @@ export const LoadMoreClick: Story = {
   },
 };
 
-export const AddButton: Story = {
+export const AddButtonStart: Story = {
   args: {
     placeholder: "Select a user",
     dynamicConfig: {
       add: {
         placement: ADD_PLACEMENT.START,
+        onClick: () => {
+          alert("add");
+        },
+      },
+    },
+  },
+};
+
+export const AddButtonEnd: Story = {
+  args: {
+    placeholder: "Select a user",
+    dynamicConfig: {
+      add: {
+        placement: ADD_PLACEMENT.END,
         onClick: () => {
           alert("add");
         },

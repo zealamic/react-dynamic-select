@@ -277,6 +277,10 @@ dynamicConfig={{
 }}
 ```
 
+| Start | End |
+| :---: | :---: |
+| ![Add button start](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/add-button-start.jpg) | ![Add button end](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/add-button-end.jpg) |
+
 Set `placement` to `"start"` (left of footer) or `"end"` (right). See [add](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
 
 ## Multiple selection
