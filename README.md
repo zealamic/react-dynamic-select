@@ -1,6 +1,6 @@
 # @zealamic/react-dynamic-select
 
-Async select components for React — fetch options from an API, search, paginate, and load more. Works with **Ant Design**, **MUI**, **Base UI** (styled defaults included), or your own UI via headless hooks.
+Async select components for React — fetch options from an API, search, paginate, and load more. Works with **Ant Design**, **MUI**, **Chakra UI**, **Base UI** (styled defaults included), or your own UI via headless hooks.
 
 ![React Dynamic Select](https://github.com/zealamic/react-dynamic-select/blob/main/assets/cover-photo.jpg)
 
@@ -11,7 +11,7 @@ Async select components for React — fetch options from an API, search, paginat
 - **Load more** — scroll-to-bottom or click-to-load pagination
 - **Add button** — optional create action in the dropdown footer
 - **Custom option labels** — string templates or React components per row
-- **Multiple selection** — single and multi-select support
+- **Multiple selection** — single and multi-select support with dismissible chips
 - **Pre-loaded values** — display selected items in edit mode via `currentData`
 - **Base UI defaults** — styled Combobox UI out of the box; override slots when needed
 - **Type-safe** — full TypeScript generics for API response, params, and data models
@@ -20,9 +20,15 @@ Async select components for React — fetch options from an API, search, paginat
 
 Same `dynamicConfig` across UI libraries:
 
-| Ant Design | MUI | Base UI |
-| :---: | :---: | :---: |
-| ![Ant Design default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/default.jpg) | ![MUI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/default.jpg) | ![Base UI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/default.jpg) |
+| Ant Design | MUI | Base UI | Chakra UI |
+| :---: | :---: | :---: | :---: |
+| ![Ant Design default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/default.jpg) | ![MUI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/default.jpg) | ![Base UI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/default.jpg) | ![Chakra UI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/chakra/default.jpg) |
+
+**Custom option label** — render each row with a React component (name + email, avatar, etc.):
+
+| Ant Design | MUI | Base UI | Chakra UI |
+| :---: | :---: | :---: | :---: |
+| ![Ant Design custom option](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/custom-option.jpg) | ![MUI custom option](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/custom-option.jpg) | ![Base UI custom option](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/custom-option.jpg) | ![Chakra UI custom option](https://github.com/zealamic/react-dynamic-select/blob/main/assets/chakra/custom-option.jpg) |
 
 More screenshots and usage details in the [documentation](#documentation).
 
@@ -41,6 +47,9 @@ pnpm add antd
 # MUI
 pnpm add @mui/material @emotion/react @emotion/styled
 
+# Chakra UI
+pnpm add @chakra-ui/react
+
 # Base UI
 pnpm add @base-ui/react
 ```
@@ -53,6 +62,7 @@ Peer dependencies: `react >= 19`. UI libraries are optional — see entry points
 | ---------------------------------------- | ------------------------------------------- |
 | `@zealamic/react-dynamic-select/antd`    | Ant Design `Select` wrapper                 |
 | `@zealamic/react-dynamic-select/mui`     | MUI `Autocomplete` wrapper                  |
+| `@zealamic/react-dynamic-select/chakra`  | Chakra UI v3 `Combobox` wrapper             |
 | `@zealamic/react-dynamic-select/base-ui` | Base UI `Combobox` wrapper with styled defaults and slot overrides |
 | `@zealamic/react-dynamic-select`         | Headless hooks and utilities                |
 
@@ -78,6 +88,21 @@ import { AntdDynamicSelect } from "@zealamic/react-dynamic-select/antd";
 ```
 
 All variants share the same `dynamicConfig` shape. Pass only the fields that differ from the defaults.
+
+**Chakra UI** — wrap your app with `ChakraProvider`, then use the same config:
+
+```tsx
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { ChakraDynamicSelect } from "@zealamic/react-dynamic-select/chakra";
+
+<ChakraProvider value={defaultSystem}>
+  <ChakraDynamicSelect
+    placeholder="Select a user"
+    width="320px"
+    dynamicConfig={userListConfig}
+  />
+</ChakraProvider>
+```
 
 **Base UI** works without a `components` prop — defaults are styled and ready to use. Customize with `createDefaultBaseUiComponents()`:
 
@@ -132,7 +157,7 @@ The resolved `label` is a `ReactNode` in the option list. String-based helpers s
 | **search** | Search input configuration | `object` | — |
 | **search.placement** | Where the search input is rendered | `"menu"` \| `"inline"` | `"menu"` |
 | **search.debounce** | Debounce delay before triggering a search fetch (ms) | `number` | `500` |
-| **search.inputSearchMenuProps** | Props for the menu search input (Ant Design `Input`, MUI `TextField`, or Base UI `ComboboxInput`) | `InputSearchProps` | `{ placeholder: "Search..." }` |
+| **search.inputSearchMenuProps** | Props for the menu search input (Ant Design `Input`, MUI `TextField`, Chakra/Base UI `ComboboxInput`) | `InputSearchProps` | `{ placeholder: "Search..." }` |
 | **loadMore** | Enable pagination / load more. `true` enables click mode with defaults | `boolean` \| `object` | `{ type: "click", threshold: 100, distance: 100, debounce: 100 }` |
 | **loadMore.type** | How to load the next page | `"click"` \| `"scroll"` | `"click"` |
 | **loadMore.label** | Load-more button text | `string` | `"Load More"` |
@@ -154,6 +179,7 @@ The resolved `label` is a `ReactNode` in the option list. String-based helpers s
 | --------------------------------------------------------------------------------------------------- | --------------------------------------------- |
 | [Ant Design](https://github.com/zealamic/react-dynamic-select/blob/main/docs/ANTD.md)               | `AntdDynamicSelect`, `useAntdDynamicSelect`   |
 | [MUI](https://github.com/zealamic/react-dynamic-select/blob/main/docs/MUI.md)                       | `MuiDynamicSelect`, `useMuiDynamicSelect`     |
+| [Chakra UI](https://github.com/zealamic/react-dynamic-select/blob/main/docs/CHAKRA.md)              | `ChakraDynamicSelect`, `useChakraDynamicSelect` |
 | [Base UI](https://github.com/zealamic/react-dynamic-select/blob/main/docs/BASE-UI.md)               | `BaseUiDynamicSelect`, `createDefaultBaseUiComponents`, slots |
 | [Build your own](https://github.com/zealamic/react-dynamic-select/blob/main/docs/BUILD_YOUR_OWN.md) | Headless hooks, utilities, custom UI          |
 

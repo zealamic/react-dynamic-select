@@ -8,6 +8,7 @@ Pre-built UI integrations live in separate entry points:
 | ---------------------------------------- | --------------------- |
 | `@zealamic/react-dynamic-select/antd`    | `AntdDynamicSelect`   |
 | `@zealamic/react-dynamic-select/mui`     | `MuiDynamicSelect`    |
+| `@zealamic/react-dynamic-select/chakra`  | `ChakraDynamicSelect` |
 | `@zealamic/react-dynamic-select/base-ui` | `BaseUiDynamicSelect` |
 
 Each of those is essentially a thin wrapper around the primitives documented here.
@@ -67,9 +68,9 @@ import type {
 | ------------------------ | ---------------------------------------------------------------------------------------- |
 | `DynamicSelectConfig`    | Full config shape: `api`, `list`, `total`, `option`, `search`, `loadMore`, `add`, `currentData` |
 | `DynamicSelectHookProps` | `{ dynamicConfig?: DynamicSelectConfig }` — useful as a base for custom hook props       |
-| `ResolvedOption`         | `{ label?: string \| null; value: string \| number \| null \| undefined }`               |
+| `ResolvedOption`         | `{ label?: string \| ReactNode \| null; value: string \| number \| null \| undefined }`    |
 | `SearchableApiParams`    | `Record<string, any> & { search?: string }` — minimum API params constraint              |
-| `OptionTemplate`         | `{ label?: string; value?: string }` — maps API item fields to options                   |
+| `OptionTemplate`         | `{ label?: string \| FC<{ data: DataType }>; value?: string }` — maps API item fields or React components to options |
 | `PaginationParams`       | `{ page, pageSize }` or `{ page, limit }`                                                |
 | `FetchTrigger`           | `"mount"` \| `"open"`                                                                    |
 | `LoadMoreType`           | `"click"` \| `"scroll"`                                                                  |
@@ -174,7 +175,7 @@ Scroll and click handlers for pagination.
 | Function                                        | Description                                                                                               |
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `resolveDataFromTemplate({ template, data })`   | Reads a value from nested response data. Supports dot paths (`"data.items"`) and `"{field}"` placeholders |
-| `resolveOptionFromTemplate({ template, data })` | Maps one API item to `ResolvedOption`                                                                     |
+| `resolveOptionFromTemplate({ template, data })` | Maps one API item to `ResolvedOption`. `label` can be a string, placeholder template, or `FC<{ data }>` returning `ReactNode` |
 | `resolveLoadMoreConfig(loadMore)`               | Normalizes `loadMore: true \| object` to `ResolvedLoadMoreConfig \| null`                                 |
 
 ### Selected value handling
@@ -189,7 +190,7 @@ Scroll and click handlers for pagination.
 
 ## Step-by-step: custom hook
 
-The built-in `useAntdDynamicSelect`, `useMuiDynamicSelect`, and `useBaseUiDynamicSelect` all follow the same pattern. Here is a minimal version you can adapt:
+The built-in `useAntdDynamicSelect`, `useMuiDynamicSelect`, `useChakraDynamicSelect`, and `useBaseUiDynamicSelect` all follow the same pattern. Here is a minimal version you can adapt:
 
 ```tsx
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -473,10 +474,32 @@ When building a custom dynamic select, make sure you handle:
 5. **Add button** — render `dynamicConfig.add` in the footer when `placement` is `"start"` or `"end"`
 6. **Edit mode** — pass `currentData` and use `mergeOptionsWithCurrent` so selected values display before fetch
 7. **Option template** — map your API shape via `list.path`, `total.path`, and `option.template`
+8. **Custom option labels** — when `option.template.label` is a React component, `ResolvedOption.label` is a `ReactNode`. Render it directly in your list; use a string fallback (`String(option.value)`) for accessibility labels and filtering when needed
+
+### Custom option label example
+
+```tsx
+const config = {
+  // ...
+  option: {
+    template: {
+      label: ({ data }: { data: User }) => (
+        <span>
+          {data.fullName} <small>{data.email}</small>
+        </span>
+      ),
+      value: "id",
+    },
+  },
+} satisfies DynamicSelectConfig<User, ApiResponse, ApiParams>;
+```
+
+UI adapters export helpers such as `getOptionLabel` / `getOptionLabelNode` from their handler modules (e.g. `@zealamic/react-dynamic-select/base-ui` exports `getOptionLabel` and `getOptionLabelNode`).
 
 ## See also
 
 - [README.md](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) — `dynamicConfig` property reference
 - [MUI.md](https://github.com/zealamic/react-dynamic-select/blob/main/docs/MUI.md) — MUI integration
+- [CHAKRA.md](https://github.com/zealamic/react-dynamic-select/blob/main/docs/CHAKRA.md) — Chakra UI integration
 - [BASE-UI.md](https://github.com/zealamic/react-dynamic-select/blob/main/docs/BASE-UI.md) — Base UI headless integration with slot components
 - `src/components/antd/hooks/use-dynamic-select.ts` — reference implementation

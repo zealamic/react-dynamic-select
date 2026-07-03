@@ -21,6 +21,9 @@ const config: StorybookConfig = {
     "../stories/**/*.mdx",
     "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
+  refs: {
+    "@chakra-ui/react": { disable: true },
+  },
   addons: [
     "@storybook/addon-docs",
     "@storybook/addon-onboarding",

@@ -154,6 +154,35 @@ Use `currentData` when the form already has a value but the option is not in the
 />
 ```
 
+## Custom option label
+
+Use a React component in `option.template.label` to render rich rows (name + email, avatars, badges, etc.):
+
+```tsx
+<AntdDynamicSelect
+  showSearch
+  allowClear
+  dynamicConfig={{
+    ...userListConfig,
+    option: {
+      template: {
+        label: ({ data }) => (
+          <div>
+            <div>{data.fullName}</div>
+            <div style={{ fontSize: 12, color: "gray" }}>{data.email}</div>
+          </div>
+        ),
+        value: "id",
+      },
+    },
+  }}
+/>
+```
+
+![Custom option label](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/custom-option.jpg)
+
+Custom labels render in the dropdown and in the selected value display. String helpers such as `getOptionLabel` fall back to `value` when the label is not plain text.
+
 ## Multiple selection
 
 ```tsx
