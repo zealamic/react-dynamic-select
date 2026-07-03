@@ -6,6 +6,20 @@ The Base UI variant is **headless-first**: fetch/search/load-more logic is built
 
 ## Installation
 
+**npm**
+
+```bash
+npm install @zealamic/react-dynamic-select @base-ui/react
+```
+
+**yarn**
+
+```bash
+yarn add @zealamic/react-dynamic-select @base-ui/react
+```
+
+**pnpm**
+
 ```bash
 pnpm add @zealamic/react-dynamic-select @base-ui/react
 ```
@@ -143,6 +157,20 @@ itemToStringValue(option);
 [shadcn/ui Combobox](https://ui.shadcn.com/docs/components/radix/combobox) is a styled wrapper around `@base-ui/react` Combobox. Map shadcn primitives to the `components` slots above to keep your Tailwind styling. Start from `createDefaultBaseUiComponents()` and replace slots incrementally, or build the map from scratch.
 
 ### Setup
+
+**npm**
+
+```bash
+npx shadcn@latest add combobox
+```
+
+**yarn**
+
+```bash
+yarn dlx shadcn@latest add combobox
+```
+
+**pnpm**
 
 ```bash
 pnpm dlx shadcn@latest add combobox

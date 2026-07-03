@@ -4,6 +4,20 @@ Guide for using `@zealamic/react-dynamic-select/antd` with [Ant Design Select](h
 
 ## Installation
 
+**npm**
+
+```bash
+npm install @zealamic/react-dynamic-select antd
+```
+
+**yarn**
+
+```bash
+yarn add @zealamic/react-dynamic-select antd
+```
+
+**pnpm**
+
 ```bash
 pnpm add @zealamic/react-dynamic-select antd
 ```

@@ -4,6 +4,20 @@ Guide for using `@zealamic/react-dynamic-select/mui` with [MUI Autocomplete](htt
 
 ## Installation
 
+**npm**
+
+```bash
+npm install @zealamic/react-dynamic-select @mui/material @emotion/react @emotion/styled
+```
+
+**yarn**
+
+```bash
+yarn add @zealamic/react-dynamic-select @mui/material @emotion/react @emotion/styled
+```
+
+**pnpm**
+
 ```bash
 pnpm add @zealamic/react-dynamic-select @mui/material @emotion/react @emotion/styled
 ```

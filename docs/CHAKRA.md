@@ -4,6 +4,20 @@ Guide for using `@zealamic/react-dynamic-select/chakra` with [Chakra UI v3 Combo
 
 ## Installation
 
+**npm**
+
+```bash
+npm install @zealamic/react-dynamic-select @chakra-ui/react
+```
+
+**yarn**
+
+```bash
+yarn add @zealamic/react-dynamic-select @chakra-ui/react
+```
+
+**pnpm**
+
 ```bash
 pnpm add @zealamic/react-dynamic-select @chakra-ui/react
 ```
