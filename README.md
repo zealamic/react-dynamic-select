@@ -114,6 +114,64 @@ import { BaseUiDynamicSelect } from "@zealamic/react-dynamic-select/base-ui";
 />;
 ```
 
+### Option template — string label
+
+`option.template.label` as a **string** maps each API item to the option text. Three forms are supported:
+
+**1. Field path** — read a property from the item (supports dot notation for nested fields):
+
+```tsx
+// API item: { id: 1, fullName: "John Doe" }
+option: {
+  template: {
+    label: "fullName", // → "John Doe"
+    value: "id",       // → 1
+  },
+}
+
+// Nested: { id: 1, profile: { name: "John Doe" } }
+option: {
+  template: {
+    label: "profile.name", // → "John Doe"
+    value: "id",
+  },
+}
+```
+
+**2. Placeholder template** — combine multiple fields in one label:
+
+```tsx
+// API item: { id: 1, firstName: "John", lastName: "Doe" }
+option: {
+  template: {
+    label: "{firstName} {lastName}", // → "John Doe"
+    value: "id",
+  },
+}
+```
+
+Use `{field}` or `{nested.field}` placeholders. Missing values render as empty strings in the label.
+
+**3. Full example with `dynamicConfig`:**
+
+```tsx
+const userListConfig = {
+  api: { fetch: fetchUsers, params: { page: 1, pageSize: 10, search: "" } },
+  list: { path: "data" },
+  total: { path: "total" },
+  option: {
+    template: {
+      label: "fullName", // or "{firstName} {lastName}"
+      value: "id",
+    },
+  },
+};
+```
+
+`option.template.value` uses the same field-path rules to pick the option id stored in the select.
+
+### Option template — React component label
+
 **Custom option label** — use a React component instead of a string field or template. Screenshots and per-UI examples are in the **Custom option label** section of each UI guide — see [Documentation](#documentation).
 
 ```tsx
