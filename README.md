@@ -20,15 +20,13 @@ Async select components for React — fetch options from an API, search, paginat
 
 Same `dynamicConfig` across UI libraries:
 
-|                                                Ant Design                                                 |                                                MUI                                                |                                                  Base UI                                                  |                                                 Chakra UI                                                  |
-| :-------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------: |
-| ![Ant Design default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/default.jpg) | ![MUI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/default.jpg) | ![Base UI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/default.jpg) | ![Chakra UI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/chakra/default.jpg) |
+| Ant Design | MUI |
+| :---: | :---: |
+| ![Ant Design default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/default.jpg) | ![MUI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/default.jpg) |
 
-**Custom option label** — render each row with a React component (name + email, avatar, etc.):
-
-|                                                      Ant Design                                                       |                                                      MUI                                                      |                                                        Base UI                                                        |                                                       Chakra UI                                                        |
-| :-------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------: |
-| ![Ant Design custom option](https://github.com/zealamic/react-dynamic-select/blob/main/assets/antd/custom-option.jpg) | ![MUI custom option](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/custom-option.jpg) | ![Base UI custom option](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/custom-option.jpg) | ![Chakra UI custom option](https://github.com/zealamic/react-dynamic-select/blob/main/assets/chakra/custom-option.jpg) |
+| Base UI | Chakra UI |
+| :---: | :---: |
+| ![Base UI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/default.jpg) | ![Chakra UI default](https://github.com/zealamic/react-dynamic-select/blob/main/assets/chakra/default.jpg) |
 
 More screenshots and usage details in the [documentation](#documentation).
 
@@ -116,7 +114,7 @@ import { BaseUiDynamicSelect } from "@zealamic/react-dynamic-select/base-ui";
 />;
 ```
 
-**Custom option label** — use a React component instead of a string field or template:
+**Custom option label** — use a React component instead of a string field or template. Screenshots and per-UI examples are in the **Custom option label** section of each UI guide — see [Documentation](#documentation).
 
 ```tsx
 option: {
