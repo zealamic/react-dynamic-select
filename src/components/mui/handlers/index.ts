@@ -1,7 +1,12 @@
 import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
+import Chip, { type ChipProps } from "@mui/material/Chip";
 import { createElement, type ReactNode, type SyntheticEvent } from "react";
 import type { ResolvedOption } from "@/general-types";
+import {
+  getOptionLabelNode,
+  getOptionLabelText,
+  hasCustomOptionLabel,
+} from "@/lib/utils/option-label";
 import type { MuiDynamicSelectValue } from "../types";
 
 function isSameOptionValue(a: unknown, b: unknown) {
@@ -9,7 +14,33 @@ function isSameOptionValue(a: unknown, b: unknown) {
 }
 
 export function getOptionLabel(option: ResolvedOption) {
-  return option.label ?? String(option.value ?? "");
+  return getOptionLabelText(option);
+}
+
+export { getOptionLabelNode, hasCustomOptionLabel };
+
+export function getMuiOptionChipProps(
+  option: ResolvedOption,
+): Pick<ChipProps, "size" | "sx"> {
+  if (!hasCustomOptionLabel(option)) {
+    return { size: "small" };
+  }
+
+  return {
+    size: "medium",
+    sx: {
+      height: "auto",
+      minHeight: 32,
+      alignItems: "center",
+      "& .MuiChip-label": {
+        display: "block",
+        whiteSpace: "normal",
+        py: 0.5,
+        pr: 0.5,
+        lineHeight: 1.4,
+      },
+    },
+  };
 }
 
 export function isOptionEqualToValue(
@@ -152,13 +183,16 @@ export function renderMultipleValueChips(
       const option = options.find((entry) =>
         isSameOptionValue(entry.value, item),
       );
-      const label = option ? getOptionLabel(option) : String(item);
+      const chipLabel = option ? getOptionLabelNode(option) : String(item);
       const handleRemove = onRemoveItem?.(item);
+      const chipProps = option
+        ? getMuiOptionChipProps(option)
+        : ({ size: "small" } as const);
 
       return createElement(Chip, {
         key: String(item),
-        size: "small",
-        label,
+        label: chipLabel,
+        ...chipProps,
         onDelete: handleRemove,
         onMouseDown: handleRemove
           ? (event: SyntheticEvent) => {
@@ -194,5 +228,5 @@ export function formatSelectDisplayValue(
     isSameOptionValue(entry.value, selected),
   );
 
-  return option ? getOptionLabel(option) : String(selected);
+  return option ? getOptionLabelNode(option) : String(selected);
 }

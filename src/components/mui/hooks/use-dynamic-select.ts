@@ -12,7 +12,7 @@ import {
   normalizeSelectValues,
   resolveCurrentOptions,
 } from "@/lib/utils";
-import { isDynamicSelectPopupElement } from "../partials/autocomplete-popup-section";
+import { shouldKeepMenuOpenOnSearchBlur } from "../partials/autocomplete-popup-section";
 import type {
   MuiDynamicSelectConfig,
   MuiDynamicSelectProps,
@@ -94,10 +94,7 @@ export function useMuiDynamicSelect<
       if (isMenuSearch && reason === "blur") {
         const relatedTarget = (event as React.FocusEvent).relatedTarget;
 
-        if (
-          isDynamicSelectPopupElement(relatedTarget) ||
-          isDynamicSelectPopupElement(document.activeElement)
-        ) {
+        if (shouldKeepMenuOpenOnSearchBlur(relatedTarget)) {
           return;
         }
       }

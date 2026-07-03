@@ -31,7 +31,7 @@ function resolveOptionsFromResponse<DataType, ApiResponse, ApiParams>({
   }
 
   return list.map((item) =>
-    resolveOptionFromTemplate({
+    resolveOptionFromTemplate<DataType>({
       template: optionTemplate,
       data: item as Record<string, unknown>,
     }),

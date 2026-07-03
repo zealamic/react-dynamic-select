@@ -12,6 +12,31 @@ export function isDynamicSelectPopupElement(
   );
 }
 
+export function shouldKeepMenuOpenOnSearchBlur(
+  relatedTarget: EventTarget | null,
+) {
+  return relatedTarget != null && isDynamicSelectPopupElement(relatedTarget);
+}
+
+export function isOutsideDynamicSelectInteraction(
+  target: EventTarget | null,
+  root: HTMLElement | null,
+) {
+  if (!(target instanceof Node)) {
+    return false;
+  }
+
+  if (root?.contains(target)) {
+    return false;
+  }
+
+  if (isDynamicSelectPopupElement(target)) {
+    return false;
+  }
+
+  return true;
+}
+
 export function preventAutocompletePopupClose(event: MouseEvent) {
   event.preventDefault();
   event.stopPropagation();

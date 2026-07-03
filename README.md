@@ -1,6 +1,6 @@
 # @zealamic/react-dynamic-select
 
-Async select components for React — fetch options from an API, search, paginate, and load more. Works with **Ant Design**, **MUI**, **Base UI**, or your own UI via headless hooks.
+Async select components for React — fetch options from an API, search, paginate, and load more. Works with **Ant Design**, **MUI**, **Base UI** (styled defaults included), or your own UI via headless hooks.
 
 ![React Dynamic Select](https://github.com/zealamic/react-dynamic-select/blob/main/assets/cover-photo.jpg)
 
@@ -9,8 +9,11 @@ Async select components for React — fetch options from an API, search, paginat
 - **Async data** — fetch options on open or mount, with configurable API params
 - **Search** — inline (main input) or menu (dropdown input), with debounce
 - **Load more** — scroll-to-bottom or click-to-load pagination
+- **Add button** — optional create action in the dropdown footer
+- **Custom option labels** — string templates or React components per row
 - **Multiple selection** — single and multi-select support
 - **Pre-loaded values** — display selected items in edit mode via `currentData`
+- **Base UI defaults** — styled Combobox UI out of the box; override slots when needed
 - **Type-safe** — full TypeScript generics for API response, params, and data models
 
 ## Preview
@@ -50,7 +53,7 @@ Peer dependencies: `react >= 19`. UI libraries are optional — see entry points
 | ---------------------------------------- | ------------------------------------------- |
 | `@zealamic/react-dynamic-select/antd`    | Ant Design `Select` wrapper                 |
 | `@zealamic/react-dynamic-select/mui`     | MUI `Autocomplete` wrapper                  |
-| `@zealamic/react-dynamic-select/base-ui` | Base UI `Combobox` wrapper (headless slots) |
+| `@zealamic/react-dynamic-select/base-ui` | Base UI `Combobox` wrapper with styled defaults and slot overrides |
 | `@zealamic/react-dynamic-select`         | Headless hooks and utilities                |
 
 ## Quick example
@@ -76,6 +79,35 @@ import { AntdDynamicSelect } from "@zealamic/react-dynamic-select/antd";
 
 All variants share the same `dynamicConfig` shape. Pass only the fields that differ from the defaults.
 
+**Base UI** works without a `components` prop — defaults are styled and ready to use. Customize with `createDefaultBaseUiComponents()`:
+
+```tsx
+import { BaseUiDynamicSelect } from "@zealamic/react-dynamic-select/base-ui";
+
+<BaseUiDynamicSelect
+  placeholder="Select a user"
+  listHeight={200}
+  dynamicConfig={userListConfig}
+/>;
+```
+
+**Custom option label** — use a React component instead of a string field or template:
+
+```tsx
+option: {
+  template: {
+    label: ({ data }) => (
+      <span>
+        {data.firstName} {data.lastName}
+      </span>
+    ),
+    value: "id",
+  },
+}
+```
+
+The resolved `label` is a `ReactNode` in the option list. String-based helpers such as `getOptionLabel` fall back to `value` when the label is not plain text.
+
 ## Dynamic config properties
 
 `dynamicConfig` is the shared prop that wires async behavior into every variant. It is deep-merged with `defaultDynamicSelectConfig` — you only need to pass fields that differ from the defaults.
@@ -94,7 +126,7 @@ All variants share the same `dynamicConfig` shape. Pass only the fields that dif
 | **total.path** | Dot path to the total count, e.g. `"total"` | `string` | `"total"` |
 | **total.label** | Label shown in the dropdown footer | `string` | `"Total"` |
 | **option** | Maps each API item to a select option | `object` | — |
-| **option.template.label** | Label field or template, supports `"{firstName} {lastName}"` | `string` | `"label"` |
+| **option.template.label** | Label field, placeholder template (`"{firstName} {lastName}"`), or React component `({ data }) => ReactNode` | `string` \| `FC<{ data: DataType }>` | `"label"` |
 | **option.template.value** | Value field | `string` | `"value"` |
 | **currentData** | Pre-loaded item(s) for edit mode when the selected value is not in the fetched list yet | `DataType` \| `DataType[]` | — |
 | **search** | Search input configuration | `object` | — |
@@ -122,8 +154,18 @@ All variants share the same `dynamicConfig` shape. Pass only the fields that dif
 | --------------------------------------------------------------------------------------------------- | --------------------------------------------- |
 | [Ant Design](https://github.com/zealamic/react-dynamic-select/blob/main/docs/ANTD.md)               | `AntdDynamicSelect`, `useAntdDynamicSelect`   |
 | [MUI](https://github.com/zealamic/react-dynamic-select/blob/main/docs/MUI.md)                       | `MuiDynamicSelect`, `useMuiDynamicSelect`     |
-| [Base UI](https://github.com/zealamic/react-dynamic-select/blob/main/docs/BASE-UI.md)               | `BaseUiDynamicSelect`, slot components, icons |
+| [Base UI](https://github.com/zealamic/react-dynamic-select/blob/main/docs/BASE-UI.md)               | `BaseUiDynamicSelect`, `createDefaultBaseUiComponents`, slots |
 | [Build your own](https://github.com/zealamic/react-dynamic-select/blob/main/docs/BUILD_YOUR_OWN.md) | Headless hooks, utilities, custom UI          |
+
+## Development
+
+```bash
+pnpm install
+pnpm run build      # build library
+pnpm run dev        # watch mode
+pnpm run test       # run tests
+pnpm run storybook  # interactive examples
+```
 
 ---
 

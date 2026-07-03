@@ -195,6 +195,49 @@ export const AddButtonEnd: Story = {
   },
 };
 
+export const LabelNode: Story = {
+  args: {
+    placeholder: "Select a user",
+    sx: { width: 320 },
+    dynamicConfig: {
+      ...userListConfig,
+      option: {
+        template: {
+          label: ({ data }) => (
+            <div>
+              <div>{data.fullName}</div>
+              <div style={{ fontSize: 12, color: "gray" }}>{data.email}</div>
+            </div>
+          ),
+          value: "id",
+        },
+      },
+    },
+  },
+};
+
+export const LabelNodeMultiple: Story = {
+  args: {
+    placeholder: "Select a user",
+    sx: { width: 320 },
+    multiple: true,
+    dynamicConfig: {
+      ...userListConfig,
+      option: {
+        template: {
+          label: ({ data }) => (
+            <div>
+              <div>{data.fullName}</div>
+              <div style={{ fontSize: 12, color: "gray" }}>{data.email}</div>
+            </div>
+          ),
+          value: "id",
+        },
+      },
+    },
+  },
+};
+
 export const HookForm: Story = {
   render: () => <MuiHookFormStory />,
   parameters: {

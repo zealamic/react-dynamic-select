@@ -262,6 +262,47 @@ export const AddButtonEnd: Story = {
   },
 };
 
+export const LabelNode: Story = {
+  args: {
+    placeholder: "Select a user",
+    dynamicConfig: {
+      ...userListConfig,
+      option: {
+        template: {
+          label: ({ data }) => (
+            <div>
+              <div>{data.fullName}</div>
+              <div style={{ fontSize: 12, color: "gray" }}>{data.email}</div>
+            </div>
+          ),
+          value: "id",
+        },
+      },
+    },
+  },
+};
+
+export const LabelNodeMultiple: Story = {
+  args: {
+    placeholder: "Select a user",
+    multiple: true,
+    dynamicConfig: {
+      ...userListConfig,
+      option: {
+        template: {
+          label: ({ data }) => (
+            <div>
+              <div>{data.fullName}</div>
+              <div style={{ fontSize: 12, color: "gray" }}>{data.email}</div>
+            </div>
+          ),
+          value: "id",
+        },
+      },
+    },
+  },
+};
+
 export const HookForm: Story = {
   render: () => <BaseUiHookFormStory />,
   parameters: {

@@ -72,7 +72,8 @@ export function useResolvedBaseUiComponents<
         Item: components?.Item ?? defaults.Item,
         ItemIndicator: components?.ItemIndicator ?? defaults.ItemIndicator,
         ItemText: components?.ItemText ?? defaults.ItemText,
-        MenuSearchInput: components?.MenuSearchInput ?? defaults.MenuSearchInput,
+        MenuSearchInput:
+          components?.MenuSearchInput ?? defaults.MenuSearchInput,
         ListFooter: components?.ListFooter ?? defaults.ListFooter,
         LoadingOverlay: components?.LoadingOverlay ?? defaults.LoadingOverlay,
         Separator: components?.Separator ?? defaults.Separator,

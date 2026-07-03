@@ -7,6 +7,10 @@ import { Fragment, useCallback, useId, useMemo } from "react";
 import type { ResolvedOption } from "@/general-types";
 import { SEARCH_PLACEMENT } from "@/lib/constants";
 import {
+  getOptionLabelNode,
+  hasCustomOptionLabel,
+} from "@/lib/utils/option-label";
+import {
   getOptionLabel,
   isOptionEqualToValue,
   itemToStringLabel,
@@ -174,43 +178,93 @@ export function BaseUiDynamicSelectView<
   const menuSearchInputProps = dynamicConfig.search?.inputSearchMenuProps;
 
   const renderSingleInput = () => (
-    <Input
-      id={inputId}
-      placeholder={placeholder}
-      style={isMenuSearch ? { cursor: "pointer" } : undefined}
-    />
+    <Value>
+      {(selectedValue: ResolvedOption | null) => {
+        const showCustomSelectedLabel =
+          selectedValue != null && hasCustomOptionLabel(selectedValue);
+
+        return (
+          <div
+            style={{
+              position: "relative",
+              display: "flex",
+              flex: 1,
+              alignItems: "center",
+              minWidth: 0,
+            }}
+          >
+            {showCustomSelectedLabel ? (
+              <span
+                style={{
+                  position: "absolute",
+                  inset: "0 0.75rem",
+                  display: "flex",
+                  alignItems: "center",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  pointerEvents: "none",
+                }}
+              >
+                {getOptionLabelNode(selectedValue)}
+              </span>
+            ) : null}
+            <Input
+              id={inputId}
+              placeholder={showCustomSelectedLabel ? undefined : placeholder}
+              style={{
+                ...(isMenuSearch ? { cursor: "pointer" } : undefined),
+                ...(showCustomSelectedLabel
+                  ? { color: "transparent", caretColor: "transparent" }
+                  : undefined),
+                width: "100%",
+              }}
+            />
+          </div>
+        );
+      }}
+    </Value>
   );
 
   const renderInputChrome = () => {
     if (multiple) {
       return (
-        <Chips>
-          <Value>
-            {(selectedValue: ResolvedOption[]) => (
-              <Fragment>
-                {selectedValue.map((option) => {
-                  const optionLabel = getOptionLabel(option);
+        <Fragment>
+          <Chips>
+            <Value>
+              {(selectedValue: ResolvedOption[]) => (
+                <Fragment>
+                  {selectedValue.map((option) => {
+                    const optionLabel = getOptionLabel(option);
+                    const optionContent = getOptionLabelNode(option);
 
-                  return (
-                    <Chip key={String(option.value)} aria-label={optionLabel}>
-                      {optionLabel}
-                      <ChipRemove aria-label={`Remove ${optionLabel}`}>
-                        <ChipRemoveIcon />
-                      </ChipRemove>
-                    </Chip>
-                  );
-                })}
-                <Input
-                  id={inputId}
-                  placeholder={
-                    selectedValue.length > 0 ? undefined : placeholder
-                  }
-                  style={isMenuSearch ? { cursor: "pointer" } : undefined}
-                />
-              </Fragment>
-            )}
-          </Value>
-        </Chips>
+                    return (
+                      <Chip key={String(option.value)} aria-label={optionLabel}>
+                        {optionContent}
+                        <ChipRemove aria-label={`Remove ${optionLabel}`}>
+                          <ChipRemoveIcon />
+                        </ChipRemove>
+                      </Chip>
+                    );
+                  })}
+                  <Input
+                    id={inputId}
+                    placeholder={
+                      selectedValue.length > 0 ? undefined : placeholder
+                    }
+                    style={isMenuSearch ? { cursor: "pointer" } : undefined}
+                  />
+                </Fragment>
+              )}
+            </Value>
+          </Chips>
+          <Clear aria-label="Clear selection">
+            <ClearIcon />
+          </Clear>
+          <Trigger aria-label="Open popup">
+            <CaretDownIcon />
+          </Trigger>
+        </Fragment>
       );
     }
 

@@ -1,8 +1,10 @@
 import { expect, test } from "@rstest/core";
+import { createElement } from "react";
 import {
   mergeOptionsWithCurrent,
   normalizeSelectValues,
   resolveCurrentOptions,
+  resolveOptionFromTemplate,
 } from "../../src/lib/utils/data";
 
 test("normalizeSelectValues handles single mode", () => {
@@ -81,4 +83,23 @@ test("resolveCurrentOptions supports single object and array", () => {
     { label: "Jill Doe", value: 4 },
     { label: "Emma Johnson", value: 15 },
   ]);
+});
+
+test("resolveOptionFromTemplate supports React component labels", () => {
+  const Label = ({ data }: { data: { name: string } }) =>
+    createElement("span", null, data.name);
+
+  const option = resolveOptionFromTemplate({
+    template: {
+      label: Label,
+      value: "id",
+    },
+    data: { id: 4, name: "Jill Doe" },
+  });
+
+  expect(option.value).toBe(4);
+  expect(option.label).toEqual(
+    // @ts-expect-error minimal config for unit test
+    createElement(Label, { data: { id: 4, name: "Jill Doe" } }),
+  );
 });
