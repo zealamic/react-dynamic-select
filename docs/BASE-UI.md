@@ -6,6 +6,20 @@ The Base UI variant is **headless-first**: fetch/search/load-more logic is built
 
 ## Installation
 
+**npm**
+
+```bash
+npm install @zealamic/react-dynamic-select @base-ui/react
+```
+
+**yarn**
+
+```bash
+yarn add @zealamic/react-dynamic-select @base-ui/react
+```
+
+**pnpm**
+
 ```bash
 pnpm add @zealamic/react-dynamic-select @base-ui/react
 ```
@@ -81,9 +95,9 @@ const multipleComponents = createDefaultBaseUiComponents({ multiple: true });
 
 ## Value
 
-Unlike Ant Design/MUI, the value is an **option object**, not a primitive:
+Unlike Ant Design/MUI/Chakra, the value is an **option object**, not a primitive:
 
-- **Single:** `ResolvedOption | null` → `{ label: string, value: string | number }`
+- **Single:** `ResolvedOption | null` → `{ label?: string | ReactNode, value: string | number }`
 - **Multiple:** `multiple={true}` → `ResolvedOption[]`
 
 ```tsx
@@ -143,6 +157,20 @@ itemToStringValue(option);
 [shadcn/ui Combobox](https://ui.shadcn.com/docs/components/radix/combobox) is a styled wrapper around `@base-ui/react` Combobox. Map shadcn primitives to the `components` slots above to keep your Tailwind styling. Start from `createDefaultBaseUiComponents()` and replace slots incrementally, or build the map from scratch.
 
 ### Setup
+
+**npm**
+
+```bash
+npx shadcn@latest add combobox
+```
+
+**yarn**
+
+```bash
+yarn dlx shadcn@latest add combobox
+```
+
+**pnpm**
 
 ```bash
 pnpm dlx shadcn@latest add combobox
@@ -282,6 +310,33 @@ dynamicConfig={{
 | ![Add button start](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/add-button-start.jpg) | ![Add button end](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/add-button-end.jpg) |
 
 Set `placement` to `"start"` (left of footer) or `"end"` (right). See [add](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
+
+## Custom option label
+
+Use a React component in `option.template.label` to render rich rows (name + email, avatars, badges, etc.):
+
+```tsx
+<BaseUiDynamicSelect
+  dynamicConfig={{
+    ...userListConfig,
+    option: {
+      template: {
+        label: ({ data }) => (
+          <div>
+            <div>{data.fullName}</div>
+            <div style={{ fontSize: 12, color: "gray" }}>{data.email}</div>
+          </div>
+        ),
+        value: "id",
+      },
+    },
+  }}
+/>
+```
+
+![Custom option label](https://github.com/zealamic/react-dynamic-select/blob/main/assets/base-ui/custom-option.jpg)
+
+Default `ItemText` and `Value` slots use `getOptionLabelNode` so custom labels render in the list, input, and chips. For custom `Item` slots, render `getOptionLabelNode(option)` yourself.
 
 ## Multiple selection
 

@@ -119,6 +119,7 @@ export type BaseUiListFooterSlotProps<
 /** Context passed when overriding the initial loading overlay above the list. */
 export type BaseUiLoadingOverlaySlotProps = {
   loading?: boolean;
+  message?: ReactNode;
 };
 
 /** Props for the separator between popup sections. Library-agnostic — defaults to `<div>`. */

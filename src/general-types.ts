@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 import type {
   ADD_PLACEMENT,
   FETCH_TRIGGER,
@@ -12,8 +12,8 @@ export type SearchPlacement =
 export type LoadMoreType = (typeof LOAD_MORE_TYPE)[keyof typeof LOAD_MORE_TYPE];
 export type FetchTrigger = (typeof FETCH_TRIGGER)[keyof typeof FETCH_TRIGGER];
 
-export type OptionTemplate = {
-  label?: string | null;
+export type OptionTemplate<DataType> = {
+  label?: string | FC<{ data: DataType }> | null;
   value?: string | null;
 };
 
@@ -28,7 +28,7 @@ export type PaginationParams =
     };
 
 export type ResolvedOption = {
-  label?: string | null;
+  label?: string | ReactNode | null;
   value: string | number | null | undefined;
 };
 
@@ -44,6 +44,12 @@ export type AddConfig = {
   placement?: AddPlacement;
   onClick?: () => void;
   disabled?: boolean;
+};
+
+export type SelectMessages = {
+  loading?: ReactNode | null;
+  empty?: ReactNode | null;
+  noResults?: ReactNode | null;
 };
 
 export type DynamicSelectConfig<
@@ -71,7 +77,7 @@ export type DynamicSelectConfig<
     path?: string | null;
   };
   option?: {
-    template?: OptionTemplate;
+    template?: OptionTemplate<DataType>;
   };
   search?: SearchConfig<InputSearchProps>;
   loadMore?:
@@ -86,6 +92,7 @@ export type DynamicSelectConfig<
         afterFetch?: (data: ApiResponse) => Promise<void>;
       };
   add?: AddConfig;
+  messages?: SelectMessages;
 };
 
 export type SearchableApiParams = Record<string, any> & { search?: string };

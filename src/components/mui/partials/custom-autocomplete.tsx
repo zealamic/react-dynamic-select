@@ -1,23 +1,34 @@
 "use client";
 
-import Autocomplete, {
-  type AutocompleteProps,
-} from "@mui/material/Autocomplete";
+import type { AutocompleteProps } from "@mui/material/Autocomplete";
+import Autocomplete from "@mui/material/Autocomplete";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
 import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
+import type { ReactNode } from "react";
 import {
   Children,
   cloneElement,
   Fragment,
   isValidElement,
-  type ReactNode,
   useCallback,
+  useEffect,
   useMemo,
+  useRef,
+  useState,
 } from "react";
 import type { ResolvedOption } from "@/general-types";
 import { SEARCH_PLACEMENT } from "@/lib/constants";
 import {
+  DEFAULT_SELECT_MESSAGES,
+  resolveSelectNoOptionsMessage,
+} from "@/lib/utils/messages";
+import {
+  getMuiOptionChipProps,
   getOptionLabel,
+  getOptionLabelNode,
+  hasCustomOptionLabel,
   isOptionEqualToValue,
   resolveAutocompleteValue,
   toChangeValue,
@@ -27,6 +38,7 @@ import type {
   UseMuiDynamicSelectReturn,
 } from "../types";
 import { MuiAutocompletePaper } from "./autocomplete-paper";
+import { isOutsideDynamicSelectInteraction } from "./autocomplete-popup-section";
 import { MuiSelectMenuPaper } from "./select-menu-paper";
 
 function getChipChildren(content: ReactNode): ReactNode[] {
@@ -75,6 +87,7 @@ export function MuiCustomAutocomplete<
   onChange,
   onInputChange,
   renderInput,
+  renderOption,
   placeholder,
   label,
   renderValue,
@@ -85,6 +98,56 @@ export function MuiCustomAutocomplete<
   const isInlineSearch =
     dynamicConfig.search?.placement === SEARCH_PLACEMENT.INLINE;
   const isControlled = value !== undefined;
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isInlineSearch || !isOpen) {
+      return;
+    }
+
+    const handleDocumentPointerDown = (event: PointerEvent) => {
+      if (!isOutsideDynamicSelectInteraction(event.target, rootRef.current)) {
+        return;
+      }
+
+      handleClose(event as unknown as React.SyntheticEvent, "blur");
+    };
+
+    document.addEventListener("pointerdown", handleDocumentPointerDown, true);
+
+    return () => {
+      document.removeEventListener(
+        "pointerdown",
+        handleDocumentPointerDown,
+        true,
+      );
+    };
+  }, [handleClose, isInlineSearch, isOpen]);
+
+  const [uncontrolledSelected, setUncontrolledSelected] =
+    useState<ResolvedOption | null>(() => {
+      if (isControlled || defaultValue === undefined || multiple) {
+        return null;
+      }
+
+      const resolved = resolveAutocompleteValue(defaultValue, options, false);
+
+      return resolved == null || Array.isArray(resolved) ? null : resolved;
+    });
+
+  const singleSelectedOption = useMemo(() => {
+    if (multiple) {
+      return null;
+    }
+
+    if (isControlled) {
+      const resolved = resolveAutocompleteValue(value, options, false);
+
+      return resolved == null || Array.isArray(resolved) ? null : resolved;
+    }
+
+    return uncontrolledSelected;
+  }, [isControlled, multiple, options, uncontrolledSelected, value]);
 
   const autocompleteValueProps = useMemo(() => {
     if (isControlled) {
@@ -112,9 +175,15 @@ export function MuiCustomAutocomplete<
     >
   >(
     (event, newValue, reason, details) => {
+      if (!isControlled && !multiple) {
+        setUncontrolledSelected(
+          newValue == null || Array.isArray(newValue) ? null : newValue,
+        );
+      }
+
       onChange?.(event, toChangeValue(newValue, multiple), reason, details);
     },
-    [multiple, onChange],
+    [isControlled, multiple, onChange],
   );
 
   const handleInputChange = useCallback<
@@ -132,6 +201,9 @@ export function MuiCustomAutocomplete<
     [handleInlineSearch, isInlineSearch, onInputChange],
   );
 
+  const showCustomSelectedLabel =
+    singleSelectedOption != null && hasCustomOptionLabel(singleSelectedOption);
+
   const defaultRenderInput = useCallback<
     NonNullable<MuiDynamicSelectProps["renderInput"]>
   >(
@@ -144,6 +216,21 @@ export function MuiCustomAutocomplete<
           ...params.slotProps,
           input: {
             ...params.slotProps.input,
+            startAdornment: showCustomSelectedLabel ? (
+              <Box
+                component="span"
+                sx={{
+                  flex: 1,
+                  minWidth: 0,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {getOptionLabelNode(singleSelectedOption)}
+              </Box>
+            ) : (
+              params.slotProps.input?.startAdornment
+            ),
             endAdornment: (
               <Fragment>
                 {loading ? (
@@ -153,10 +240,23 @@ export function MuiCustomAutocomplete<
               </Fragment>
             ),
           },
+          htmlInput: showCustomSelectedLabel
+            ? {
+                ...params.slotProps?.htmlInput,
+                value: "",
+                "aria-label": getOptionLabel(singleSelectedOption),
+              }
+            : params.slotProps?.htmlInput,
         }}
       />
     ),
-    [label, loading, placeholder],
+    [
+      label,
+      loading,
+      placeholder,
+      showCustomSelectedLabel,
+      singleSelectedOption,
+    ],
   );
 
   const menuRenderInput = useCallback<
@@ -172,6 +272,22 @@ export function MuiCustomAutocomplete<
           input: {
             ...params.slotProps.input,
             readOnly: true,
+            startAdornment: showCustomSelectedLabel ? (
+              <Box
+                component="span"
+                sx={{
+                  flex: 1,
+                  minWidth: 0,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  zIndex: -1,
+                }}
+              >
+                {getOptionLabelNode(singleSelectedOption)}
+              </Box>
+            ) : (
+              params.slotProps.input?.startAdornment
+            ),
             endAdornment: (
               <Fragment>
                 {loading ? (
@@ -181,18 +297,70 @@ export function MuiCustomAutocomplete<
               </Fragment>
             ),
           },
-          htmlInput: {
-            ...params.slotProps?.htmlInput,
-            readOnly: true,
-          },
+          htmlInput: showCustomSelectedLabel
+            ? {
+                ...params.slotProps?.htmlInput,
+                readOnly: true,
+                // value: "",
+                style: {
+                  display: "none",
+                },
+                "aria-label": getOptionLabel(singleSelectedOption),
+              }
+            : {
+                ...params.slotProps?.htmlInput,
+                readOnly: true,
+              },
         }}
       />
     ),
-    [label, loading, placeholder],
+    [
+      label,
+      loading,
+      placeholder,
+      showCustomSelectedLabel,
+      singleSelectedOption,
+    ],
   );
 
   const resolvedRenderInput =
     renderInput ?? (isInlineSearch ? defaultRenderInput : menuRenderInput);
+
+  const defaultRenderOption = useCallback<
+    NonNullable<
+      AutocompleteProps<ResolvedOption, boolean, false, false>["renderOption"]
+    >
+  >(
+    ({ key, ...optionProps }, option) => (
+      <li key={key} {...optionProps}>
+        {getOptionLabelNode(option)}
+      </li>
+    ),
+    [],
+  );
+
+  const resolvedRenderOption = renderOption ?? defaultRenderOption;
+
+  const defaultMultipleRenderValue = useCallback<
+    NonNullable<
+      AutocompleteProps<ResolvedOption, true, false, false>["renderValue"]
+    >
+  >(
+    (selectedValue, getItemProps) =>
+      selectedValue.map((option, index) => {
+        const { key, ...itemProps } = getItemProps({ index });
+
+        return (
+          <Chip
+            key={key}
+            label={getOptionLabelNode(option)}
+            {...itemProps}
+            {...getMuiOptionChipProps(option)}
+          />
+        );
+      }),
+    [],
+  );
 
   const listboxSlotProps =
     slotProps?.listbox && typeof slotProps.listbox === "object"
@@ -243,6 +411,10 @@ export function MuiCustomAutocomplete<
     return adapter;
   }, [multiple, renderValue]);
 
+  const autocompleteRenderValue = multiple
+    ? (resolvedAutocompleteRenderValue ?? defaultMultipleRenderValue)
+    : resolvedAutocompleteRenderValue;
+
   const sharedPaperSlotProps = {
     ...paperSlotProps,
     loading,
@@ -256,56 +428,88 @@ export function MuiCustomAutocomplete<
     onListScroll: handlePopupScroll,
   };
 
+  const resolvedNoOptionsText = useMemo(() => {
+    if (autocompleteProps.noOptionsText != null) {
+      return autocompleteProps.noOptionsText;
+    }
+
+    return resolveSelectNoOptionsMessage(dynamicConfig.messages, searchValue);
+  }, [
+    autocompleteProps.noOptionsText,
+    dynamicConfig.messages,
+    searchValue,
+  ]);
+
+  const resolvedLoadingText = useMemo(() => {
+    if (autocompleteProps.loadingText != null) {
+      return autocompleteProps.loadingText;
+    }
+
+    return dynamicConfig.messages?.loading ?? DEFAULT_SELECT_MESSAGES.loading;
+  }, [autocompleteProps.loadingText, dynamicConfig.messages?.loading]);
+
   return (
-    <Autocomplete
-      {...autocompleteProps}
-      multiple={multiple}
-      open={isOpen}
-      onOpen={handleOpen}
-      onClose={handleClose}
-      options={options}
-      {...autocompleteValueProps}
-      onChange={handleChange}
-      disableCloseOnSelect={multiple}
-      {...(isInlineSearch
-        ? { inputValue: isOpen ? searchValue : undefined }
-        : {})}
-      onInputChange={handleInputChange}
-      loading={loading}
-      filterOptions={(filteredOptions) => filteredOptions}
-      getOptionLabel={getOptionLabel}
-      isOptionEqualToValue={isOptionEqualToValue}
-      renderValue={resolvedAutocompleteRenderValue}
-      slots={{
-        paper: isInlineSearch ? MuiAutocompletePaper : MuiSelectMenuPaper,
-        ...slots,
-      }}
-      slotProps={{
-        ...slotProps,
-        listbox: {
-          ...listboxSlotProps,
-          sx: [
-            {
-              maxHeight: "none",
-              overflow: "visible",
-              py: 0,
-            },
-            ...(Array.isArray(listboxSlotProps.sx)
-              ? listboxSlotProps.sx
-              : listboxSlotProps.sx
-                ? [listboxSlotProps.sx]
-                : []),
-          ],
-        },
-        paper: isInlineSearch
-          ? sharedPaperSlotProps
-          : {
-              ...sharedPaperSlotProps,
-              searchValue,
-              handleMenuSearchChange,
-            },
-      }}
-      renderInput={resolvedRenderInput}
-    />
+    <div ref={rootRef}>
+      <Autocomplete
+        {...autocompleteProps}
+        multiple={multiple}
+        open={isOpen}
+        onOpen={handleOpen}
+        onClose={handleClose}
+        options={options}
+        {...autocompleteValueProps}
+        onChange={handleChange}
+        disableCloseOnSelect={multiple}
+        {...(isInlineSearch
+          ? { inputValue: isOpen ? searchValue : undefined }
+          : {})}
+        onInputChange={handleInputChange}
+        loading={loading}
+        noOptionsText={resolvedNoOptionsText}
+        loadingText={resolvedLoadingText}
+        filterOptions={(filteredOptions) => filteredOptions}
+        getOptionLabel={getOptionLabel}
+        isOptionEqualToValue={isOptionEqualToValue}
+        renderOption={resolvedRenderOption}
+        renderValue={
+          autocompleteRenderValue as AutocompleteProps<
+            ResolvedOption,
+            boolean,
+            false,
+            false
+          >["renderValue"]
+        }
+        slots={{
+          paper: isInlineSearch ? MuiAutocompletePaper : MuiSelectMenuPaper,
+          ...slots,
+        }}
+        slotProps={{
+          ...slotProps,
+          listbox: {
+            ...listboxSlotProps,
+            sx: [
+              {
+                maxHeight: "none",
+                overflow: "visible",
+                py: 0,
+              },
+              ...(Array.isArray(listboxSlotProps.sx)
+                ? listboxSlotProps.sx
+                : listboxSlotProps.sx
+                  ? [listboxSlotProps.sx]
+                  : []),
+            ],
+          },
+          paper: isInlineSearch
+            ? sharedPaperSlotProps
+            : {
+                ...sharedPaperSlotProps,
+                searchValue,
+                handleMenuSearchChange,
+              },
+        }}
+        renderInput={resolvedRenderInput}
+      />
+    </div>
   );
 }

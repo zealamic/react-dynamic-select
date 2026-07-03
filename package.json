@@ -1,6 +1,6 @@
 {
   "name": "@zealamic/react-dynamic-select",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "description": "An extensible, headless-first dynamic select component for React with a pluggable UI adapter architecture.",
   "keywords": [
@@ -12,6 +12,8 @@
     "mui",
     "ant-design",
     "base-ui",
+    "chakra-ui",
+    "chakra",
     "dynamic-select",
     "shadcn-ui",
     "react-dynamic-select"
@@ -39,6 +41,10 @@
     "./base-ui": {
       "types": "./dist/base-ui.d.ts",
       "import": "./dist/base-ui.js"
+    },
+    "./chakra": {
+      "types": "./dist/chakra.d.ts",
+      "import": "./dist/chakra.js"
     }
   },
   "types": "./dist/index.d.ts",
@@ -59,6 +65,7 @@
   "devDependencies": {
     "@base-ui/react": "^1.6.0",
     "@biomejs/biome": "2.4.15",
+    "@chakra-ui/react": "^3.36.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^9.1.2",
@@ -89,6 +96,7 @@
   },
   "peerDependencies": {
     "@base-ui/react": ">=1.0.0",
+    "@chakra-ui/react": ">=3.0.0",
     "@mui/material": ">=5.0.0",
     "antd": ">=5.0.0",
     "react": ">=19.0.0",
@@ -96,6 +104,9 @@
   },
   "peerDependenciesMeta": {
     "@base-ui/react": {
+      "optional": true
+    },
+    "@chakra-ui/react": {
       "optional": true
     },
     "@mui/material": {

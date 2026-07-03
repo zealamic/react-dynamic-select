@@ -1,3 +1,4 @@
+import { createElement, type FC, type ReactElement } from "react";
 import type {
   DynamicSelectConfig,
   OptionTemplate,
@@ -5,10 +6,28 @@ import type {
 } from "@/general-types";
 import { INVALID_VALUE, PLACEHOLDER_PATTERN } from "@/lib/constants";
 
+const REACT_MEMO = Symbol.for("react.memo");
+const REACT_FORWARD_REF = Symbol.for("react.forward_ref");
+
 type NormalizeSelectValuesOptions = {
   mode?: "multiple" | "tags";
   labelInValue?: boolean;
 };
+
+function isReactComponent<DataType>(
+  value: unknown,
+): value is FC<{ data: DataType }> {
+  if (typeof value === "function") {
+    return true;
+  }
+
+  if (typeof value === "object" && value !== null) {
+    const type = (value as { $$typeof?: symbol }).$$typeof;
+    return type === REACT_MEMO || type === REACT_FORWARD_REF;
+  }
+
+  return false;
+}
 
 function resolvePath(data: Record<string, unknown>, path: string): unknown {
   const keys = path.split(".");
@@ -33,13 +52,17 @@ function formatResolvedValue(value: unknown): string {
   return String(value);
 }
 
-function resolveLabelTemplate({
+function resolveLabelTemplate<DataType>({
   template,
   data,
 }: {
-  template: string | null | undefined;
+  template: string | FC<{ data: DataType }> | null | undefined;
   data: Record<string, unknown>;
-}): string {
+}): string | ReactElement<{ data: DataType }> {
+  if (isReactComponent<DataType>(template)) {
+    return createElement(template, { data: data as DataType });
+  }
+
   if (template == null || template === "") {
     return INVALID_VALUE;
   }
@@ -79,11 +102,11 @@ export function resolveDataFromTemplate({
   return resolvePath(data, template);
 }
 
-export function resolveOptionFromTemplate({
+export function resolveOptionFromTemplate<DataType>({
   template,
   data,
 }: {
-  template: OptionTemplate;
+  template: OptionTemplate<DataType>;
   data: Record<string, unknown>;
 }): ResolvedOption {
   const { label, value } = template;
@@ -158,7 +181,7 @@ export function resolveCurrentOptions<DataType, ApiResponse, ApiParams>(
   ) as DataType[];
 
   return items.map((item) =>
-    resolveOptionFromTemplate({
+    resolveOptionFromTemplate<DataType>({
       template,
       data: item as Record<string, unknown>,
     }),

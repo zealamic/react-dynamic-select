@@ -1,12 +1,18 @@
 import type { ResolvedOption } from "@/general-types";
+import {
+  getOptionLabelNode,
+  getOptionLabelText,
+} from "@/lib/utils/option-label";
 
 function isSameOptionValue(a: unknown, b: unknown) {
   return a === b || String(a) === String(b);
 }
 
 export function getOptionLabel(option: ResolvedOption) {
-  return option.label ?? String(option.value ?? "");
+  return getOptionLabelText(option);
 }
+
+export { getOptionLabelNode };
 
 export function isOptionEqualToValue(
   option: ResolvedOption,

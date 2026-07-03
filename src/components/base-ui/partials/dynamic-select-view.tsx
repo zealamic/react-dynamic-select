@@ -7,6 +7,14 @@ import { Fragment, useCallback, useId, useMemo } from "react";
 import type { ResolvedOption } from "@/general-types";
 import { SEARCH_PLACEMENT } from "@/lib/constants";
 import {
+  resolveSelectEmptyMessage,
+  resolveSelectLoadingMessage,
+} from "@/lib/utils/messages";
+import {
+  getOptionLabelNode,
+  hasCustomOptionLabel,
+} from "@/lib/utils/option-label";
+import {
   getOptionLabel,
   isOptionEqualToValue,
   itemToStringLabel,
@@ -123,25 +131,24 @@ export function BaseUiDynamicSelectView<
     [handleInlineSearch, isInlineSearch],
   );
 
-  const statusMessage = useMemo(() => {
-    if (loading && options.length === 0) {
-      return "Loading...";
-    }
+  const loadingMessage = useMemo(
+    () =>
+      resolveSelectLoadingMessage(dynamicConfig.messages, {
+        loading,
+        hasOptions: options.length > 0,
+      }),
+    [dynamicConfig.messages, loading, options.length],
+  );
 
-    return null;
-  }, [loading, options.length]);
-
-  const emptyMessage = useMemo(() => {
-    if (loading || options.length > 0) {
-      return null;
-    }
-
-    if (searchValue) {
-      return "No results found.";
-    }
-
-    return null;
-  }, [loading, options.length, searchValue]);
+  const emptyMessage = useMemo(
+    () =>
+      resolveSelectEmptyMessage(dynamicConfig.messages, {
+        loading,
+        hasOptions: options.length > 0,
+        searchValue,
+      }),
+    [dynamicConfig.messages, loading, options.length, searchValue],
+  );
 
   const listStyle = listHeight ? { maxHeight: listHeight } : undefined;
 
@@ -174,43 +181,93 @@ export function BaseUiDynamicSelectView<
   const menuSearchInputProps = dynamicConfig.search?.inputSearchMenuProps;
 
   const renderSingleInput = () => (
-    <Input
-      id={inputId}
-      placeholder={placeholder}
-      style={isMenuSearch ? { cursor: "pointer" } : undefined}
-    />
+    <Value>
+      {(selectedValue: ResolvedOption | null) => {
+        const showCustomSelectedLabel =
+          selectedValue != null && hasCustomOptionLabel(selectedValue);
+
+        return (
+          <div
+            style={{
+              position: "relative",
+              display: "flex",
+              flex: 1,
+              alignItems: "center",
+              minWidth: 0,
+            }}
+          >
+            {showCustomSelectedLabel ? (
+              <span
+                style={{
+                  position: "absolute",
+                  inset: "0 0.75rem",
+                  display: "flex",
+                  alignItems: "center",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  pointerEvents: "none",
+                }}
+              >
+                {getOptionLabelNode(selectedValue)}
+              </span>
+            ) : null}
+            <Input
+              id={inputId}
+              placeholder={showCustomSelectedLabel ? undefined : placeholder}
+              style={{
+                ...(isMenuSearch ? { cursor: "pointer" } : undefined),
+                ...(showCustomSelectedLabel
+                  ? { color: "transparent", caretColor: "transparent" }
+                  : undefined),
+                width: "100%",
+              }}
+            />
+          </div>
+        );
+      }}
+    </Value>
   );
 
   const renderInputChrome = () => {
     if (multiple) {
       return (
-        <Chips>
-          <Value>
-            {(selectedValue: ResolvedOption[]) => (
-              <Fragment>
-                {selectedValue.map((option) => {
-                  const optionLabel = getOptionLabel(option);
+        <Fragment>
+          <Chips>
+            <Value>
+              {(selectedValue: ResolvedOption[]) => (
+                <Fragment>
+                  {selectedValue.map((option) => {
+                    const optionLabel = getOptionLabel(option);
+                    const optionContent = getOptionLabelNode(option);
 
-                  return (
-                    <Chip key={String(option.value)} aria-label={optionLabel}>
-                      {optionLabel}
-                      <ChipRemove aria-label={`Remove ${optionLabel}`}>
-                        <ChipRemoveIcon />
-                      </ChipRemove>
-                    </Chip>
-                  );
-                })}
-                <Input
-                  id={inputId}
-                  placeholder={
-                    selectedValue.length > 0 ? undefined : placeholder
-                  }
-                  style={isMenuSearch ? { cursor: "pointer" } : undefined}
-                />
-              </Fragment>
-            )}
-          </Value>
-        </Chips>
+                    return (
+                      <Chip key={String(option.value)} aria-label={optionLabel}>
+                        {optionContent}
+                        <ChipRemove aria-label={`Remove ${optionLabel}`}>
+                          <ChipRemoveIcon />
+                        </ChipRemove>
+                      </Chip>
+                    );
+                  })}
+                  <Input
+                    id={inputId}
+                    placeholder={
+                      selectedValue.length > 0 ? undefined : placeholder
+                    }
+                    style={isMenuSearch ? { cursor: "pointer" } : undefined}
+                  />
+                </Fragment>
+              )}
+            </Value>
+          </Chips>
+          <Clear aria-label="Clear selection">
+            <ClearIcon />
+          </Clear>
+          <Trigger aria-label="Open popup">
+            <CaretDownIcon />
+          </Trigger>
+        </Fragment>
       );
     }
 
@@ -275,18 +332,21 @@ export function BaseUiDynamicSelectView<
             <Status
               loading={loading}
               searchValue={searchValue}
-              message={statusMessage}
+              message={loadingMessage}
               style={{ display: "none" }}
             >
-              {statusMessage}
+              {loadingMessage}
             </Status>
-            {!loading && options.length === 0 && (
+            {!loading && options.length === 0 && emptyMessage != null && (
               <Empty searchValue={searchValue} message={emptyMessage}>
                 {emptyMessage}
               </Empty>
             )}
 
-            <LoadingOverlay loading={loading && options.length === 0} />
+            <LoadingOverlay
+              loading={loading && options.length === 0}
+              message={loadingMessage}
+            />
 
             <List style={listStyle} onScroll={handlePopupScroll}>
               {renderOptionItem}

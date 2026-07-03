@@ -41,4 +41,9 @@ export const defaultDynamicSelectConfig: DynamicSelectConfig = {
     distance: 100,
     debounce: 100,
   },
+  messages: {
+    loading: "Loading...",
+    empty: "No items found",
+    noResults: "No results found.",
+  },
 };

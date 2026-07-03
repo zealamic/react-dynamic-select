@@ -53,7 +53,9 @@ export function createDefaultInput(multiple: boolean) {
     return (
       <Combobox.Input
         className={mergeClassName(
-          styles[multiple ? "rds-base-ui__input--multiple" : "rds-base-ui__input"],
+          styles[
+            multiple ? "rds-base-ui__input--multiple" : "rds-base-ui__input"
+          ],
           className,
         )}
         {...props}

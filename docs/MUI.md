@@ -4,6 +4,20 @@ Guide for using `@zealamic/react-dynamic-select/mui` with [MUI Autocomplete](htt
 
 ## Installation
 
+**npm**
+
+```bash
+npm install @zealamic/react-dynamic-select @mui/material @emotion/react @emotion/styled
+```
+
+**yarn**
+
+```bash
+yarn add @zealamic/react-dynamic-select @mui/material @emotion/react @emotion/styled
+```
+
+**pnpm**
+
 ```bash
 pnpm add @zealamic/react-dynamic-select @mui/material @emotion/react @emotion/styled
 ```
@@ -146,6 +160,33 @@ Render a create / add action in the dropdown footer. Set `placement` to `"start"
 | `disabled` | Disable the button |
 
 The footer is shown when `total`, `loadMore`, or `add` is configured. See [add](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
+
+## Custom option label
+
+Use a React component in `option.template.label` to render rich rows (name + email, avatars, badges, etc.):
+
+```tsx
+<MuiDynamicSelect
+  dynamicConfig={{
+    ...userListConfig,
+    option: {
+      template: {
+        label: ({ data }) => (
+          <div>
+            <div>{data.fullName}</div>
+            <div style={{ fontSize: 12, color: "gray" }}>{data.email}</div>
+          </div>
+        ),
+        value: "id",
+      },
+    },
+  }}
+/>
+```
+
+![Custom option label](https://github.com/zealamic/react-dynamic-select/blob/main/assets/mui/custom-option.jpg)
+
+In **single** mode, a custom label is overlaid on the input. In **multiple** mode, custom labels appear in chips via `renderValue` / `getOptionLabelNode`.
 
 ## Multiple selection
 

@@ -3,6 +3,7 @@ import { Select as AntdSelect } from "antd";
 import { useMemo } from "react";
 import type { SearchableApiParams } from "@/general-types";
 import { SEARCH_PLACEMENT } from "@/lib/constants";
+import { resolveSelectNoOptionsMessage } from "@/lib/utils/messages";
 import { useAntdDynamicSelect } from "./hooks/use-dynamic-select";
 import { AntdSelectMenu } from "./partials/select-menu";
 import type { AntdDynamicSelectProps } from "./types";
@@ -53,9 +54,18 @@ export function AntdDynamicSelect<
     };
   }, [handleInlineSearch, isInlineSearch, searchValue, showSearch]);
 
+  const resolvedNotFoundContent = useMemo(() => {
+    if (selectProps.notFoundContent !== undefined) {
+      return selectProps.notFoundContent;
+    }
+
+    return resolveSelectNoOptionsMessage(dynamicConfig.messages, searchValue);
+  }, [dynamicConfig.messages, searchValue, selectProps.notFoundContent]);
+
   return (
     <AntdSelect
       {...selectProps}
+      notFoundContent={resolvedNotFoundContent}
       onOpenChange={handleOpenChange}
       size={size}
       loading={loading}
