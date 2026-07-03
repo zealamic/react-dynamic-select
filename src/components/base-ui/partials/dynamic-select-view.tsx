@@ -7,6 +7,10 @@ import { Fragment, useCallback, useId, useMemo } from "react";
 import type { ResolvedOption } from "@/general-types";
 import { SEARCH_PLACEMENT } from "@/lib/constants";
 import {
+  resolveSelectEmptyMessage,
+  resolveSelectLoadingMessage,
+} from "@/lib/utils/messages";
+import {
   getOptionLabelNode,
   hasCustomOptionLabel,
 } from "@/lib/utils/option-label";
@@ -127,25 +131,24 @@ export function BaseUiDynamicSelectView<
     [handleInlineSearch, isInlineSearch],
   );
 
-  const statusMessage = useMemo(() => {
-    if (loading && options.length === 0) {
-      return "Loading...";
-    }
+  const loadingMessage = useMemo(
+    () =>
+      resolveSelectLoadingMessage(dynamicConfig.messages, {
+        loading,
+        hasOptions: options.length > 0,
+      }),
+    [dynamicConfig.messages, loading, options.length],
+  );
 
-    return null;
-  }, [loading, options.length]);
-
-  const emptyMessage = useMemo(() => {
-    if (loading || options.length > 0) {
-      return null;
-    }
-
-    if (searchValue) {
-      return "No results found.";
-    }
-
-    return null;
-  }, [loading, options.length, searchValue]);
+  const emptyMessage = useMemo(
+    () =>
+      resolveSelectEmptyMessage(dynamicConfig.messages, {
+        loading,
+        hasOptions: options.length > 0,
+        searchValue,
+      }),
+    [dynamicConfig.messages, loading, options.length, searchValue],
+  );
 
   const listStyle = listHeight ? { maxHeight: listHeight } : undefined;
 
@@ -329,18 +332,21 @@ export function BaseUiDynamicSelectView<
             <Status
               loading={loading}
               searchValue={searchValue}
-              message={statusMessage}
+              message={loadingMessage}
               style={{ display: "none" }}
             >
-              {statusMessage}
+              {loadingMessage}
             </Status>
-            {!loading && options.length === 0 && (
+            {!loading && options.length === 0 && emptyMessage != null && (
               <Empty searchValue={searchValue} message={emptyMessage}>
                 {emptyMessage}
               </Empty>
             )}
 
-            <LoadingOverlay loading={loading && options.length === 0} />
+            <LoadingOverlay
+              loading={loading && options.length === 0}
+              message={loadingMessage}
+            />
 
             <List style={listStyle} onScroll={handlePopupScroll}>
               {renderOptionItem}

@@ -42,6 +42,9 @@ import {
   getInitialPagination,
   getNextPagePagination,
   hasMoreToLoad,
+  resolveSelectEmptyMessage,
+  resolveSelectLoadingMessage,
+  resolveSelectNoOptionsMessage,
 } from "@zealamic/react-dynamic-select";
 
 import type {
@@ -53,6 +56,7 @@ import type {
   FetchTrigger,
   LoadMoreType,
   SearchPlacement,
+  SelectMessages,
   OptionTemplate,
   PaginationParams,
 } from "@zealamic/react-dynamic-select";
@@ -77,6 +81,7 @@ import type {
 | `SearchPlacement`        | `"inline"` \| `"menu"`                                                                   |
 | `AddPlacement`           | `"start"` \| `"end"` — add button position in the dropdown footer                        |
 | `AddConfig`              | `{ label?, icon?, placement?, onClick?, disabled? }` — footer add button                   |
+| `SelectMessages`         | `{ loading?, empty?, noResults? }` — dropdown loading / empty-state copy (`ReactNode`)     |
 | `ResolvedLoadMoreConfig` | Normalized load-more settings returned by `resolveLoadMoreConfig`                        |
 
 ### Constants

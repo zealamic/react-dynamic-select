@@ -14,9 +14,17 @@ import {
   Spinner,
   Tag,
 } from "@chakra-ui/react";
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { ResolvedOption } from "@/general-types";
 import { SEARCH_PLACEMENT } from "@/lib/constants";
+import { resolveSelectEmptyMessage } from "@/lib/utils/messages";
 import { hasCustomOptionLabel } from "@/lib/utils/option-label";
 import {
   fromComboboxValues,
@@ -24,8 +32,10 @@ import {
   getOptionLabelNode,
   toComboboxValues,
 } from "../handlers";
-import type { ChakraDynamicSelectValue } from "../types";
-import type { UseChakraDynamicSelectReturn } from "../types";
+import type {
+  ChakraDynamicSelectValue,
+  UseChakraDynamicSelectReturn,
+} from "../types";
 import {
   ChakraComboboxPopupSection,
   DYNAMIC_SELECT_POPUP_ATTR,
@@ -214,21 +224,18 @@ export function ChakraDynamicSelectView<
     [handleInlineSearch, isInlineSearch],
   );
 
-  const emptyMessage = useMemo(() => {
-    if (loading || options.length > 0) {
-      return null;
-    }
-
-    if (searchValue) {
-      return "No results found.";
-    }
-
-    return "No items found";
-  }, [loading, options.length, searchValue]);
+  const emptyMessage = useMemo(
+    () =>
+      resolveSelectEmptyMessage(dynamicConfig.messages, {
+        loading,
+        hasOptions: options.length > 0,
+        searchValue,
+      }),
+    [dynamicConfig.messages, loading, options.length, searchValue],
+  );
 
   const menuSearchInputProps = dynamicConfig.search?.inputSearchMenuProps;
-  const searchDisabled =
-    menuSearchInputProps?.disabled || isInitialLoading;
+  const searchDisabled = menuSearchInputProps?.disabled || isInitialLoading;
 
   const rootPassthrough = rootProps as Omit<
     ComboboxRootProps<ResolvedOption>,
@@ -354,9 +361,7 @@ export function ChakraDynamicSelectView<
                 readOnly={isMenuSearch || undefined}
                 cursor={isMenuSearch ? "pointer" : undefined}
                 color={showCustomSelectedLabel ? "transparent" : undefined}
-                caretColor={
-                  showCustomSelectedLabel ? "transparent" : undefined
-                }
+                caretColor={showCustomSelectedLabel ? "transparent" : undefined}
                 flex={1}
                 aria-label={
                   showCustomSelectedLabel

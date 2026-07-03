@@ -170,6 +170,10 @@ The resolved `label` is a `ReactNode` in the option list. String-based helpers s
 | **add.placement**               | Footer position of the add button                                                                            | `"start"` \| `"end"`                   | —                                                                 |
 | **add.onClick**                 | Called when the add button is clicked                                                                        | `() => void`                           | —                                                                 |
 | **add.disabled**                | Disables the add button                                                                                      | `boolean`                              | `false`                                                           |
+| **messages**                    | Loading and empty-state copy in the dropdown                                                                 | `object`                               | —                                                                 |
+| **messages.loading**            | Shown while the initial fetch is in progress with an empty list (Base UI overlay; MUI `loadingText` fallback) | `ReactNode` \| `null`                  | `"Loading..."`                                                    |
+| **messages.empty**              | Shown when the list is empty and there is no active search                                                   | `ReactNode` \| `null`                  | `"No items found"`                                                |
+| **messages.noResults**          | Shown when the list is empty after searching                                                                  | `ReactNode` \| `null`                  | `"No results found."`                                             |
 
 ---
 

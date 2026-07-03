@@ -17,6 +17,7 @@ export type {
   ResolvedOption,
   SearchableApiParams,
   SearchPlacement,
+  SelectMessages,
 } from "@/general-types";
 export {
   FETCH_TRIGGER,

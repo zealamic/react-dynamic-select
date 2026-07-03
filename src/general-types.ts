@@ -46,6 +46,12 @@ export type AddConfig = {
   disabled?: boolean;
 };
 
+export type SelectMessages = {
+  loading?: ReactNode | null;
+  empty?: ReactNode | null;
+  noResults?: ReactNode | null;
+};
+
 export type DynamicSelectConfig<
   DataType = any,
   ApiResponse = any,
@@ -86,6 +92,7 @@ export type DynamicSelectConfig<
         afterFetch?: (data: ApiResponse) => Promise<void>;
       };
   add?: AddConfig;
+  messages?: SelectMessages;
 };
 
 export type SearchableApiParams = Record<string, any> & { search?: string };

@@ -21,6 +21,10 @@ import {
 import type { ResolvedOption } from "@/general-types";
 import { SEARCH_PLACEMENT } from "@/lib/constants";
 import {
+  DEFAULT_SELECT_MESSAGES,
+  resolveSelectNoOptionsMessage,
+} from "@/lib/utils/messages";
+import {
   getMuiOptionChipProps,
   getOptionLabel,
   getOptionLabelNode,
@@ -424,6 +428,26 @@ export function MuiCustomAutocomplete<
     onListScroll: handlePopupScroll,
   };
 
+  const resolvedNoOptionsText = useMemo(() => {
+    if (autocompleteProps.noOptionsText != null) {
+      return autocompleteProps.noOptionsText;
+    }
+
+    return resolveSelectNoOptionsMessage(dynamicConfig.messages, searchValue);
+  }, [
+    autocompleteProps.noOptionsText,
+    dynamicConfig.messages,
+    searchValue,
+  ]);
+
+  const resolvedLoadingText = useMemo(() => {
+    if (autocompleteProps.loadingText != null) {
+      return autocompleteProps.loadingText;
+    }
+
+    return dynamicConfig.messages?.loading ?? DEFAULT_SELECT_MESSAGES.loading;
+  }, [autocompleteProps.loadingText, dynamicConfig.messages?.loading]);
+
   return (
     <div ref={rootRef}>
       <Autocomplete
@@ -441,6 +465,8 @@ export function MuiCustomAutocomplete<
           : {})}
         onInputChange={handleInputChange}
         loading={loading}
+        noOptionsText={resolvedNoOptionsText}
+        loadingText={resolvedLoadingText}
         filterOptions={(filteredOptions) => filteredOptions}
         getOptionLabel={getOptionLabel}
         isOptionEqualToValue={isOptionEqualToValue}
