@@ -64,6 +64,10 @@ Peer dependencies: `react >= 19`. UI libraries are optional.
 | [Base UI](https://github.com/zealamic/react-dynamic-select/blob/main/docs/BASE-UI.md)               | `BaseUiDynamicSelect`, `createDefaultBaseUiComponents`, slots |
 | [Build your own](https://github.com/zealamic/react-dynamic-select/blob/main/docs/BUILD_YOUR_OWN.md) | Headless hooks, utilities, custom UI                          |
 
+### Cursor Agent Skill
+
+Copy [`skills/`](https://github.com/zealamic/react-dynamic-select/tree/main/skills) into `~/.cursor/skills/react-dynamic-select` (or `.cursor/skills/react-dynamic-select` in your project) so Cursor agents can integrate this library. See [skills/README.md](https://github.com/zealamic/react-dynamic-select/blob/main/skills/README.md).
+
 ## Quick example
 
 ```tsx
