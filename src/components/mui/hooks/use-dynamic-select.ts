@@ -87,6 +87,10 @@ export function useMuiDynamicSelect<
 
   const handleClose = useCallback(
     (event: React.SyntheticEvent, reason?: AutocompleteCloseReason) => {
+      if (isLoadingMore) {
+        return;
+      }
+
       if (multiple && reason === "selectOption") {
         return;
       }
@@ -121,6 +125,7 @@ export function useMuiDynamicSelect<
     [
       fetchData,
       isControlledOpen,
+      isLoadingMore,
       isMenuSearch,
       multiple,
       onClose,

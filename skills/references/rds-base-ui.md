@@ -123,6 +123,20 @@ Do **not** pass static `items` — library owns fetch lifecycle via `dynamicConf
 
 Default `ItemText` uses `getOptionLabelNode`. Custom `Item` slot: render `getOptionLabelNode(option)` yourself.
 
+## Total label
+
+Keep `total.path` for load more. Hide the footer count with `hidden: true`:
+
+```tsx
+total: { path: "total", hidden: true }
+```
+
+Hide the entire footer (total, load more, add):
+
+```tsx
+isMenuFooterVisible: false
+```
+
 ## Messages
 
 `dynamicConfig.messages` drives `Empty`, `LoadingOverlay`, and `Status`.
@@ -158,5 +172,6 @@ BaseUiDynamicSelect<UserModel, ApiResponse, ApiParams, Multiple>
 - Default styles: CSS Modules in build (`default.module.css`).
 - `label` prop renders when `components.Label` exists.
 - Do not pass `items` / `filter` to Root — managed internally.
+- Search inputs are disabled while load more is in progress.
 
 See [dynamicConfig](rds-dynamic-config.md).

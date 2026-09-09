@@ -3,7 +3,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import { forwardRef } from "react";
+import { LoadMoreStatusChip } from "@/components/_shared/load-more-status-chip";
 import type { SearchableApiParams } from "@/general-types";
+import { isSelectSearchDisabled } from "@/lib/utils/search";
+import { shouldShowLoadMoreStatusChip } from "@/lib/utils/total";
 import type { MuiSelectMenuPaperProps } from "../types";
 import {
   DYNAMIC_SELECT_POPUP_ATTR,
@@ -38,8 +41,15 @@ export const MuiSelectMenuPaper = forwardRef(function MuiSelectMenuPaper<
   } = props;
 
   const search = dynamicConfig?.search;
-  const searchDisabled =
-    search?.inputSearchMenuProps?.disabled || loading || isLoadingMore;
+  const searchDisabled = isSelectSearchDisabled({
+    disabled: search?.inputSearchMenuProps?.disabled,
+    loading,
+    isLoadingMore,
+  });
+  const showLoadMoreStatusChip = shouldShowLoadMoreStatusChip({
+    isMenuFooterVisible: dynamicConfig?.isMenuFooterVisible,
+    isLoadingMore,
+  });
 
   return (
     <Paper
@@ -88,15 +98,25 @@ export const MuiSelectMenuPaper = forwardRef(function MuiSelectMenuPaper<
         <>
           <Box
             sx={{
+              position: "relative",
               flex: "1 1 auto",
               minHeight: 0,
-              maxHeight: listHeight,
-              overflowY: "auto",
-              overflowX: "hidden",
             }}
-            onScroll={onListScroll}
           >
-            {children}
+            <Box
+              sx={{
+                maxHeight: listHeight,
+                overflowY: "auto",
+                overflowX: "hidden",
+              }}
+              onScroll={onListScroll}
+            >
+              {children}
+            </Box>
+            <LoadMoreStatusChip
+              visible={showLoadMoreStatusChip}
+              label={loadMoreConfig?.loadingLabel || "Loading..."}
+            />
           </Box>
 
           <MuiListMenuFooter

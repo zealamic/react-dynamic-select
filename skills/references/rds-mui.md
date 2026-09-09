@@ -80,6 +80,20 @@ dynamicConfig={{
 
 Custom chip display: `renderValue`.
 
+## Total label
+
+Keep `total.path` for load more. Hide the footer count with `hidden: true`:
+
+```tsx
+total: { path: "total", hidden: true }
+```
+
+Hide the entire footer (total, load more, add):
+
+```tsx
+isMenuFooterVisible: false
+```
+
 ## Custom option label
 
 React component in `option.template.label`. Single mode overlays custom label on input; multiple uses chips via `getOptionLabelNode`.
@@ -125,5 +139,6 @@ For custom Autocomplete UI. Returns `isOpen`, `handleOpen`, `handleClose`, scrol
 
 - Loading: `CircularProgress` in input + popup overlay.
 - `search.inputSearchMenuProps` → MUI `TextField` props.
+- Search inputs are disabled while load more is in progress.
 
 See [dynamicConfig](rds-dynamic-config.md).

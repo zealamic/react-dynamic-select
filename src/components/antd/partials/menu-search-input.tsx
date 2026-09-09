@@ -48,7 +48,6 @@ export function AntdMenuSearchInput({
       }}
       onMouseDown={(event) => {
         event.preventDefault();
-        event.stopPropagation();
         focusSearchInput(event, inputRef);
         onMouseDown?.(event);
       }}

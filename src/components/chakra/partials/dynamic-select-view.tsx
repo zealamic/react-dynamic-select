@@ -22,10 +22,13 @@ import {
   useRef,
   useState,
 } from "react";
+import { LoadMoreStatusChip } from "@/components/_shared/load-more-status-chip";
 import type { ResolvedOption } from "@/general-types";
 import { SEARCH_PLACEMENT } from "@/lib/constants";
 import { resolveSelectEmptyMessage } from "@/lib/utils/messages";
 import { hasCustomOptionLabel } from "@/lib/utils/option-label";
+import { isSelectSearchDisabled } from "@/lib/utils/search";
+import { shouldShowLoadMoreStatusChip } from "@/lib/utils/total";
 import {
   fromComboboxValues,
   getOptionLabel,
@@ -211,7 +214,7 @@ export function ChakraDynamicSelectView<
 
   const handleRootInputValueChange = useCallback(
     (details: ComboboxInputValueChangeDetails) => {
-      if (!isInlineSearch) {
+      if (!isInlineSearch || isLoadingMore) {
         return;
       }
 
@@ -221,7 +224,7 @@ export function ChakraDynamicSelectView<
 
       handleInlineSearch(details.inputValue);
     },
-    [handleInlineSearch, isInlineSearch],
+    [handleInlineSearch, isInlineSearch, isLoadingMore],
   );
 
   const emptyMessage = useMemo(
@@ -235,7 +238,16 @@ export function ChakraDynamicSelectView<
   );
 
   const menuSearchInputProps = dynamicConfig.search?.inputSearchMenuProps;
-  const searchDisabled = menuSearchInputProps?.disabled || isInitialLoading;
+  const searchDisabled = isSelectSearchDisabled({
+    disabled: menuSearchInputProps?.disabled,
+    loading: isInitialLoading,
+    isLoadingMore,
+  });
+  const inlineSearchDisabled = isInlineSearch && isLoadingMore;
+  const showLoadMoreStatusChip = shouldShowLoadMoreStatusChip({
+    isMenuFooterVisible: dynamicConfig?.isMenuFooterVisible,
+    isLoadingMore,
+  });
 
   const rootPassthrough = rootProps as Omit<
     ComboboxRootProps<ResolvedOption>,
@@ -333,6 +345,7 @@ export function ChakraDynamicSelectView<
               placeholder={selectedOptions.length > 0 ? undefined : placeholder}
               readOnly={isMenuSearch || undefined}
               cursor={isMenuSearch ? "pointer" : undefined}
+              disabled={inlineSearchDisabled || undefined}
             />
           ) : (
             <Box
@@ -360,6 +373,7 @@ export function ChakraDynamicSelectView<
                 placeholder={showCustomSelectedLabel ? undefined : placeholder}
                 readOnly={isMenuSearch || undefined}
                 cursor={isMenuSearch ? "pointer" : undefined}
+                disabled={inlineSearchDisabled || undefined}
                 color={showCustomSelectedLabel ? "transparent" : undefined}
                 caretColor={showCustomSelectedLabel ? "transparent" : undefined}
                 flex={1}
@@ -411,18 +425,24 @@ export function ChakraDynamicSelectView<
 
                 {options.length > 0 ? (
                   <Fragment>
-                    <Box
-                      maxH={listHeight}
-                      overflowY="auto"
-                      overflowX="hidden"
-                      onScroll={handlePopupScroll}
-                    >
-                      {collection.items.map((item) => (
-                        <Combobox.Item item={item} key={String(item.value)}>
-                          {getOptionLabelNode(item)}
-                          <Combobox.ItemIndicator />
-                        </Combobox.Item>
-                      ))}
+                    <Box position="relative">
+                      <Box
+                        maxH={listHeight}
+                        overflowY="auto"
+                        overflowX="hidden"
+                        onScroll={handlePopupScroll}
+                      >
+                        {collection.items.map((item) => (
+                          <Combobox.Item item={item} key={String(item.value)}>
+                            {getOptionLabelNode(item)}
+                            <Combobox.ItemIndicator />
+                          </Combobox.Item>
+                        ))}
+                      </Box>
+                      <LoadMoreStatusChip
+                        visible={showLoadMoreStatusChip}
+                        label={loadMoreConfig?.loadingLabel || "Loading..."}
+                      />
                     </Box>
 
                     <ChakraListFooter

@@ -72,6 +72,7 @@ export type DynamicSelectConfig<
   total?: {
     path?: string | null;
     label?: string | null;
+    hidden?: boolean;
   };
   list?: {
     path?: string | null;
@@ -93,6 +94,7 @@ export type DynamicSelectConfig<
       };
   add?: AddConfig;
   messages?: SelectMessages;
+  isMenuFooterVisible?: boolean;
 };
 
 export type SearchableApiParams = Record<string, any> & { search?: string };

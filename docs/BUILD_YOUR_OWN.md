@@ -45,6 +45,10 @@ import {
   resolveSelectEmptyMessage,
   resolveSelectLoadingMessage,
   resolveSelectNoOptionsMessage,
+  isSelectSearchDisabled,
+  shouldShowListFooter,
+  shouldShowLoadMoreStatusChip,
+  shouldShowTotalLabel,
 } from "@zealamic/react-dynamic-select";
 
 import type {
@@ -70,7 +74,7 @@ import type {
 
 | Export                   | Description                                                                              |
 | ------------------------ | ---------------------------------------------------------------------------------------- |
-| `DynamicSelectConfig`    | Full config shape: `api`, `list`, `total`, `option`, `search`, `loadMore`, `add`, `currentData` |
+| `DynamicSelectConfig`    | Full config shape: `api`, `list`, `total`, `option`, `search`, `loadMore`, `add`, `messages`, `isMenuFooterVisible`, `currentData` |
 | `DynamicSelectHookProps` | `{ dynamicConfig?: DynamicSelectConfig }` — useful as a base for custom hook props       |
 | `ResolvedOption`         | `{ label?: string \| ReactNode \| null; value: string \| number \| null \| undefined }`    |
 | `SearchableApiParams`    | `Record<string, any> & { search?: string }` — minimum API params constraint              |
@@ -124,7 +128,7 @@ Manages async data fetching, pagination, and option resolution.
 **Behavior:**
 
 - Resolves list items via `list.path` and `option.template` from the API response.
-- Resolves `total` via `total.path`.
+- Resolves `total` via `total.path` (still used for load more when `total.hidden` is `true`).
 - Cancels stale requests when a newer one is in flight.
 - Calls `api.onSuccess` / `api.onError` on each request.
 - Runs `loadMore.afterFetch` after every successful fetch.
@@ -182,6 +186,10 @@ Scroll and click handlers for pagination.
 | `resolveDataFromTemplate({ template, data })`   | Reads a value from nested response data. Supports dot paths (`"data.items"`) and `"{field}"` placeholders |
 | `resolveOptionFromTemplate({ template, data })` | Maps one API item to `ResolvedOption`. `label` can be a string, placeholder template, or `FC<{ data }>` returning `ReactNode` |
 | `resolveLoadMoreConfig(loadMore)`               | Normalizes `loadMore: true \| object` to `ResolvedLoadMoreConfig \| null`                                 |
+| `shouldShowTotalLabel(total)`                   | `true` when the footer should render the total count (`path`/`label` set and `hidden` is not `true`)      |
+| `shouldShowListFooter({ isMenuFooterVisible, loadMoreConfig, total, add })` | `true` when the dropdown footer should render (`isMenuFooterVisible` defaults to `true`) |
+| `shouldShowLoadMoreStatusChip({ isMenuFooterVisible, isLoadingMore })` | `true` when the footer is hidden and a load-more fetch is in progress |
+| `isSelectSearchDisabled({ disabled, loading, isLoadingMore })` | `true` when the search input should be disabled (load more, initial fetch, or explicit `disabled`) |
 
 ### Selected value handling
 
@@ -361,7 +369,7 @@ export function useCustomDynamicSelect<
 Wire the hook to your own markup:
 
 ```tsx
-import { SEARCH_PLACEMENT } from "@zealamic/react-dynamic-select";
+import { SEARCH_PLACEMENT, shouldShowListFooter, shouldShowTotalLabel } from "@zealamic/react-dynamic-select";
 import type { DynamicSelectConfig } from "@zealamic/react-dynamic-select";
 
 type User = { id: number; fullName: string };
@@ -415,6 +423,7 @@ function CustomUserSelect() {
               value={searchValue}
               onChange={handleMenuSearchChange}
               placeholder="Search..."
+              disabled={loading || isLoadingMore}
             />
           )}
 
@@ -440,25 +449,34 @@ function CustomUserSelect() {
             )}
           </div>
 
-          <footer>
-            <span>Total: {totalNumber}</span>
-            {dynamicConfig.add?.placement === "start" && (
-              <button type="button" onClick={dynamicConfig.add.onClick}>
-                {dynamicConfig.add.label ?? "Add"}
-              </button>
-            )}
-            {loadMoreConfig?.type === "click" && canLoadMore && (
-              <button
-                type="button"
-                onClick={handleLoadMoreClick}
-                disabled={loading || isLoadingMore}
-              >
-                {isLoadingMore
-                  ? "Loading..."
-                  : (loadMoreConfig.label ?? "Load More")}
-              </button>
-            )}
-          </footer>
+          {shouldShowListFooter({
+            isMenuFooterVisible: dynamicConfig.isMenuFooterVisible,
+            loadMoreConfig,
+            total: dynamicConfig.total,
+            add: dynamicConfig.add,
+          }) && (
+            <footer>
+              {shouldShowTotalLabel(dynamicConfig.total) && (
+                <span>Total: {totalNumber}</span>
+              )}
+              {dynamicConfig.add?.placement === "start" && (
+                <button type="button" onClick={dynamicConfig.add.onClick}>
+                  {dynamicConfig.add.label ?? "Add"}
+                </button>
+              )}
+              {loadMoreConfig?.type === "click" && canLoadMore && (
+                <button
+                  type="button"
+                  onClick={handleLoadMoreClick}
+                  disabled={loading || isLoadingMore}
+                >
+                  {isLoadingMore
+                    ? "Loading..."
+                    : (loadMoreConfig.label ?? "Load More")}
+                </button>
+              )}
+            </footer>
+          )}
         </div>
       )}
     </div>
@@ -479,7 +497,9 @@ When building a custom dynamic select, make sure you handle:
 5. **Add button** — render `dynamicConfig.add` in the footer when `placement` is `"start"` or `"end"`
 6. **Edit mode** — pass `currentData` and use `mergeOptionsWithCurrent` so selected values display before fetch
 7. **Option template** — map your API shape via `list.path`, `total.path`, and `option.template`
-8. **Custom option labels** — when `option.template.label` is a React component, `ResolvedOption.label` is a `ReactNode`. Render it directly in your list; use a string fallback (`String(option.value)`) for accessibility labels and filtering when needed
+8. **Total label** — keep `total.path` for pagination; hide the footer count with `total.hidden: true` (`shouldShowTotalLabel`)
+9. **Menu footer** — hide the entire footer with `isMenuFooterVisible: false` (`shouldShowListFooter`)
+10. **Custom option labels** — when `option.template.label` is a React component, `ResolvedOption.label` is a `ReactNode`. Render it directly in your list; use a string fallback (`String(option.value)`) for accessibility labels and filtering when needed
 
 ### Custom option label example
 

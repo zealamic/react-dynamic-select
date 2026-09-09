@@ -95,6 +95,11 @@
   &:focus {
     outline: none;
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: oklch(55% 0 0deg);
+  }
 }
 
 .rds-base-ui__input--multiple {
@@ -326,6 +331,12 @@
     background-color: white;
     border-bottom-color: oklch(62% 0.19 264deg);
     box-shadow: inset 0 -2px 0 oklch(62% 0.19 264deg / 30%);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: oklch(55% 0 0deg);
+    background-color: oklch(96% 0 0deg);
   }
 }
 

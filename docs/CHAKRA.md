@@ -175,7 +175,21 @@ Render a create / add action in the dropdown footer. Set `placement` to `"start"
 | `onClick` | Click handler |
 | `disabled` | Disable the button |
 
-The footer is shown when `total`, `loadMore`, or `add` is configured. See [add](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
+The footer is shown when `isMenuFooterVisible` is not `false` and `loadMore`, `add`, or a visible total (`total.path` / `total.label` with `hidden` not `true`) is configured. Hide the whole footer with:
+
+```tsx
+isMenuFooterVisible: false
+```
+
+Scroll load more still works. While the next page is fetching, a small status chip (spinner + `loadMore.loadingLabel`) appears at the bottom-right of the menu.
+
+Keep `total.path` for pagination even when the label is hidden:
+
+```tsx
+total: { path: "total", hidden: true }
+```
+
+See [add](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
 
 ## Custom option label
 
@@ -306,5 +320,6 @@ Use when building a custom UI on top of Chakra Combobox.
 - Initial fetch shows a spinner in the indicator group; the dropdown opens only after the first page of data is ready.
 - Closing the dropdown resets search and re-fetches the first page when a search was active.
 - For **menu search**, the main input is read-only and opens the menu on click.
+- Search inputs are disabled while load more is in progress.
 - `listHeight` defaults to `200` when not provided.
 - Fetch runs only on the first open (unless `trigger: FETCH_TRIGGER.MOUNT`).

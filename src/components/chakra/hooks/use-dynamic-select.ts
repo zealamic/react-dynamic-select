@@ -67,6 +67,10 @@ export function useChakraDynamicSelect<
 
   const handleOpenChange = useCallback(
     (nextOpen: boolean, details?: ComboboxOpenChangeDetails) => {
+      if (!nextOpen && isLoadingMore) {
+        return;
+      }
+
       if (details) {
         onOpenChange?.(nextOpen, details);
       }
@@ -84,7 +88,14 @@ export function useChakraDynamicSelect<
         }
       }
     },
-    [fetchData, isControlledOpen, onOpenChange, resetSearch, searchValue],
+    [
+      fetchData,
+      isControlledOpen,
+      isLoadingMore,
+      onOpenChange,
+      resetSearch,
+      searchValue,
+    ],
   );
 
   const {
