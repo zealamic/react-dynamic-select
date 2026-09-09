@@ -7,6 +7,7 @@ import type { SearchableApiParams } from "@/general-types";
 import { DefaultPlusIcon } from "@/icons/default-plus-icon";
 import { ADD_PLACEMENT, LOAD_MORE_TYPE } from "@/lib/constants";
 import type { ResolvedLoadMoreConfig } from "@/lib/utils/load-more";
+import { shouldShowListFooter, shouldShowTotalLabel } from "@/lib/utils/total";
 import type { MuiDynamicSelectConfig } from "../types";
 import { MuiAutocompletePopupSection } from "./autocomplete-popup-section";
 
@@ -39,11 +40,13 @@ export function MuiListMenuFooter<
 }: MuiListMenuFooterProps<DataType, ApiResponse, ApiParams>) {
   const totalConfig = dynamicConfig?.total;
   const addConfig = dynamicConfig?.add;
-  const showFooter =
-    loadMoreConfig != null ||
-    totalConfig?.path ||
-    totalConfig?.label ||
-    addConfig?.placement != null;
+  const showTotal = shouldShowTotalLabel(totalConfig);
+  const showFooter = shouldShowListFooter({
+    isMenuFooterVisible: dynamicConfig?.isMenuFooterVisible,
+    loadMoreConfig,
+    total: totalConfig,
+    add: addConfig,
+  });
 
   if (!showFooter) {
     return null;
@@ -82,7 +85,7 @@ export function MuiListMenuFooter<
               {addConfig?.label}
             </Button>
           )}
-          {(totalConfig?.path || totalConfig?.label) && (
+          {showTotal && (
             <Typography variant="body2" sx={{ fontWeight: "bold" }}>
               {totalConfig?.label || "Total"}: {totalNumber ?? "-"}
             </Typography>

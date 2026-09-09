@@ -26,6 +26,7 @@ export {
   getInitialPagination,
   getNextPagePagination,
   hasMoreToLoad,
+  isSelectSearchDisabled,
   mergeDynamicConfig,
   mergeOptionsWithCurrent,
   normalizeSelectValues,
@@ -36,6 +37,9 @@ export {
   resolveSelectEmptyMessage,
   resolveSelectLoadingMessage,
   resolveSelectNoOptionsMessage,
+  shouldShowListFooter,
+  shouldShowLoadMoreStatusChip,
+  shouldShowTotalLabel,
 } from "@/lib/utils";
 
 export type { ResolvedLoadMoreConfig } from "@/lib/utils/load-more";

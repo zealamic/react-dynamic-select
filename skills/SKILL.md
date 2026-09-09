@@ -70,7 +70,9 @@ Install package + UI peer. Only pass fields that differ from `defaultDynamicSele
 4. **Value model** — primitives (Antd/MUI/Chakra) vs `ResolvedOption` (Base UI). Do not mix APIs.
 5. **Search** — default `SEARCH_PLACEMENT.MENU`; inline needs variant-specific flags (Antd: `showSearch`).
 6. **Edit mode** — pass `currentData` when selected item may not be in fetched list yet.
-7. **i18n / copy** — use `dynamicConfig.messages` or native props (`noOptionsText`, `notFoundContent`).
+7. **Total label** — keep `total.path` for load more; hide footer count with `total.hidden: true`.
+8. **Menu footer** — hide the entire footer with `isMenuFooterVisible: false`.
+9. **i18n / copy** — use `dynamicConfig.messages` or native props (`noOptionsText`, `notFoundContent`).
 
 ## Option template (string)
 
@@ -113,6 +115,8 @@ import {
 - **MUI** — do not pass `options`, `filterOptions`, or manage `renderInput` unless using `renderInput` override intentionally.
 - **Closing dropdown** — search resets and re-fetches page 1 if search was active.
 - **Messages** — MUI/Antd native props win over `dynamicConfig.messages` when both set.
+- **Total hidden** — `total.hidden: true` hides the footer label only; `total.path` is still required for load more.
+- **Footer hidden** — `isMenuFooterVisible: false` hides total, load more button, and add. Scroll load more still shows a small loading chip at the bottom-right of the menu.
 
 ## React Hook Form (primitives)
 

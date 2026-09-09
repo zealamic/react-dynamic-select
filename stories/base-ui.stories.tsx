@@ -262,6 +262,15 @@ export const AddButtonEnd: Story = {
   },
 };
 
+export const HiddenFooter: Story = {
+  args: {
+    placeholder: "Select a user",
+    dynamicConfig: {
+      isMenuFooterVisible: false,
+    },
+  },
+};
+
 export const LabelNode: Story = {
   args: {
     placeholder: "Select a user",

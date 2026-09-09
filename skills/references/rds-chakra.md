@@ -81,6 +81,20 @@ Dismissible `Tag` chips with per-chip remove (`Tag.EndElement` + `Tag.CloseTrigg
 <ChakraDynamicSelect multiple dynamicConfig={userListConfig} />
 ```
 
+## Total label
+
+Keep `total.path` for load more. Hide the footer count with `hidden: true`:
+
+```tsx
+total: { path: "total", hidden: true }
+```
+
+Hide the entire footer (total, load more, add):
+
+```tsx
+isMenuFooterVisible: false
+```
+
 ## Custom option label
 
 Single: overlay on input. Multiple: custom labels in chips and dropdown.
@@ -127,5 +141,6 @@ Build custom Combobox UI on top of shared fetch/search/load-more logic.
 - Menu search: `autoFocus={false}` on root; menu input gets focus when open.
 - Closing resets search when active.
 - `search.inputSearchMenuProps` → Chakra `ComboboxInput` props.
+- Search inputs are disabled while load more is in progress.
 
 See [dynamicConfig](rds-dynamic-config.md).

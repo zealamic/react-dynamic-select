@@ -22,6 +22,10 @@ import {
   resolveOptionFromTemplate,
   resolveSelectEmptyMessage,
   resolveSelectLoadingMessage,
+  shouldShowListFooter,
+  shouldShowLoadMoreStatusChip,
+  shouldShowTotalLabel,
+  isSelectSearchDisabled,
 } from "@zealamic/react-dynamic-select";
 
 import type {
@@ -89,6 +93,10 @@ Reference implementations:
 | `mergeOptionsWithCurrent` | Inject `currentData` into options |
 | `resolveSelectEmptyMessage` | Empty / no-results copy |
 | `resolveSelectLoadingMessage` | Loading copy |
+| `shouldShowTotalLabel` | Whether to render the footer total (`hidden` is not `true`) |
+| `shouldShowListFooter` | Whether to render the footer (`isMenuFooterVisible` defaults to `true`) |
+| `shouldShowLoadMoreStatusChip` | Whether to show the load-more chip when the footer is hidden |
+| `isSelectSearchDisabled` | Whether to disable search during load more / loading |
 
 ## Minimal custom hook skeleton
 
@@ -170,6 +178,8 @@ export function useCustomDynamicSelect(props) {
 - [ ] `currentData` + `mergeOptionsWithCurrent`
 - [ ] Option template (string + React component labels)
 - [ ] Footer: `total`, `loadMore`, `add` button placements
+- [ ] `total.hidden` — hide footer count; keep `total.path` for pagination (`shouldShowTotalLabel`)
+- [ ] `isMenuFooterVisible: false` — hide the entire footer (`shouldShowListFooter`)
 - [ ] Messages via `dynamicConfig.messages` or custom UI
 
 ## When to use headless vs Base UI

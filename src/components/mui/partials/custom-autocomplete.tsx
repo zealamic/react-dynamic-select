@@ -192,13 +192,17 @@ export function MuiCustomAutocomplete<
     >
   >(
     (event, newInputValue, reason) => {
+      if (isLoadingMore) {
+        return;
+      }
+
       if (isInlineSearch && (reason === "input" || reason === "clear")) {
         handleInlineSearch(reason === "clear" ? "" : newInputValue);
       }
 
       onInputChange?.(event, newInputValue, reason);
     },
-    [handleInlineSearch, isInlineSearch, onInputChange],
+    [handleInlineSearch, isInlineSearch, isLoadingMore, onInputChange],
   );
 
   const showCustomSelectedLabel =
@@ -244,13 +248,18 @@ export function MuiCustomAutocomplete<
             ? {
                 ...params.slotProps?.htmlInput,
                 value: "",
+                disabled: isLoadingMore,
                 "aria-label": getOptionLabel(singleSelectedOption),
               }
-            : params.slotProps?.htmlInput,
+            : {
+                ...params.slotProps?.htmlInput,
+                disabled: isLoadingMore,
+              },
         }}
       />
     ),
     [
+      isLoadingMore,
       label,
       loading,
       placeholder,
@@ -434,11 +443,7 @@ export function MuiCustomAutocomplete<
     }
 
     return resolveSelectNoOptionsMessage(dynamicConfig.messages, searchValue);
-  }, [
-    autocompleteProps.noOptionsText,
-    dynamicConfig.messages,
-    searchValue,
-  ]);
+  }, [autocompleteProps.noOptionsText, dynamicConfig.messages, searchValue]);
 
   const resolvedLoadingText = useMemo(() => {
     if (autocompleteProps.loadingText != null) {

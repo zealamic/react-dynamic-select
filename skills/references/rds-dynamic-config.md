@@ -8,11 +8,12 @@ Shared by all `@zealamic/react-dynamic-select` entry points. Deep-merged with `d
 {
   api: { params: { page: 1, pageSize: 10, search: "" }, trigger: "open" },
   list: { path: "list" },
-  total: { path: "total", label: "Total" },
+  total: { path: "total", label: "Total", hidden: false },
   option: { template: { label: "label", value: "value" } },
   search: { placement: "menu", debounce: 500, inputSearchMenuProps: { placeholder: "Search..." } },
   loadMore: { type: "click", threshold: 100, distance: 100, debounce: 100 },
   messages: { loading: "Loading...", empty: "No items found", noResults: "No results found." },
+  isMenuFooterVisible: true,
 }
 ```
 
@@ -30,7 +31,11 @@ Shared by all `@zealamic/react-dynamic-select` entry points. Deep-merged with `d
 
 ```tsx
 list: { path: "data" },           // dot path to array in response
-total: { path: "total", label: "Total" },
+total: {
+  path: "total",                  // still used for load more
+  label: "Total",
+  hidden: false,                  // true = hide footer count, keep path
+},
 option: {
   template: {
     label: "fullName",            // field, "{a} {b}", or FC
@@ -90,6 +95,16 @@ add: {
 },
 ```
 
+## Footer visibility
+
+Default `true`. Set `false` to hide the entire dropdown footer (total, load more button, add):
+
+```tsx
+isMenuFooterVisible: false
+```
+
+Load more via **scroll** still works when the footer is hidden. While extra pages load, a small status chip appears at the bottom-right of the menu. Click-to-load needs the footer button.
+
 ## messages
 
 ```tsx
@@ -125,5 +140,7 @@ import {
   resolveSelectEmptyMessage,
   resolveSelectLoadingMessage,
   resolveSelectNoOptionsMessage,
+  shouldShowListFooter,
+  shouldShowTotalLabel,
 } from "@zealamic/react-dynamic-select";
 ```

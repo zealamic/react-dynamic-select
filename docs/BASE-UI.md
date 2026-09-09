@@ -311,6 +311,20 @@ dynamicConfig={{
 
 Set `placement` to `"start"` (left of footer) or `"end"` (right). See [add](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
 
+The footer is shown when `isMenuFooterVisible` is not `false` and `loadMore`, `add`, or a visible total (`total.path` / `total.label` with `hidden` not `true`) is configured. Hide the whole footer with:
+
+```tsx
+isMenuFooterVisible: false
+```
+
+Scroll load more still works. While the next page is fetching, a small status chip (spinner + `loadMore.loadingLabel`) appears at the bottom-right of the menu.
+
+Keep `total.path` for pagination even when the label is hidden:
+
+```tsx
+total: { path: "total", hidden: true }
+```
+
 ## Custom option label
 
 Use a React component in `option.template.label` to render rich rows (name + email, avatars, badges, etc.):
@@ -425,4 +439,5 @@ BaseUiDynamicSelect<UserModel, ApiResponse, ApiParams, Multiple>
 
 - Default styles are shipped as CSS Modules in the build output (`default.module.js` + `default_module.css`).
 - Use `onValueChange(value, eventDetails)` instead of `onChange` from other variants.
+- Search inputs are disabled while load more is in progress.
 - The `label` prop renders a label above the input when `components.Label` is provided.

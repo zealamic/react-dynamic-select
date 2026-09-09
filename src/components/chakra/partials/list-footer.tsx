@@ -3,6 +3,7 @@ import type { SearchableApiParams } from "@/general-types";
 import { DefaultPlusIcon } from "@/icons/default-plus-icon";
 import { ADD_PLACEMENT, LOAD_MORE_TYPE } from "@/lib/constants";
 import type { ResolvedLoadMoreConfig } from "@/lib/utils/load-more";
+import { shouldShowListFooter, shouldShowTotalLabel } from "@/lib/utils/total";
 import type { ChakraDynamicSelectConfig } from "../types";
 import { ChakraComboboxPopupSection } from "./combobox-popup-section";
 
@@ -35,11 +36,13 @@ export function ChakraListFooter<
 }: ChakraListFooterProps<DataType, ApiResponse, ApiParams>) {
   const totalConfig = dynamicConfig?.total;
   const addConfig = dynamicConfig?.add;
-  const showFooter =
-    loadMoreConfig != null ||
-    totalConfig?.path ||
-    totalConfig?.label ||
-    addConfig?.placement != null;
+  const showTotal = shouldShowTotalLabel(totalConfig);
+  const showFooter = shouldShowListFooter({
+    isMenuFooterVisible: dynamicConfig?.isMenuFooterVisible,
+    loadMoreConfig,
+    total: totalConfig,
+    add: addConfig,
+  });
 
   if (!showFooter) {
     return null;
@@ -73,7 +76,7 @@ export function ChakraListFooter<
               {addConfig?.label}
             </Button>
           )}
-          {(totalConfig?.path || totalConfig?.label) && (
+          {showTotal && (
             <Text fontSize="sm" fontWeight="semibold">
               {totalConfig?.label || "Total"}: {totalNumber ?? "-"}
             </Text>

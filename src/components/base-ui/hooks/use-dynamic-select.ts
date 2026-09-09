@@ -68,6 +68,11 @@ export function useBaseUiDynamicSelect<
 
   const handleOpenChange = useCallback(
     (nextOpen: boolean, eventDetails?: ComboboxRootChangeEventDetails) => {
+      if (!nextOpen && isLoadingMore) {
+        eventDetails?.cancel();
+        return;
+      }
+
       if (eventDetails) {
         onOpenChange?.(nextOpen, eventDetails);
       }
@@ -98,6 +103,7 @@ export function useBaseUiDynamicSelect<
       dynamicConfig.api.trigger,
       fetchData,
       isControlledOpen,
+      isLoadingMore,
       onOpenChange,
       resetSearch,
       searchValue,

@@ -66,6 +66,10 @@ export function useAntdDynamicSelect<
 
   const handleOpenChange = useCallback(
     (open: boolean) => {
+      if (!open && isLoadingMore) {
+        return;
+      }
+
       onOpenChange?.(open);
 
       if (!isControlledOpen) {
@@ -81,7 +85,14 @@ export function useAntdDynamicSelect<
         }
       }
     },
-    [fetchData, isControlledOpen, onOpenChange, resetSearch, searchValue],
+    [
+      fetchData,
+      isControlledOpen,
+      isLoadingMore,
+      onOpenChange,
+      resetSearch,
+      searchValue,
+    ],
   );
 
   const {
@@ -155,5 +166,6 @@ export function useAntdDynamicSelect<
     searchValue,
     handleInlineSearch,
     handleMenuSearchChange,
+    open: isOpen,
   };
 }

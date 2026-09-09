@@ -36,7 +36,8 @@ const config: StorybookConfig = {
     options: {},
   },
   typescript: {
-    reactDocgen: "react-docgen-typescript",
+    // TypeScript 7 no longer ships the JS compiler API that react-docgen-typescript needs.
+    reactDocgen: "react-docgen",
     check: true,
   },
 };

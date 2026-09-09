@@ -150,7 +150,21 @@ Render a create / add action in the dropdown footer (left or right of total coun
 | `onClick` | Click handler |
 | `disabled` | Disable the button |
 
-The footer is shown when `total`, `loadMore`, or `add` is configured. See [add](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
+The footer is shown when `isMenuFooterVisible` is not `false` and `loadMore`, `add`, or a visible total (`total.path` / `total.label` with `hidden` not `true`) is configured. Hide the whole footer with:
+
+```tsx
+isMenuFooterVisible: false
+```
+
+Scroll load more still works. While the next page is fetching, a small status chip (spinner + `loadMore.loadingLabel`) appears at the bottom-right of the menu.
+
+Keep `total.path` for pagination even when the label is hidden:
+
+```tsx
+total: { path: "total", hidden: true }
+```
+
+See [add](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
 
 ## Edit mode
 
@@ -257,5 +271,6 @@ const selectProps = useAntdDynamicSelect(props);
 
 - For **inline search**, `showSearch={true}` is required.
 - Closing the dropdown resets the search value and re-fetches the first page (if a search was active).
+- Load more keeps the dropdown open and refreshes the option list in place (no need to close and reopen). Search inputs are disabled while extra pages load.
 - `listHeight` defaults to `200` when not provided.
 - Fetch runs only on the first open (unless `trigger: FETCH_TRIGGER.MOUNT`).

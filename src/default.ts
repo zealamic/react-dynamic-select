@@ -18,6 +18,7 @@ export const defaultDynamicSelectConfig: DynamicSelectConfig = {
   total: {
     path: "total",
     label: "Total",
+    hidden: false,
   },
   list: {
     path: "list",
@@ -46,4 +47,5 @@ export const defaultDynamicSelectConfig: DynamicSelectConfig = {
     empty: "No items found",
     noResults: "No results found.",
   },
+  isMenuFooterVisible: true,
 };

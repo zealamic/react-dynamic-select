@@ -2,7 +2,9 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Paper from "@mui/material/Paper";
 import { forwardRef } from "react";
+import { LoadMoreStatusChip } from "@/components/_shared/load-more-status-chip";
 import type { SearchableApiParams } from "@/general-types";
+import { shouldShowLoadMoreStatusChip } from "@/lib/utils/total";
 import type { MuiAutocompletePaperProps } from "../types";
 import { MuiListMenuFooter } from "./list-menu-footer";
 
@@ -28,6 +30,11 @@ export const MuiAutocompletePaper = forwardRef(function MuiAutocompletePaper<
     sx,
     ...paperProps
   } = props;
+
+  const showLoadMoreStatusChip = shouldShowLoadMoreStatusChip({
+    isMenuFooterVisible: dynamicConfig?.isMenuFooterVisible,
+    isLoadingMore,
+  });
 
   return (
     <Paper
@@ -59,15 +66,25 @@ export const MuiAutocompletePaper = forwardRef(function MuiAutocompletePaper<
         <>
           <Box
             sx={{
+              position: "relative",
               flex: "1 1 auto",
               minHeight: 0,
-              maxHeight: listHeight,
-              overflowY: "auto",
-              overflowX: "hidden",
             }}
-            onScroll={onListScroll}
           >
-            {children}
+            <Box
+              sx={{
+                maxHeight: listHeight,
+                overflowY: "auto",
+                overflowX: "hidden",
+              }}
+              onScroll={onListScroll}
+            >
+              {children}
+            </Box>
+            <LoadMoreStatusChip
+              visible={showLoadMoreStatusChip}
+              label={loadMoreConfig?.loadingLabel || "Loading..."}
+            />
           </Box>
 
           <MuiListMenuFooter

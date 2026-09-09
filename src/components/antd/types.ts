@@ -56,4 +56,5 @@ export type AntdSelectMenuProps<
   handleLoadMoreClick?: () => void;
   searchValue?: string;
   handleMenuSearchChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  optionListKey?: string;
 };

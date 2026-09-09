@@ -68,6 +68,22 @@ Extends all Ant Design `Select` props + `dynamicConfig`.
 loadMore: { type: LOAD_MORE_TYPE.SCROLL }
 loadMore: { type: LOAD_MORE_TYPE.CLICK }
 add: { label: "Add user", placement: "start", onClick: () => {} }
+total: { path: "total", hidden: true }  // hide "Total: N"; path still used for load more
+isMenuFooterVisible: false              // hide footer; load-more spinner still shows as a chip
+```
+
+## Total label
+
+Keep `total.path` for load more. Hide the footer count with `hidden: true`:
+
+```tsx
+total: { path: "total", hidden: true }
+```
+
+Hide the entire footer (total, load more, add):
+
+```tsx
+isMenuFooterVisible: false
 ```
 
 ## Custom option label
@@ -120,5 +136,6 @@ Returns `options`, `loading`, `handleOpenChange`, `handlePopupScroll`, `handleLo
 - `listHeight` defaults to `200`.
 - Fetch on first open unless `api.trigger: FETCH_TRIGGER.MOUNT`.
 - `search.inputSearchMenuProps` → Ant Design `Input` props.
+- Search inputs are disabled while load more is in progress.
 
 See [dynamicConfig](rds-dynamic-config.md).

@@ -4,6 +4,7 @@ import type {
   ComboboxRootProps,
 } from "@base-ui/react/combobox";
 import { Fragment, useCallback, useId, useMemo } from "react";
+import { LoadMoreStatusChip } from "@/components/_shared/load-more-status-chip";
 import type { ResolvedOption } from "@/general-types";
 import { SEARCH_PLACEMENT } from "@/lib/constants";
 import {
@@ -14,6 +15,8 @@ import {
   getOptionLabelNode,
   hasCustomOptionLabel,
 } from "@/lib/utils/option-label";
+import { isSelectSearchDisabled } from "@/lib/utils/search";
+import { shouldShowLoadMoreStatusChip } from "@/lib/utils/total";
 import {
   getOptionLabel,
   isOptionEqualToValue,
@@ -117,7 +120,7 @@ export function BaseUiDynamicSelectView<
 
   const handleRootInputValueChange = useCallback(
     (inputValue: string, eventDetails: ComboboxRootChangeEventDetails) => {
-      if (!isInlineSearch) {
+      if (!isInlineSearch || isLoadingMore) {
         eventDetails.cancel();
         return;
       }
@@ -128,7 +131,7 @@ export function BaseUiDynamicSelectView<
 
       handleInlineSearch(inputValue);
     },
-    [handleInlineSearch, isInlineSearch],
+    [handleInlineSearch, isInlineSearch, isLoadingMore],
   );
 
   const loadingMessage = useMemo(
@@ -179,6 +182,15 @@ export function BaseUiDynamicSelectView<
   >;
 
   const menuSearchInputProps = dynamicConfig.search?.inputSearchMenuProps;
+  const searchDisabled = isSelectSearchDisabled({
+    disabled: menuSearchInputProps?.disabled,
+    isLoadingMore,
+  });
+  const inlineSearchDisabled = isInlineSearch && isLoadingMore;
+  const showLoadMoreStatusChip = shouldShowLoadMoreStatusChip({
+    isMenuFooterVisible: dynamicConfig?.isMenuFooterVisible,
+    isLoadingMore,
+  });
 
   const renderSingleInput = () => (
     <Value>
@@ -215,6 +227,7 @@ export function BaseUiDynamicSelectView<
             <Input
               id={inputId}
               placeholder={showCustomSelectedLabel ? undefined : placeholder}
+              disabled={inlineSearchDisabled}
               style={{
                 ...(isMenuSearch ? { cursor: "pointer" } : undefined),
                 ...(showCustomSelectedLabel
@@ -255,6 +268,7 @@ export function BaseUiDynamicSelectView<
                     placeholder={
                       selectedValue.length > 0 ? undefined : placeholder
                     }
+                    disabled={inlineSearchDisabled}
                     style={isMenuSearch ? { cursor: "pointer" } : undefined}
                   />
                 </Fragment>
@@ -324,6 +338,7 @@ export function BaseUiDynamicSelectView<
                 {...menuSearchInputProps}
                 searchValue={searchValue}
                 onSearchChange={handleMenuSearchChange}
+                disabled={searchDisabled}
               />
             ) : null}
 
@@ -348,9 +363,15 @@ export function BaseUiDynamicSelectView<
               message={loadingMessage}
             />
 
-            <List style={listStyle} onScroll={handlePopupScroll}>
-              {renderOptionItem}
-            </List>
+            <div style={{ position: "relative" }}>
+              <List style={listStyle} onScroll={handlePopupScroll}>
+                {renderOptionItem}
+              </List>
+              <LoadMoreStatusChip
+                visible={showLoadMoreStatusChip}
+                label={loadMoreConfig?.loadingLabel || "Loading..."}
+              />
+            </div>
             <Separator />
             <ListFooter
               loading={loading}

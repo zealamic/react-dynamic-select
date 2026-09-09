@@ -2,6 +2,7 @@
 import type { SearchableApiParams } from "@/general-types";
 import { DefaultPlusIcon } from "@/icons/default-plus-icon";
 import { ADD_PLACEMENT, LOAD_MORE_TYPE } from "@/lib/constants";
+import { shouldShowListFooter, shouldShowTotalLabel } from "@/lib/utils/total";
 import type { BaseUiListFooterSlotProps } from "../../types";
 import styles from "./default.module.css";
 import { DefaultButton } from "./default-button";
@@ -23,11 +24,13 @@ export function DefaultListFooter<
 }: BaseUiListFooterSlotProps<DataType, ApiResponse, ApiParams>) {
   const totalConfig = dynamicConfig?.total;
   const addConfig = dynamicConfig?.add;
-  const showFooter =
-    loadMoreConfig != null ||
-    totalConfig?.path ||
-    totalConfig?.label ||
-    addConfig?.placement != null;
+  const showTotal = shouldShowTotalLabel(totalConfig);
+  const showFooter = shouldShowListFooter({
+    isMenuFooterVisible: dynamicConfig?.isMenuFooterVisible,
+    loadMoreConfig,
+    total: totalConfig,
+    add: addConfig,
+  });
 
   if (!showFooter) {
     return null;
@@ -54,7 +57,7 @@ export function DefaultListFooter<
             {addConfig?.label}
           </Button>
         )}
-        {(totalConfig?.path || totalConfig?.label) && (
+        {showTotal && (
           <span className={styles["rds-base-ui__list-footer-total"]}>
             {totalConfig?.label || "Total"}:{" "}
             {loading && totalNumber === 0 ? "..." : (totalNumber ?? "-")}

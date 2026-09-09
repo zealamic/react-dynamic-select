@@ -159,7 +159,21 @@ Render a create / add action in the dropdown footer. Set `placement` to `"start"
 | `onClick` | Click handler |
 | `disabled` | Disable the button |
 
-The footer is shown when `total`, `loadMore`, or `add` is configured. See [add](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
+The footer is shown when `isMenuFooterVisible` is not `false` and `loadMore`, `add`, or a visible total (`total.path` / `total.label` with `hidden` not `true`) is configured. Hide the whole footer with:
+
+```tsx
+isMenuFooterVisible: false
+```
+
+Scroll load more still works. While the next page is fetching, a small status chip (spinner + `loadMore.loadingLabel`) appears at the bottom-right of the menu.
+
+Keep `total.path` for pagination even when the label is hidden:
+
+```tsx
+total: { path: "total", hidden: true }
+```
+
+See [add](https://github.com/zealamic/react-dynamic-select/blob/main/README.md#dynamic-config-properties) in the property reference.
 
 ## Custom option label
 
@@ -285,3 +299,4 @@ Use when rendering a custom UI on top of MUI Autocomplete.
 - Client-side filtering is disabled (`filterOptions` always returns all server-fetched options).
 - Loading is shown via `CircularProgress` in the input and an overlay in the popup.
 - Closing the popup resets search, same as the Ant Design variant.
+- Search inputs are disabled while load more is in progress.

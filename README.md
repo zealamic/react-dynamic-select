@@ -210,6 +210,7 @@ The resolved `label` is a `ReactNode` in the option list. String-based helpers s
 | **total**                       | Maps the total record count from the response                                                                | `object`                               | —                                                                 |
 | **total.path**                  | Dot path to the total count, e.g. `"total"`                                                                  | `string`                               | `"total"`                                                         |
 | **total.label**                 | Label shown in the dropdown footer                                                                           | `string`                               | `"Total"`                                                         |
+| **total.hidden**                | Hides the total label in the footer. `total.path` is still used for load more                                | `boolean`                              | `false`                                                           |
 | **option**                      | Maps each API item to a select option                                                                        | `object`                               | —                                                                 |
 | **option.template.label**       | Label field, placeholder template (`"{firstName} {lastName}"`), or React component `({ data }) => ReactNode` | `string` \| `FC<{ data: DataType }>`   | `"label"`                                                         |
 | **option.template.value**       | Value field                                                                                                  | `string`                               | `"value"`                                                         |
@@ -236,6 +237,7 @@ The resolved `label` is a `ReactNode` in the option list. String-based helpers s
 | **messages.loading**            | Shown while the initial fetch is in progress with an empty list (Base UI overlay; MUI `loadingText` fallback) | `ReactNode` \| `null`                  | `"Loading..."`                                                    |
 | **messages.empty**              | Shown when the list is empty and there is no active search                                                   | `ReactNode` \| `null`                  | `"No items found"`                                                |
 | **messages.noResults**          | Shown when the list is empty after searching                                                                  | `ReactNode` \| `null`                  | `"No results found."`                                             |
+| **isMenuFooterVisible**         | Shows the dropdown footer (total, load more, add). `false` hides the footer; load-more status still shows as a small chip at the bottom-right of the menu | `boolean`                              | `true`                                                            |
 
 ---
 

@@ -3,4 +3,6 @@ export * from "./load-more";
 export * from "./messages";
 export * from "./option-label";
 export * from "./param";
+export * from "./search";
+export * from "./total";
 export * from "./ui";
