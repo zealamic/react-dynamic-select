@@ -28,7 +28,6 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "preset": "recommended",
       "suspicious": {
         "noExplicitAny": "off"
       }
